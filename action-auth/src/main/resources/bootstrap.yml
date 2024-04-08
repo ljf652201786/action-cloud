@@ -1,0 +1,15 @@
+server:
+  port: 8886
+spring:
+  application:
+    name: springcloud-auth
+  profiles:
+    # 环境配置
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      username: nacos
+      password: nacos
+      config:
+        file-extension: yaml

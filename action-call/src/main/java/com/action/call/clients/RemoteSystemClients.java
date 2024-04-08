@@ -1,0 +1,30 @@
+package com.action.call.clients;
+
+import com.action.call.factory.RemoteSystemClientsFallbackFactory;
+import com.action.common.core.common.Result;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+/**
+ * @Description:
+ * @Author: ljf  <lin652210786@163.com>
+ * @Date: 2024/04/02
+ */
+@FeignClient(contextId = "systemClients", value = "springcloud-system", fallbackFactory = RemoteSystemClientsFallbackFactory.class)
+public interface RemoteSystemClients {
+
+    @LoadBalanced  //启用负载均衡
+    @RequestMapping(value = "user/getUserByPhone", method = RequestMethod.GET)
+    Result getUserByPhone(@RequestParam("phone") String phone);
+
+    @LoadBalanced
+    @RequestMapping(value = "user/getUserByEmail", method = RequestMethod.GET)
+    Result getUserByEmail(String email);
+
+    @LoadBalanced
+    @RequestMapping(value = "user/getUserNameByWeChatCode", method = RequestMethod.GET)
+    Result getUserNameByWeChatCode(String code);
+}
