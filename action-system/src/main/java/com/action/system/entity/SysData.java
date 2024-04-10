@@ -8,33 +8,32 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
- * @Description: 用户表
+ * @Description: 数据表
  * @Author: ljf  <lin652210786@163.com>
- * @Date: 2024/04/02
+ * @Date: 2024/04/07
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("sys_user")
-public class SysUser extends BaseEntity {
+@TableName("sys_data")
+public class SysData extends BaseEntity {
     @TableId(value = "id")
     private String id;
-    @TableField("avatar")
-    private String avatar;
-    @TableField("user_name")
-    private String username;
-    @TableField("nick_name")
-    private String nickName;
-    @TableField("password")
-    private String password;
-    @TableField("email")
-    private String email;
-    @TableField("phone")
-    private String phone;
-    @TableField("sex")
-    private String sex;
+    @TableField("parent_id")
+    private String parentId;
+    @TableField("data_code")
+    private String dataCode;
+    @TableField("label")
+    private String label;
+    @TableField("table_name")
+    private String tableName;
+    @TableField("sort")
+    private Integer sort;
     @TableField("status")
     private String status;
-
+    @TableField(exist = false)
+    private List<SysData> childrenDataList;
 }

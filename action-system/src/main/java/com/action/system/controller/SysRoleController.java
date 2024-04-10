@@ -82,12 +82,15 @@ public class SysRoleController {
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody SysRole sysRole) {
-        SysRole sr = iSysRoleService.getOne(new QueryWrapper<SysRole>().eq("code", sysRole.getCode()));
+        SysRole sr = iSysRoleService.getOne(new QueryWrapper<SysRole>().eq("role_code", sysRole.getRoleCode()));
         if (Objects.nonNull(sr)) {
             return Result.error("角色编码已存在");
         }
-        boolean bo = iSysRoleService.save(sysRole);
-        return Result.success("保存数据成功", bo);
+        boolean isSave = iSysRoleService.save(sysRole);
+        if (isSave) {
+            return Result.success("保存数据成功");
+        }
+        return Result.error("数据保存失败");
     }
 
     /**
@@ -101,12 +104,15 @@ public class SysRoleController {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Result update(@RequestBody SysRole sysRole) {
         SysRole oldRole = iSysRoleService.getById(sysRole.getId());
-        SysRole sr = iSysRoleService.getOne(new QueryWrapper<SysRole>().eq("code", sysRole.getCode()));
-        if (!oldRole.getCode().equals(sysRole.getCode()) && Objects.nonNull(sr)) {
+        SysRole sr = iSysRoleService.getOne(new QueryWrapper<SysRole>().eq("role_code", sysRole.getRoleCode()));
+        if (!oldRole.getRoleCode().equals(sysRole.getRoleCode()) && Objects.nonNull(sr)) {
             return Result.error("角色编码已存在");
         }
-        boolean bo = iSysRoleService.updateById(sysRole);
-        return Result.success("更新数据成功", bo);
+        boolean isUpdate = iSysRoleService.updateById(sysRole);
+        if (isUpdate) {
+            return Result.success("更新数据成功");
+        }
+        return Result.error("更新数据失败");
     }
 
     /**

@@ -9,26 +9,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @Description: 角色表
+ * @Description: 数据限制字段表
  * @Author: ljf  <lin652210786@163.com>
  * @Date: 2024/04/07
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("sys_role")
-public class SysRole extends BaseEntity {
+@TableName("sys_column_limit")
+public class SysColumnLimit extends BaseEntity {
     @TableId(value = "id")
     private String id;
-    @TableField("role_code")
-    private String roleCode;
-    @TableField("role_name")
-    private String roleName;
-    @TableField("default_role")
-    private Boolean defaultRole;
-    @TableField("sort")
-    private Integer sort;
-    @TableField("status")
-    private String status;
-
+    @TableField("data_id")
+    private String dataId;
+    @TableField("type")
+    private String type;
+    @TableField("contact_id")
+    private String contactId;
+    @TableField("limit_field")
+    private String limitField;
+    @TableField("limit_field_desc")
+    private String limitFieldDesc;
 }

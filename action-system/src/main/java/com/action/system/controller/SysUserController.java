@@ -1,14 +1,17 @@
 package com.action.system.controller;
 
 import com.action.common.common.RedisSetConstants;
+import com.action.common.common.UserSetConstants;
 import com.action.common.core.common.Result;
 import com.action.common.enums.UseType;
 import com.action.system.dto.SysUserQuery;
 import com.action.system.dto.SysUserExtend;
 import com.action.system.entity.SysRole;
+import com.action.system.entity.SysScope;
 import com.action.system.entity.SysUser;
 import com.action.system.entity.SysUserRole;
 import com.action.system.service.ISysRoleService;
+import com.action.system.service.ISysScopeService;
 import com.action.system.service.ISysUserRoleService;
 import com.action.system.service.ISysUserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -38,6 +41,8 @@ public class SysUserController {
     private ISysRoleService iSysRoleService;
     @Resource
     private ISysUserRoleService iSysUserRoleService;
+    @Resource
+    private ISysScopeService iSysScopeService;
 
 
     /**
@@ -56,6 +61,7 @@ public class SysUserController {
     }
 
     /**
+     * @param id 用户id
      * @Description: 根据id获取当前用户信息
      * @return: Result 结果集
      * @throws:
@@ -69,24 +75,19 @@ public class SysUserController {
     }
 
     /**
+     * @param sysUser 用户扩展对象
      * @Description: 添加用户
      * @return: Result 结果集
      * @throws:
      * @Author: ljf  <lin652210786@163.com>
      * @Date: 2024/4/3
      */
-    /*@RequestMapping(value = "save", method = RequestMethod.POST)
+    @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody SysUserExtend sysUser) {
-        List<String> roles = userQueryPara.getRoles();
-        List<Scope> scopeList = sysUser.getUserPostList();
-        User u = new User();
-        BeanUtils.copyProperties(userQueryPara, u);
+        List<String> roleList = sysUser.getRoleList();
+        List<SysScope> scopeList = sysUser.getSysScopeList();
 
-        if (StringUtils.isBlank(u.getUsername()) || StringUtils.isBlank(u.getPassword())) {
-            return Result.error("缺少必需表单字段");
-        }
-        if (StringUtils.isEmpty(sysUser.getUsername()) || StringUtils.isEmpty(sysUser.getPassword())
-                || StringUtils.isEmpty(sysUser.getEmail()) || StringUtils.isEmpty(sysUser.getPhone())) {
+        if (StringUtils.isEmpty(sysUser.getUsername()) || StringUtils.isEmpty(sysUser.getEmail()) || StringUtils.isEmpty(sysUser.getPhone())) {
             return Result.error("缺少必需表单字段");
         }
 
@@ -102,87 +103,71 @@ public class SysUserController {
             return Result.error("该手机号已被注册");
         }
 
-        u.setAvatar(u.getAvatar() == null ? SecurityConstants.Avatar : u.getAvatar());
-        boolean b = userService.save(u);
-        if (!b) {
-            return Result.error("添加失败");
+        sysUser.setAvatar(sysUser.getAvatar() == null ? UserSetConstants.DEFAULT_AVATAR : sysUser.getAvatar());
+        boolean isSave = iSysUserService.save(sysUser);
+        if (!isSave) {
+            return Result.error("添加用户失败");
         }
-        if (null != roles) {
-            //添加角色
-            List<UserRole> userRoleList = roles.stream().map(roleId -> {
-                UserRole ur = new UserRole();
-                ur.setUserId(u.getId());
-                ur.setRoleId(roleId);
-                ur.setStatus("1");
-                return ur;
+        if (!CollectionUtils.isEmpty(roleList)) {
+            List<SysUserRole> userRoleList = roleList.stream().map(roleId -> {
+                return new SysUserRole(sysUser.getId(), roleId, UseType.ENABLE.getStatus());
             }).collect(Collectors.toList());
-            iUserRoleService.saveBatch(userRoleList);
+            iSysUserRoleService.saveBatch(userRoleList);
         }
-        if (null != scopeList) {
-            scopeList.stream().forEach(scope -> {
-                scope.setUserId(u.getId());
-                scope.setUserNick(u.getNickName());
-            });
-            iScopeService.saveBatch(scopeList);
+        if (!CollectionUtils.isEmpty(scopeList)) {
+            iSysScopeService.saveBatch(scopeList);
         }
         return Result.success("添加用户成功");
     }
 
-    *//*修改用户*//*
-    @RequestMapping(value = "edit", method = RequestMethod.POST)
-    public Result edit(@RequestBody UserQueryPara userQueryPara, HttpServletRequest request) {
-        List<String> roles = userQueryPara.getRoles();
-        List<Scope> scopeList = userQueryPara.getUserPostList();
-        User old = userService.getById(userQueryPara.getId());
-        //判断新用户名是否存在
-        if (!old.getUsername().equals(userQueryPara.getUsername()) && userService.findByUsername(userQueryPara.getUsername()) != null) {
-            return Result.error("该用户名已被存在");
+    /**
+     * @param sysUser 用户扩展对象
+     * @Description: 修改用户
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/3
+     */
+    @RequestMapping(value = "update", method = RequestMethod.PUT)
+    public Result update(@RequestBody SysUserExtend sysUser) {
+        List<String> roles = sysUser.getRoleList();
+        List<SysScope> scopeList = sysUser.getSysScopeList();
+        SysUser oldUser = iSysUserService.getById(sysUser);
+        if (Objects.isNull(oldUser) || oldUser.getUsername().equalsIgnoreCase(sysUser.getUsername())) {
+            return Result.error("该用户不存在");
         }
-        old.setUsername(userQueryPara.getUsername());
-        // 若修改了手机和邮箱判断是否唯一
-        if (userService.getOne(new QueryWrapper<User>().eq("phone", userQueryPara.getPhone())) != null && old.getPhone() != null && !old.getPhone().equals(userQueryPara.getPhone())) {
+        if (Objects.nonNull(iSysUserService.findByPhone(sysUser.getPhone())) && !StringUtils.isEmpty(oldUser.getPhone()) && !oldUser.getPhone().equalsIgnoreCase(sysUser.getPhone())) {
             return Result.error("该手机号已绑定其他账户");
         }
-        old.setPhone(userQueryPara.getPhone());
-        if (!old.getEmail().equals(userQueryPara.getEmail()) && userService.getOne(new QueryWrapper<User>().eq("email", userQueryPara.getEmail())) != null) {
+        oldUser.setPhone(sysUser.getPhone());
+        if (Objects.nonNull(iSysUserService.findByEmail(sysUser.getEmail())) && !StringUtils.isEmpty(oldUser.getEmail()) && !oldUser.getEmail().equalsIgnoreCase(sysUser.getEmail())) {
             return Result.error("该邮箱已绑定其他账户");
         }
-        old.setEmail(userQueryPara.getEmail());
-        old.setNickName(userQueryPara.getNickName());
-        old.setAvatar(userQueryPara.getAvatar());
-        old.setSex(userQueryPara.getSex());
-        old.setType(userQueryPara.getType());
-        Boolean bo = userService.updateById(old);
-        if (!bo) {
-            return Result.error("修改失败");
+        oldUser.setEmail(sysUser.getEmail());
+        oldUser.setNickName(sysUser.getNickName());
+        oldUser.setAvatar(sysUser.getAvatar());
+        oldUser.setSex(sysUser.getSex());
+        Boolean isUpdate = iSysUserService.updateById(oldUser);
+        if (!isUpdate) {
+            return Result.error("用户更新失败");
         }
-        //删除该用户角色
-        iUserRoleService.remove(new QueryWrapper<UserRole>().eq("user_id", old.getId()));
-        if (roles != null) {
-            //新角色
-            List<UserRole> userRoleList = roles.stream().map(roleId -> {
-                UserRole ur = new UserRole();
-                ur.setUserId(old.getId());
-                ur.setRoleId(roleId);
-                ur.setStatus("1");
-                return ur;
+        iSysUserRoleService.remove(new QueryWrapper<SysUserRole>().eq("user_id", oldUser.getId()));
+        if (!CollectionUtils.isEmpty(roles)) {
+            List<SysUserRole> userRoleList = roles.stream().map(roleId -> {
+                return new SysUserRole(oldUser.getId(), roleId, UseType.ENABLE.getStatus());
             }).collect(Collectors.toList());
-            iUserRoleService.saveBatch(userRoleList);
+            iSysUserRoleService.saveBatch(userRoleList);
         }
-        //删除该用户部门岗位
-        iScopeService.remove(new QueryWrapper<Scope>().eq("user_id", old.getId()));
-        if (scopeList != null) {
+        iSysScopeService.remove(new QueryWrapper<SysScope>().eq("user_id", oldUser.getId()));
+        if (!CollectionUtils.isEmpty(scopeList)) {
             scopeList.stream().forEach(scope -> {
-                scope.setUserId(old.getId());
-                scope.setUserNick(old.getNickName());
-                scope.setStatus("1");
+                scope.setUserId(oldUser.getId());
+                scope.setStatus(UseType.ENABLE.getStatus());
             });
-            iScopeService.saveBatch(scopeList);
+            iSysScopeService.saveBatch(scopeList);
         }
-        //刷新用户权限
-        userService.refreshPermissions(old.getUsername(), true);
-        return Result.success("修改成功");
-    }*/
+        return Result.success("用户信息修改成功");
+    }
 
     /**
      * @param sysUser 用户扩展对象
@@ -245,7 +230,7 @@ public class SysUserController {
      * @Author: ljf  <lin652210786@163.com>
      * @Date: 2024/4/3
      */
-    @RequestMapping(value = "editInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "editInfo", method = RequestMethod.PUT)
     public Result editInfo(@RequestBody SysUser sysUser) {
         Boolean isEdit = iSysUserService.editInfo(sysUser);
         if (!isEdit) {
