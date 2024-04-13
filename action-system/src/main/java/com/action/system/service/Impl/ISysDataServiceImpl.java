@@ -3,6 +3,7 @@ package com.action.system.service.Impl;
 import com.action.common.enums.UseType;
 import com.action.system.entity.SysData;
 import com.action.system.entity.SysDept;
+import com.action.system.enums.NodeType;
 import com.action.system.mapper.SysDataMapper;
 import com.action.system.service.ISysDataService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -31,7 +32,7 @@ public class ISysDataServiceImpl extends ServiceImpl<SysDataMapper, SysData> imp
         if (CollectionUtils.isEmpty(sysDataList)) {
             return List.of();
         }
-        List<SysData> parentDataList = sysDataList.stream().filter(data -> data.getParentId().equals("0")).collect(Collectors.toList());
+        List<SysData> parentDataList = sysDataList.stream().filter(data -> data.getParentId().equals(NodeType.PARENT.getType())).collect(Collectors.toList());
         parentDataList.stream().forEach(parentData -> {
             List<SysData> childrenDataList = new ArrayList<>();
             parentData.setChildrenDataList(childrenDataList);

@@ -8,34 +8,35 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 /**
- * @Description: 数据行限制表
+ * @Description: 菜单权限表
  * @Author: ljf  <lin652210786@163.com>
  * @Date: 2024/04/07
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("sys_row_limit")
-public class SysRowLimit extends BaseEntity {
+@TableName("sys_menu_limit")
+public class SysMenuLimit extends BaseEntity {
     @TableId(value = "id")
     private String id;
-    @TableField("data_id")
-    private String dataId;
     @TableField("type")
     private String type;
     @TableField("contact_id")
     private String contactId;
-    @TableField("condition")
-    private String condition;
-    @TableField("limit_type")
-    private String limitType;
-    @TableField("limit_field")
-    private String limitField;
-    @TableField("limit_field_desc")
-    private String limitFieldDesc;
-    @TableField("val")
-    private String val;
+    @TableField("menu_id")
+    private String menuId;
     @TableField("status")
     private String status;
+
+    public SysMenuLimit(String type, String contactId, String menuId, String status) {
+        this.type = type;
+        this.contactId = contactId;
+        this.menuId = menuId;
+        this.status = status;
+    }
 }

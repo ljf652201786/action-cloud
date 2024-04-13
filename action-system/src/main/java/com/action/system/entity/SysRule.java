@@ -8,32 +8,28 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 /**
- * @Description: 数据行限制表
+ * @Description: 规则表
  * @Author: ljf  <lin652210786@163.com>
  * @Date: 2024/04/07
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("sys_row_limit")
-public class SysRowLimit extends BaseEntity {
+@TableName("sys_rule")
+public class SysRule extends BaseEntity {
     @TableId(value = "id")
     private String id;
-    @TableField("data_id")
-    private String dataId;
-    @TableField("type")
-    private String type;
-    @TableField("contact_id")
-    private String contactId;
-    @TableField("condition")
-    private String condition;
+    @TableField("rule_code")
+    private String ruleCode;
+    @TableField("limit_obj_id")
+    private String limitObjId;
     @TableField("limit_type")
     private String limitType;
-    @TableField("limit_field")
-    private String limitField;
-    @TableField("limit_field_desc")
-    private String limitFieldDesc;
     @TableField("val")
     private String val;
     @TableField("status")

@@ -30,4 +30,12 @@ public class SysColumnLimit extends BaseEntity {
     private String limitField;
     @TableField("limit_field_desc")
     private String limitFieldDesc;
+
+    public SysColumnLimit(String dataId, String type, String contactId, String limitField, String limitFieldDesc) {
+        this.dataId = dataId;
+        this.type = type;
+        this.contactId = contactId;
+        this.limitField = limitField;
+        this.limitFieldDesc = limitFieldDesc;
+    }
 }

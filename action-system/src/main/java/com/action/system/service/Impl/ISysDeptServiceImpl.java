@@ -3,6 +3,7 @@ package com.action.system.service.Impl;
 import com.action.common.enums.UseType;
 import com.action.system.entity.SysDept;
 import com.action.system.entity.SysPost;
+import com.action.system.enums.NodeType;
 import com.action.system.mapper.SysDeptMapper;
 import com.action.system.mapper.SysPostMapper;
 import com.action.system.service.ISysDeptService;
@@ -34,7 +35,7 @@ public class ISysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> imp
         if (CollectionUtils.isEmpty(sysDeptList)) {
             return List.of();
         }
-        List<SysDept> parentDeptList = sysDeptList.stream().filter(dept -> dept.getParentId().equals("0")).collect(Collectors.toList());
+        List<SysDept> parentDeptList = sysDeptList.stream().filter(dept -> dept.getParentId().equals(NodeType.PARENT.getType())).collect(Collectors.toList());
         parentDeptList.stream().forEach(parentDept -> {
             List<SysDept> childrenDeptList = new ArrayList<>();
             parentDept.setChildrenList(childrenDeptList);
@@ -50,7 +51,7 @@ public class ISysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> imp
         if (CollectionUtils.isEmpty(sysDeptList)) {
             return List.of();
         }
-        List<SysDept> parentDeptList = sysDeptList.stream().filter(dept -> dept.getParentId().equals("0")).collect(Collectors.toList());
+        List<SysDept> parentDeptList = sysDeptList.stream().filter(dept -> dept.getParentId().equals(NodeType.PARENT.getType())).collect(Collectors.toList());
         parentDeptList.stream().forEach(parentDept -> {
             List<SysDept> childrenDeptList = new ArrayList<>();
             parentDept.setChildrenList(childrenDeptList);
