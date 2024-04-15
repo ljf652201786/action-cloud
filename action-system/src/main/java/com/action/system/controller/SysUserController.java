@@ -3,6 +3,7 @@ package com.action.system.controller;
 import com.action.common.common.RedisSetConstants;
 import com.action.common.common.UserSetConstants;
 import com.action.common.core.common.Result;
+import com.action.common.core.service.RedisCacheService;
 import com.action.common.enums.UseType;
 import com.action.system.dto.SysUserQuery;
 import com.action.system.dto.SysUserExtend;
@@ -43,7 +44,15 @@ public class SysUserController {
     private ISysUserRoleService iSysUserRoleService;
     @Resource
     private ISysScopeService iSysScopeService;
+    @Resource
+    private RedisCacheService redisCacheService;
 
+
+    @RequestMapping(value = "v", method = RequestMethod.GET)
+    public Result v() {
+//        redisCacheService.
+        return Result.success("ok");
+    }
 
     /**
      * @param query 查询 查询参数

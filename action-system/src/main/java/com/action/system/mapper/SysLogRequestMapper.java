@@ -1,13 +1,13 @@
 package com.action.system.mapper;
 
-import com.action.system.entity.SysRowLimit;
+import com.action.system.entity.SysLogRequest;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
- * @Description: 数据行权限表
+ * @Description: 请求日志表
  * @Author: ljf  <lin652210786@163.com>
  * @Date: 2024/04/07
  */
-public interface SysRowLimitMapper extends BaseMapper<SysRowLimit> {
+public interface SysLogRequestMapper extends BaseMapper<SysLogRequest> {
 
 }

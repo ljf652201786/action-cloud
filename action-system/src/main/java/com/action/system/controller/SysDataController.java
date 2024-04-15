@@ -21,9 +21,9 @@ public class SysDataController {
     @Resource
     private ISysDataService iSysDataService;
     @Resource
-    private ISysRowLimitService iSysRowLimitService;
+    private ISysDataRowLimitService iSysDataRowLimitService;
     @Resource
-    private ISysColumnLimitService iSysColumnLimitService;
+    private ISysDataColumnLimitService iSysDataColumnLimitService;
 
     /**
      * @param sysData 数据对象
@@ -78,9 +78,9 @@ public class SysDataController {
      */
     @RequestMapping(value = "deleteById", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("id") String id) {
-        SysRowLimit sysRowLimit = iSysRowLimitService.getOne(new QueryWrapper<SysRowLimit>().eq("data_id", id));
-        SysColumnLimit sysColumnLimit = iSysColumnLimitService.getOne(new QueryWrapper<SysColumnLimit>().eq("data_id", id));
-        if (Objects.nonNull(sysRowLimit) || Objects.nonNull(sysColumnLimit)) {
+        SysDataRowLimit sysDataRowLimit = iSysDataRowLimitService.getOne(new QueryWrapper<SysDataRowLimit>().eq("data_id", id));
+        SysDataColumnLimit sysDataColumnLimit = iSysDataColumnLimitService.getOne(new QueryWrapper<SysDataColumnLimit>().eq("data_id", id));
+        if (Objects.nonNull(sysDataRowLimit) || Objects.nonNull(sysDataColumnLimit)) {
             return Result.error("该数据删除失败，因为包含正被使用");
         }
         iSysDataService.removeById(id);

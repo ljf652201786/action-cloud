@@ -38,8 +38,8 @@ public class SysDeptController {
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
     public Result listPage(SysDeptQuery query) {
         Page<SysDept> rowPage = new Page(query.getPage(), query.getLimit());
-        List<SysDept> sysRoleList = iSysDeptService.list(rowPage, new QueryWrapper<>());
-        return Result.success("分页获取系统管理-部门基础信息表列表成功", sysRoleList);
+        List<SysDept> sysDeptList = iSysDeptService.list(rowPage, new QueryWrapper<>());
+        return Result.success("分页获取系统管理-部门基础信息表列表成功", sysDeptList);
     }
 
     /**
@@ -109,7 +109,7 @@ public class SysDeptController {
             iSysDeptService.removeBatchByIds(idList);
         }
         if (idExistList.size() > 0) {
-            return Result.error("该部门删除失败，因为包含正被用户使用", idExistList);
+            return Result.error("该部门删除失败，因为包含正被使用", idExistList);
         }
         return Result.success("批量通过id删除数据成功");
     }

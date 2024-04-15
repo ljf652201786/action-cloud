@@ -2,8 +2,8 @@ package com.action.system.controller;
 
 import com.action.common.core.common.Result;
 import com.action.common.enums.UseType;
-import com.action.system.entity.SysRowLimit;
-import com.action.system.service.ISysRowLimitService;
+import com.action.system.entity.SysDataRowLimit;
+import com.action.system.service.ISysDataRowLimitService;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +20,10 @@ import java.util.Objects;
 @RequestMapping("dataRow")
 public class SysDataRowController {
     @Resource
-    private ISysRowLimitService iSysRowLimitService;
+    private ISysDataRowLimitService iSysDataRowLimitService;
 
     /**
-     * @param sysRowLimit 数据行对象
+     * @param sysDataRowLimit 数据行对象
      * @Description: 保存数据
      * @return: Result 结果集
      * @throws:
@@ -31,13 +31,13 @@ public class SysDataRowController {
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    public Result save(@RequestBody SysRowLimit sysRowLimit) {
-        if (StringUtils.isEmpty(sysRowLimit.getDataId()) || StringUtils.isEmpty(sysRowLimit.getContactId()) || StringUtils.isEmpty(sysRowLimit.getType())) {
+    public Result save(@RequestBody SysDataRowLimit sysDataRowLimit) {
+        if (StringUtils.isEmpty(sysDataRowLimit.getDataId()) || StringUtils.isEmpty(sysDataRowLimit.getContactId()) || StringUtils.isEmpty(sysDataRowLimit.getType())) {
             return Result.error("缺少必要数据");
         }
-        sysRowLimit.setStatus(UseType.ENABLE.getStatus());
-        sysRowLimit.setCondition("And");
-        boolean isSave = iSysRowLimitService.save(sysRowLimit);
+        sysDataRowLimit.setStatus(UseType.ENABLE.getStatus());
+        sysDataRowLimit.setCondition("And");
+        boolean isSave = iSysDataRowLimitService.save(sysDataRowLimit);
         if (isSave) {
             return Result.success("保存数据成功");
         }
@@ -45,7 +45,7 @@ public class SysDataRowController {
     }
 
     /**
-     * @param sysRowLimit 数据行对象
+     * @param sysDataRowLimit 数据行对象
      * @Description: 更新数据
      * @return: Result 结果集
      * @throws:
@@ -53,13 +53,13 @@ public class SysDataRowController {
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "update", method = RequestMethod.PUT)
-    public Result update(@RequestBody SysRowLimit sysRowLimit) {
-        if (StringUtils.isEmpty(sysRowLimit.getDataId()) || StringUtils.isEmpty(sysRowLimit.getContactId()) || StringUtils.isEmpty(sysRowLimit.getType())) {
+    public Result update(@RequestBody SysDataRowLimit sysDataRowLimit) {
+        if (StringUtils.isEmpty(sysDataRowLimit.getDataId()) || StringUtils.isEmpty(sysDataRowLimit.getContactId()) || StringUtils.isEmpty(sysDataRowLimit.getType())) {
             return Result.error("缺少必要数据");
         }
-        sysRowLimit.setStatus(UseType.ENABLE.getStatus());
-        sysRowLimit.setCondition("And");
-        boolean isUpdate = iSysRowLimitService.updateById(sysRowLimit);
+        sysDataRowLimit.setStatus(UseType.ENABLE.getStatus());
+        sysDataRowLimit.setCondition("And");
+        boolean isUpdate = iSysDataRowLimitService.updateById(sysDataRowLimit);
         if (isUpdate) {
             return Result.success("更新数据成功");
         }
@@ -76,7 +76,7 @@ public class SysDataRowController {
      */
     @RequestMapping(value = "deleteById", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("id") String id) {
-        iSysRowLimitService.removeById(id);
+        iSysDataRowLimitService.removeById(id);
         return Result.success("通过id删除数据成功");
     }
 
@@ -90,12 +90,12 @@ public class SysDataRowController {
      */
     @RequestMapping(value = "disable/{id}", method = RequestMethod.PUT)
     public Result disable(@PathVariable String id) {
-        SysRowLimit sysRowLimit = iSysRowLimitService.getById(id);
-        if (Objects.isNull(sysRowLimit)) {
+        SysDataRowLimit sysDataRowLimit = iSysDataRowLimitService.getById(id);
+        if (Objects.isNull(sysDataRowLimit)) {
             return Result.error("该数据不存在");
         }
-        sysRowLimit.setStatus(UseType.DISABLED.getStatus());
-        iSysRowLimitService.updateById(sysRowLimit);
+        sysDataRowLimit.setStatus(UseType.DISABLED.getStatus());
+        iSysDataRowLimitService.updateById(sysDataRowLimit);
         //刷新缓存权限
         /*List<Scope> userIdScopeList = iScopeService.list(new QueryWrapper<Scope>().select("user_id").eq("dept_id", deptId));
         String userIdsVar = userIdScopeList.stream().map(sp -> sp.getUserId()).collect(Collectors.joining(","));
@@ -114,12 +114,12 @@ public class SysDataRowController {
      */
     @RequestMapping(value = "enable/{id}", method = RequestMethod.PUT)
     public Result enable(@PathVariable String id) {
-        SysRowLimit sysRowLimit = iSysRowLimitService.getById(id);
-        if (Objects.isNull(sysRowLimit)) {
+        SysDataRowLimit sysDataRowLimit = iSysDataRowLimitService.getById(id);
+        if (Objects.isNull(sysDataRowLimit)) {
             return Result.error("该数据不存在");
         }
-        sysRowLimit.setStatus(UseType.ENABLE.getStatus());
-        iSysRowLimitService.updateById(sysRowLimit);
+        sysDataRowLimit.setStatus(UseType.ENABLE.getStatus());
+        iSysDataRowLimitService.updateById(sysDataRowLimit);
         //刷新缓存权限
         /*List<Scope> userIdScopeList = iScopeService.list(new QueryWrapper<Scope>().select("user_id").eq("dept_id", deptId));
         String userIdsVar = userIdScopeList.stream().map(sp -> sp.getUserId()).collect(Collectors.joining(","));

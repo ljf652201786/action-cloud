@@ -1,8 +1,8 @@
 package com.action.system.controller;
 
 import com.action.common.core.common.Result;
-import com.action.system.entity.SysColumnLimit;
-import com.action.system.service.ISysColumnLimitService;
+import com.action.system.entity.SysDataColumnLimit;
+import com.action.system.service.ISysDataColumnLimitService;
 import com.action.system.vo.ColumnAllocationVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import jakarta.annotation.Resource;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RequestMapping("dataColumn")
 public class SysDataColumnController {
     @Resource
-    private ISysColumnLimitService iSysColumnLimitService;
+    private ISysDataColumnLimitService iSysDataColumnLimitService;
 
     /**
      * @param columnAllocationVo 数据列对象
@@ -38,14 +38,14 @@ public class SysDataColumnController {
         if (StringUtils.isEmpty(columnAllocationVo.getDataId()) || StringUtils.isEmpty(columnAllocationVo.getContactId()) || StringUtils.isEmpty(columnAllocationVo.getType())) {
             return Result.error("缺少必要数据");
         }
-        iSysColumnLimitService.remove(new QueryWrapper<SysColumnLimit>().eq("data_id", columnAllocationVo.getDataId()).eq("contact_id", columnAllocationVo.getContactId()).eq("type", columnAllocationVo.getType()));
+        iSysDataColumnLimitService.remove(new QueryWrapper<SysDataColumnLimit>().eq("data_id", columnAllocationVo.getDataId()).eq("contact_id", columnAllocationVo.getContactId()).eq("type", columnAllocationVo.getType()));
         if (CollectionUtils.isEmpty(columnAllocationVo.getColumnVoList())) {
             return Result.success("保存数据成功");
         }
-        List<SysColumnLimit> sysColumnLimitList = columnAllocationVo.getColumnVoList().stream().map(columnVo -> {
-            return new SysColumnLimit(columnAllocationVo.getDataId(), columnAllocationVo.getType(), columnAllocationVo.getContactId(), columnVo.getField(), columnVo.getFieldDesc());
+        List<SysDataColumnLimit> sysDataColumnLimitList = columnAllocationVo.getColumnVoList().stream().map(columnVo -> {
+            return new SysDataColumnLimit(columnAllocationVo.getDataId(), columnAllocationVo.getType(), columnAllocationVo.getContactId(), columnVo.getField(), columnVo.getFieldDesc());
         }).collect(Collectors.toList());
-        boolean isSave = iSysColumnLimitService.saveBatch(sysColumnLimitList);
+        boolean isSave = iSysDataColumnLimitService.saveBatch(sysDataColumnLimitList);
         if (isSave) {
             return Result.success("保存数据成功");
         }

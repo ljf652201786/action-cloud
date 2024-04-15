@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("sys_row_limit")
-public class SysRowLimit extends BaseEntity {
+public class SysDataRowLimit extends BaseEntity {
     @TableId(value = "id")
     private String id;
     @TableField("data_id")

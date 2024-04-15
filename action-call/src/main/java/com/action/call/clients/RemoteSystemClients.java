@@ -1,9 +1,11 @@
 package com.action.call.clients;
 
 import com.action.call.factory.RemoteSystemClientsFallbackFactory;
+import com.action.call.vo.LogRequestVo;
 import com.action.common.core.common.Result;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,4 +29,8 @@ public interface RemoteSystemClients {
     @LoadBalanced
     @RequestMapping(value = "user/getUserNameByWeChatCode", method = RequestMethod.GET)
     Result getUserNameByWeChatCode(String code);
+
+    @LoadBalanced
+    @RequestMapping(value = "logRequest/save", method = RequestMethod.POST)
+    Result save(@RequestBody LogRequestVo logRequestVo);
 }
