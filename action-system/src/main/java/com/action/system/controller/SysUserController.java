@@ -3,7 +3,7 @@ package com.action.system.controller;
 import com.action.common.common.RedisSetConstants;
 import com.action.common.common.UserSetConstants;
 import com.action.common.core.common.Result;
-import com.action.common.core.service.RedisCacheService;
+import com.action.common.core.service.RedisCacheServices;
 import com.action.common.enums.UseType;
 import com.action.system.dto.SysUserQuery;
 import com.action.system.dto.SysUserExtend;
@@ -19,7 +19,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,12 +44,13 @@ public class SysUserController {
     @Resource
     private ISysScopeService iSysScopeService;
     @Resource
-    private RedisCacheService redisCacheService;
+    private RedisCacheServices redisCacheService;
 
 
     @RequestMapping(value = "v", method = RequestMethod.GET)
     public Result v() {
-//        redisCacheService.
+        redisCacheService.set("k", "234");
+        Object k = redisCacheService.get("k");
         return Result.success("ok");
     }
 
