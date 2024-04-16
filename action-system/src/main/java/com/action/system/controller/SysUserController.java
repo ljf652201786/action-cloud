@@ -4,6 +4,7 @@ import com.action.common.common.RedisSetConstants;
 import com.action.common.common.UserSetConstants;
 import com.action.common.core.common.Result;
 import com.action.common.core.service.RedisCacheServices;
+import com.action.common.entity.SecurityAuthUser;
 import com.action.common.enums.UseType;
 import com.action.system.dto.SysUserQuery;
 import com.action.system.dto.SysUserExtend;
@@ -385,7 +386,7 @@ public class SysUserController {
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "getUserByEmail", method = RequestMethod.GET)
-    public Result getUserByEmail(String email) {
+    public Result getUserByEmail(@RequestParam("email") String email) {
         SysUser sysUser = iSysUserService.findByEmail(email);
         if (Objects.isNull(sysUser)) {
             return Result.error("该手邮箱未注册");
@@ -402,7 +403,7 @@ public class SysUserController {
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "getUserNameByWeChatCode", method = RequestMethod.GET)
-    public Result getUserNameByWeChatCode(String code) {
+    public Result getUserNameByWeChatCode(@RequestParam("code") String code) {
         String username = iSysUserService.getUserNameByWeChatCode(code);
         if (StringUtils.isEmpty(username)) {
             return Result.error("无效扫码");
@@ -410,5 +411,21 @@ public class SysUserController {
         return Result.success("扫码获取用户名成功", username);
     }
 
+    /**
+     * @param username 用户名
+     * @Description: 通过用户名查找用户信息（包含菜单权限和角色）
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/3
+     */
+    @RequestMapping(value = "getUserByUserName", method = RequestMethod.GET)
+    public Result getUserByUserName(@RequestParam("username") String username) {
+        SecurityAuthUser securityAuthUser = iSysUserService.getUserByUserName(username);
+        if (Objects.isNull(securityAuthUser)) {
+            return Result.error("获取用户信息失败");
+        }
+        return Result.success("获取用户信息成功", securityAuthUser);
+    }
 
 }

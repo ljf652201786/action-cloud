@@ -1,5 +1,7 @@
 package com.action.system.service.Impl;
 
+import com.action.common.core.base.BaseSecurityMenu;
+import com.action.common.enums.UseType;
 import com.action.system.entity.SysMenu;
 import com.action.system.enums.MenuType;
 import com.action.system.enums.NodeType;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -40,7 +44,19 @@ public class ISysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> imp
         });
         return parentMenuList;
     }
-    
+
+    @Override
+    public Set<? extends BaseSecurityMenu> getSysPermission() {
+        List<SysMenu> sysMenuList = sysMenuMapper.selectList(new QueryWrapper<SysMenu>().eq("status", UseType.ENABLE.getStatus()));
+        if (CollectionUtils.isEmpty(sysMenuList)) {
+            return new HashSet<>();
+        }
+        Set<BaseSecurityMenu> securityMenuSet = sysMenuList.stream().map(sysMenu -> {
+            return new BaseSecurityMenu(sysMenu.getRouteUrl(), sysMenu.getMenuPerm());
+        }).collect(Collectors.toSet());
+        return securityMenuSet;
+    }
+
     private void buildMenuTree(List<SysMenu> menus, List<SysMenu> childrenDeptList, String parentId) {
         menus.stream().forEach(menu -> {
             if (menu.getParentId().equals(parentId)) {

@@ -1,11 +1,11 @@
 package com.action.auth.holder;
 
-import com.action.auth.entity.SecurityAuthUser;
 import com.action.call.clients.RemoteSystemClients;
-import com.action.common.auth.base.BaseSecurityMenu;
-import com.action.common.auth.base.BaseSecurityRole;
 import com.action.common.auth.holder.IAuthHolder;
+import com.action.common.core.base.BaseSecurityMenu;
+import com.action.common.core.base.BaseSecurityRole;
 import com.action.common.core.common.Result;
+import com.action.common.entity.SecurityAuthUser;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,11 +38,6 @@ public class ExtendAuthHolder implements IAuthHolder<SecurityAuthUser> {
             return new SecurityAuthUser(result.get("data"));
         }
         return null;
-        //通过手机号从数据库查询user信息
-        /*SecurityAuthUser user = new SecurityAuthUser();
-        user.setUsername("wangwu");
-        user.setCode("1234");
-        return user;*/
     }
 
     /*
@@ -57,10 +52,6 @@ public class ExtendAuthHolder implements IAuthHolder<SecurityAuthUser> {
             return new SecurityAuthUser(result.get("data"));
         }
         return null;
-        /*SecurityAuthUser user = new SecurityAuthUser();
-        user.setUsername("wangwu");
-        user.setCode("1234");
-        return user;*/
     }
 
     /*
@@ -85,36 +76,16 @@ public class ExtendAuthHolder implements IAuthHolder<SecurityAuthUser> {
     }
 
     /*
-     * 用户名密码登录
+     * 通过用户名查找用户信息（包含菜单权限和角色）
      * 数据库配合缓存获取
      * */
     @Override
     public SecurityAuthUser getUserByUserName(String username) {
-        //通过用户名查找用户信息（包含菜单权限和角色）
-        SecurityAuthUser user = new SecurityAuthUser();
-        user.setId("1770275787111649281");
-        user.setUsername("wangwu");
-        user.setPassword(passwordEncoder.encode("123456"));
-        user.setStatus("1");
-
-        BaseSecurityRole baseSecurityRole = new BaseSecurityRole();
-        baseSecurityRole.setCode("ROLE_user");
-        Set<BaseSecurityRole> baseSecurityRoles = new HashSet<>();
-        baseSecurityRoles.add(baseSecurityRole);
-        user.setRoleScopeList(baseSecurityRoles);
-
-        Set<BaseSecurityMenu> baseSecurityMenus = new HashSet<>();
-        BaseSecurityMenu baseSecurityMenu = new BaseSecurityMenu();
-        baseSecurityMenu.setPath("/system/user/listPage");
-        baseSecurityMenu.setPerms("sys::user::list");
-        baseSecurityMenus.add(baseSecurityMenu);
-        BaseSecurityMenu baseSecurityMenu1 = new BaseSecurityMenu();
-        baseSecurityMenu1.setPath("/system/user/private");
-        baseSecurityMenu1.setPerms("sys::user::private");
-        baseSecurityMenus.add(baseSecurityMenu1);
-        user.setMenuScopeList(baseSecurityMenus);
-
-        return user;
+        Result result = remoteSystemClients.getUserByUserName(username);
+        if (result.get("code").equals(HttpServletResponse.SC_OK)) {
+            return (SecurityAuthUser) result.get("data");
+        }
+        return null;
     }
 
     /*
@@ -122,15 +93,8 @@ public class ExtendAuthHolder implements IAuthHolder<SecurityAuthUser> {
      * */
     @Override
     public Set<? extends BaseSecurityMenu> getSysPermission() {
-        Set<BaseSecurityMenu> baseSecurityMenus = new HashSet<>();
-        BaseSecurityMenu baseSecurityMenu = new BaseSecurityMenu();
-        baseSecurityMenu.setPath("/system/user/listPage");
-        baseSecurityMenu.setPerms("sys::user::list");
-        baseSecurityMenus.add(baseSecurityMenu);
-        BaseSecurityMenu baseSecurityMenu1 = new BaseSecurityMenu();
-        baseSecurityMenu1.setPath("/system/user/private");
-        baseSecurityMenu1.setPerms("sys::user::private");
-        baseSecurityMenus.add(baseSecurityMenu1);
-        return baseSecurityMenus;
+        Result result = remoteSystemClients.getSysPermission();
+        Set sysPermissions = (Set) result.get("data");
+        return sysPermissions;
     }
 }

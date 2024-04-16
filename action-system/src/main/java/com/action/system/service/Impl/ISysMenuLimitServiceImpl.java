@@ -1,11 +1,14 @@
 package com.action.system.service.Impl;
 
+import com.action.system.entity.SysMenu;
 import com.action.system.entity.SysMenuLimit;
 import com.action.system.mapper.SysMenuLimitMapper;
 import com.action.system.service.ISysMenuLimitService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 /**
  * @Description: 菜单权限表
@@ -17,4 +20,7 @@ public class ISysMenuLimitServiceImpl extends ServiceImpl<SysMenuLimitMapper, Sy
     @Resource
     private SysMenuLimitMapper sysMenuLimitMapper;
 
+    public Set<SysMenu> getSysMenuByScope(Set<String> deptIdSet, Set<String> postIdSet, Set<String> roleIdSet) {
+        return sysMenuLimitMapper.getSysMenuByScope(deptIdSet, postIdSet, roleIdSet);
+    }
 }

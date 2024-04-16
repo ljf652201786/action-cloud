@@ -24,7 +24,7 @@ public class SysScope {
     @TableField("dept_id")
     private String deptId;
     @TableField("post_id")
-    private Boolean postId;
+    private String postId;
     @TableField("status")
     private String status;
 }

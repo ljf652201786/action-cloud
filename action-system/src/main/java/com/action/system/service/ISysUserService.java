@@ -1,5 +1,6 @@
 package com.action.system.service;
 
+import com.action.common.entity.SecurityAuthUser;
 import com.action.system.dto.SysUserExtend;
 import com.action.system.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -81,4 +82,12 @@ public interface ISysUserService extends IService<SysUser> {
      * @return String
      */
     String getUserNameByWeChatCode(String code);
+
+    /**
+     * 通过用户名查找用户信息（包含菜单权限和角色）
+     *
+     * @param username 用户名
+     * @return SecurityAuthUser
+     */
+    SecurityAuthUser getUserByUserName(String username);
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.action.system.mapper.SysUserRoleMapper">
+
+    <select id="getSysRoleByUserId" parameterType="String" resultType="com.action.system.entity.SysRole">
+        select sr.id,
+               sr.role_code,
+               sr.role_name,
+               sr.default_role,
+               sr.sort,
+               sr.status,
+               sr.remark,
+               sr.create_by,
+               sr.create_time,
+               sr.update_by,
+               sr.update_time
+        from sys_user_role sur
+                 left join sys_role sr on sr.id = sur.role_id
+        where sur.user_id = #{userId}
+    </select>
+</mapper>

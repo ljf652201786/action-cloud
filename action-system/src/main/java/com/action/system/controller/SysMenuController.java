@@ -110,4 +110,16 @@ public class SysMenuController {
         List<SysMenu> treeSelects = iSysMenuService.buildMenuTreeSelect();
         return Result.success("获取数据权限树成功", treeSelects);
     }
+
+    /**
+     * @Description: 获取所有菜单权限
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/3
+     */
+    @RequestMapping(value = "getSysPermission", method = RequestMethod.GET)
+    public Result getSysPermission() {
+        return Result.success("系统菜单权限获取成功", iSysMenuService.getSysPermission());
+    }
 }

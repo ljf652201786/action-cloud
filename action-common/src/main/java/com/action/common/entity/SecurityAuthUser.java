@@ -1,6 +1,6 @@
-package com.action.auth.entity;
+package com.action.common.entity;
 
-import com.action.common.auth.base.BaseSecurityUser;
+import com.action.common.core.base.BaseSecurityUser;
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.lang.reflect.InvocationTargetException;
