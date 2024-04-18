@@ -11,7 +11,7 @@
  Target Server Version : 50725
  File Encoding         : 65001
 
- Date: 16/04/2024 19:23:17
+ Date: 18/04/2024 12:22:29
 */
 
 SET NAMES utf8mb4;
@@ -23,7 +23,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `sys_data`;
 CREATE TABLE `sys_data`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `parent_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '父部门id',
+  `parent_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '父id',
   `data_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '编码',
   `label` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '标题',
   `table_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '表名',
@@ -49,7 +49,7 @@ DROP TABLE IF EXISTS `sys_data_column_limit`;
 CREATE TABLE `sys_data_column_limit`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `data_id` bigint(11) NOT NULL COMMENT '数据限制id',
-  `type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '1、部门 2、岗位 3、角色  4、用户组',
+  `type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '1、用户组 2、岗位 3、角色',
   `contact_id` bigint(20) NOT NULL COMMENT '关联id',
   `limit_field` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '限制所属字段',
   `limit_field_desc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '限制所属字段描述',
@@ -73,7 +73,7 @@ DROP TABLE IF EXISTS `sys_data_row_limit`;
 CREATE TABLE `sys_data_row_limit`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `data_id` bigint(11) NOT NULL COMMENT '数据限制id',
-  `type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '1、部门 2、岗位 3、角色  4、用户组',
+  `type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '1、用户组 2、岗位 3、角色',
   `contact_id` bigint(20) NOT NULL COMMENT '关联id',
   `condition` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '衔接条件(默认就是and)',
   `limit_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '限制方式（属于(等于)、不属于(不等于)、大于、小于、范围）',
@@ -183,6 +183,24 @@ INSERT INTO `sys_dict_detail` VALUES (1664549953634222081, 1664549910374170626, 
 INSERT INTO `sys_dict_detail` VALUES (1664549985406074881, 1664549910374170626, 'sys_enable_disable', '启用', '1', 0, '0', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
+-- Table structure for sys_group
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_group`;
+CREATE TABLE `sys_group`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `group_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户组编码',
+  `group_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户组名称',
+  `sort` int(4) NOT NULL COMMENT '显示顺序',
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '角色状态（1正常 0停用）',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户组表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for sys_limit_obj
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_limit_obj`;
@@ -208,14 +226,24 @@ INSERT INTO `sys_limit_obj` VALUES (1, 'now.getYear', '1', '当前年份', '', N
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_log_login`;
 CREATE TABLE `sys_log_login`  (
-  `id` bigint(20) NOT NULL COMMENT '主键id',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户账号',
   `ip_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip地址',
   `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '登录状态',
   `msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录信息',
   `request_time` datetime(0) NULL DEFAULT NULL COMMENT '请求时间',
+  `browser_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器名',
+  `browser_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器类型',
+  `browser_group` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器家族',
+  `browser_manufacturer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器生产厂商',
+  `browser_renderingengine` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器使用的渲染引擎',
+  `browser_version` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '浏览器版本',
+  `os_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统名',
+  `os_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '访问设备类型',
+  `os_group` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统家族',
+  `os_manufacturer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作系统生产厂商',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '登录日志表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '登录日志表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_log_request
@@ -641,7 +669,7 @@ INSERT INTO `sys_menu` VALUES (1683762378296184833, 1683761702220517377, '项目
 DROP TABLE IF EXISTS `sys_menu_limit`;
 CREATE TABLE `sys_menu_limit`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '1、岗位 2、部门 3、角色 4、用户组',
+  `type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '1、用户组 2、岗位 3、角色',
   `contact_id` bigint(20) NOT NULL COMMENT '关联ID',
   `menu_id` bigint(20) NOT NULL COMMENT '菜单ID',
   `status` char(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态 1  启用 0 禁用',
@@ -747,22 +775,23 @@ DROP TABLE IF EXISTS `sys_scope`;
 CREATE TABLE `sys_scope`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `user_id` bigint(20) NOT NULL COMMENT '用户id',
-  `dept_id` bigint(20) NOT NULL COMMENT '部门id',
+  `dept_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '部门id 父级表示：[1,2,3]',
   `post_id` bigint(20) NOT NULL COMMENT '岗位id',
-  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态 1  启用 0 禁用',
+  `dept_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '部门状态（1正常 0停用）',
+  `post_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '岗位状态（1正常 0停用）',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1683741281328746500 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '范围表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_scope
 -- ----------------------------
-INSERT INTO `sys_scope` VALUES (1683722964241154050, 1, 108, 2, '1');
-INSERT INTO `sys_scope` VALUES (1683723364428087297, 1663070588807405570, 108, 2, '1');
-INSERT INTO `sys_scope` VALUES (1683723364428087298, 1663070588807405570, 108, 4, '1');
-INSERT INTO `sys_scope` VALUES (1683733904613376001, 1663082419064115201, 109, 3, '1');
-INSERT INTO `sys_scope` VALUES (1683741281328746497, 12, 108, 2, '1');
-INSERT INTO `sys_scope` VALUES (1683741281328746498, 12, 108, 4, '1');
-INSERT INTO `sys_scope` VALUES (1683741281328746499, 12, 109, 3, '1');
+INSERT INTO `sys_scope` VALUES (1683722964241154050, 1, '108', 2, '', '');
+INSERT INTO `sys_scope` VALUES (1683723364428087297, 1663070588807405570, '108', 2, '', '');
+INSERT INTO `sys_scope` VALUES (1683723364428087298, 1663070588807405570, '108', 4, '', '');
+INSERT INTO `sys_scope` VALUES (1683733904613376001, 1663082419064115201, '109', 3, '', '');
+INSERT INTO `sys_scope` VALUES (1683741281328746497, 12, '108', 2, '', '');
+INSERT INTO `sys_scope` VALUES (1683741281328746498, 12, '108', 4, '', '');
+INSERT INTO `sys_scope` VALUES (1683741281328746499, 12, '109', 3, '', '');
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -808,6 +837,18 @@ INSERT INTO `sys_user` VALUES (1769917978985529345, '', 'user3', '张三3', '', 
 INSERT INTO `sys_user` VALUES (1769928944334831618, '', 'user3', '张三3', '', '', '', '0', '0', '', NULL, '', NULL, NULL);
 INSERT INTO `sys_user` VALUES (1769929093765304322, '', 'user3', '张三3', '{bcrypt}$2a$10$vXmtX1s5VFFPHf2ZqcHM7euv5P3NUfG/qh9d.tbBVXx3tXFG3U1am', '', '', '0', '0', '', NULL, '', NULL, NULL);
 INSERT INTO `sys_user` VALUES (1770275787111649281, '', 'wangwu', '王五', '{bcrypt}$2a$10$vXmtX1s5VFFPHf2ZqcHM7euv5P3NUfG/qh9d.tbBVXx3tXFG3U1am', '', '', '1', '0', '', NULL, '', NULL, NULL);
+
+-- ----------------------------
+-- Table structure for sys_user_group
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user_group`;
+CREATE TABLE `sys_user_group`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+  `group_id` bigint(20) NOT NULL COMMENT '用户组id',
+  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态 1  启用 0 禁用',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户用户组中间件表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_user_role
