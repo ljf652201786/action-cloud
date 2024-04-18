@@ -11,5 +11,5 @@ public interface ISysUserRoleService extends IService<SysUserRole> {
 
     List<SysUserRole> getSysUserRoleByUserId(String userId);
 
-    boolean updateGroupStatus(String roleId, String status);
+    boolean updateRoleStatus(String roleId, String status);
 }

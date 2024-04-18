@@ -3,11 +3,14 @@ package com.action.system.service.Impl;
 import com.action.common.enums.UseType;
 import com.action.system.entity.SysUserGroup;
 import com.action.system.mapper.SysUserGroupMapper;
+import com.action.system.service.ICacheService;
 import com.action.system.service.ISysUserGroupService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +24,8 @@ import java.util.List;
 public class ISysUserGroupServiceImpl extends ServiceImpl<SysUserGroupMapper, SysUserGroup> implements ISysUserGroupService {
     @Resource
     private SysUserGroupMapper sysUserGroupMapper;
+    @Resource
+    private ICacheService iCacheService;
 
     @Override
     public List<SysUserGroup> getSysUserGroupByUserId(String userId) {
@@ -29,6 +34,10 @@ public class ISysUserGroupServiceImpl extends ServiceImpl<SysUserGroupMapper, Sy
 
     @Override
     public boolean updateGroupStatus(String groupId, String status) {
-        return SqlHelper.retBool(sysUserGroupMapper.update(new QueryWrapper<SysUserGroup>().eq("group_id", groupId).eq("status", status)));
+        boolean isUpdate = SqlHelper.retBool(sysUserGroupMapper.update(new UpdateWrapper<SysUserGroup>().set(!StringUtils.isEmpty(status), "status", status).eq("group_id", groupId)));
+        if (isUpdate) {
+            iCacheService.cleanUserGroupCache(groupId);
+        }
+        return isUpdate;
     }
 }

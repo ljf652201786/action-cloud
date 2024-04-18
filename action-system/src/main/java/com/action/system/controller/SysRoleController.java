@@ -179,7 +179,7 @@ public class SysRoleController {
         }
         sysRole.setStatus(UseType.DISABLED.getStatus());
         iSysRoleService.updateById(sysRole);
-        iSysUserRoleService.updateGroupStatus(id, UseType.DISABLED.getStatus());
+        iSysUserRoleService.updateRoleStatus(id, UseType.DISABLED.getStatus());
         return Result.success("禁用成功");
     }
 
@@ -199,7 +199,7 @@ public class SysRoleController {
         }
         sysRole.setStatus(UseType.ENABLE.getStatus());
         iSysRoleService.updateById(sysRole);
-        iSysUserRoleService.updateGroupStatus(id, UseType.ENABLE.getStatus());
+        iSysUserRoleService.updateRoleStatus(id, UseType.ENABLE.getStatus());
         return Result.success("激活成功");
     }
 }

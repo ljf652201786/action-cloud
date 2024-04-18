@@ -1,15 +1,17 @@
 package com.action.system.service.Impl;
 
-import com.action.common.core.service.RedisCacheServices;
 import com.action.common.enums.UseType;
 import com.action.system.entity.SysRole;
 import com.action.system.entity.SysUserRole;
 import com.action.system.mapper.SysUserRoleMapper;
+import com.action.system.service.ICacheService;
 import com.action.system.service.ISysUserRoleService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public class ISysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysU
     @Resource
     private SysUserRoleMapper sysUserRoleMapper;
     @Resource
-    private RedisCacheServices redisCacheServices;
+    private ICacheService iCacheService;
 
     @Override
     public List<SysRole> getSysRoleByUserId(String userId) {
@@ -37,10 +39,10 @@ public class ISysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysU
     }
 
     @Override
-    public boolean updateGroupStatus(String roleId, String status) {
-        boolean isUpdate = SqlHelper.retBool(sysUserRoleMapper.update(new QueryWrapper<SysUserRole>().eq("role_id", roleId).eq("status", status)));
+    public boolean updateRoleStatus(String roleId, String status) {
+        boolean isUpdate = SqlHelper.retBool(sysUserRoleMapper.update(new UpdateWrapper<SysUserRole>().set(!StringUtils.isEmpty(status), "status", status).eq("role_id", roleId)));
         if (isUpdate) {
-            redisCacheServices.remove();
+            iCacheService.cleanUserRoleCache(roleId);
         }
         return isUpdate;
     }

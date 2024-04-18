@@ -5,7 +5,6 @@ import com.action.common.common.RedisSetConstants;
 import com.action.common.common.UserSetConstants;
 import com.action.common.core.base.BaseSecurityMenu;
 import com.action.common.core.common.Result;
-import com.action.common.core.service.RedisCacheServices;
 import com.action.common.entity.SecurityAuthUser;
 import com.action.common.enums.UseType;
 import com.action.system.dto.SysUserExtend;
@@ -46,7 +45,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
     @Resource
     private RemoteAuthClients authClients;
     @Resource
-    private RedisCacheServices redisCacheServices;
+    private ICacheService iCacheService;
 
     @Override
     public Boolean regist(SysUserExtend sysUser) {
@@ -147,64 +146,64 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
     @Override
     public SecurityAuthUser getUserByUserName(String username) {
         SecurityAuthUser securityAuthUser;
-        Object cacheUser = redisCacheServices.get(RedisSetConstants.USER_BASIS + username);
+        SysUser cacheUser = iCacheService.getUserBasisCache(username);
         if (Objects.nonNull(cacheUser)) {
-            securityAuthUser = new SecurityAuthUser((SysUser) cacheUser);
+            securityAuthUser = new SecurityAuthUser(cacheUser);
         } else {
             SysUser sysUser = this.findByUsername(username);
             if (Objects.isNull(sysUser)) {
                 return null;
             }
             securityAuthUser = new SecurityAuthUser(sysUser);
-            redisCacheServices.set(RedisSetConstants.USER_BASIS + username, sysUser);
+            iCacheService.setUserBasisCache(username, sysUser);
         }
-        Object cacheMenuPerm = redisCacheServices.get(RedisSetConstants.USER_MENUPERM + username);
+        Set<BaseSecurityMenu> cacheMenuPerm = iCacheService.getUserMenupermCache(username);
         if (Objects.nonNull(cacheMenuPerm)) {
-            securityAuthUser.setMenuScopeList((Set<BaseSecurityMenu>) cacheMenuPerm);
+            securityAuthUser.setMenuScopeList(cacheMenuPerm);
             return securityAuthUser;
         } else {
             //获取用户所拥有的用户组信息
             Set<String> groupIdSet = new HashSet<String>();
-            Object cacheGroupIdSet = redisCacheServices.get(RedisSetConstants.USER_GROUP + username);
+            Set<String> cacheGroupIdSet = iCacheService.getUserGroupCache(username);
             if (Objects.nonNull(cacheGroupIdSet)) {
-                groupIdSet = (Set<String>) cacheGroupIdSet;
+                groupIdSet = cacheGroupIdSet;
             } else {
                 //获取用户组(已激活的)
                 List<SysUserGroup> sysUserGroupList = iSysUserGroupService.getSysUserGroupByUserId(securityAuthUser.getId());
                 if (!CollectionUtils.isEmpty(sysUserGroupList)) {
                     groupIdSet = sysUserGroupList.stream().map(sysUserGroup -> sysUserGroup.getGroupId()).collect(Collectors.toSet());
                 }
-                redisCacheServices.set(RedisSetConstants.USER_GROUP + username, groupIdSet);
+                iCacheService.setUserGroupCache(username, groupIdSet);
             }
             //获取用户所拥有的岗位信息
             Set<String> postIdSet = new HashSet<String>();
-            Object cachePostIdSet = redisCacheServices.get(RedisSetConstants.USER_POST + username);
+            Set<String> cachePostIdSet = iCacheService.getUserPostCache(username);
             if (Objects.nonNull(cachePostIdSet)) {
-                postIdSet = (Set<String>) cachePostIdSet;
+                postIdSet = cachePostIdSet;
             } else {
                 //获取用户岗位(已激活的)
                 List<SysScope> sysScopeList = iSysScopeService.getSysScopeByUserId(securityAuthUser.getId());
                 if (!CollectionUtils.isEmpty(sysScopeList)) {
                     postIdSet = sysScopeList.stream().map(sysScope -> sysScope.getPostId()).collect(Collectors.toSet());
                 }
-                redisCacheServices.set(RedisSetConstants.USER_POST + username, postIdSet);
+                iCacheService.setUserPostCache(username, postIdSet);
             }
             //获取用户所拥有的角色信息
             Set<String> roleIdSet = new HashSet<String>();
-            Object cacheRoleIdSet = redisCacheServices.get(RedisSetConstants.USER_ROLE + username);
+            Set<String> cacheRoleIdSet = iCacheService.getUserRoleCache(username);
             if (Objects.nonNull(cacheRoleIdSet)) {
-                roleIdSet = (Set<String>) cacheRoleIdSet;
+                roleIdSet = cacheRoleIdSet;
             } else {
                 //获取用户角色(已激活的)
                 List<SysUserRole> sysUserRoleList = iSysUserRoleService.getSysUserRoleByUserId(securityAuthUser.getId());
                 if (!CollectionUtils.isEmpty(sysUserRoleList)) {
                     roleIdSet = sysUserRoleList.stream().map(sysUserRole -> sysUserRole.getId()).collect(Collectors.toSet());
                 }
-                redisCacheServices.set(RedisSetConstants.USER_ROLE + username, roleIdSet);
+                iCacheService.setUserRoleCache(username, roleIdSet);
             }
             //获取用户菜单权限
             Set<BaseSecurityMenu> baseSecurityMenuSet = iSysMenuLimitService.getBaseSecurityMenuByScope(groupIdSet, postIdSet, roleIdSet);
-            redisCacheServices.set(RedisSetConstants.USER_MENUPERM + username, baseSecurityMenuSet);
+            iCacheService.setUserMenupermCache(username, baseSecurityMenuSet);
             securityAuthUser.setMenuScopeList(baseSecurityMenuSet);
         }
         return securityAuthUser;
@@ -265,11 +264,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
         }
         Set<BaseSecurityMenu> baseSecurityMenuSet = iSysMenuLimitService.getBaseSecurityMenuByScope(groupIdSet, postIdSet, roleIdSet);
         //更新用户缓存信息
-        redisCacheServices.set(RedisSetConstants.USER_BASIS + sysUser.getUsername(), sysUser);
-        redisCacheServices.set(RedisSetConstants.USER_GROUP + sysUser.getUsername(), groupIdSet);
-        redisCacheServices.set(RedisSetConstants.USER_POST + sysUser.getUsername(), postIdSet);
-        redisCacheServices.set(RedisSetConstants.USER_ROLE + sysUser.getUsername(), roleIdSet);
-        redisCacheServices.set(RedisSetConstants.USER_MENUPERM + sysUser.getUsername(), baseSecurityMenuSet);
+        iCacheService.setUserExtendInfoCache(sysUser, groupIdSet, postIdSet, roleIdSet, baseSecurityMenuSet);
     }
 
 }
