@@ -1,6 +1,7 @@
 package com.action.call.clients;
 
 import com.action.call.factory.RemoteSystemClientsFallbackFactory;
+import com.action.call.vo.LogLoginVo;
 import com.action.call.vo.LogRequestVo;
 import com.action.common.core.base.BaseSecurityMenu;
 import com.action.common.core.common.Result;
@@ -44,4 +45,8 @@ public interface RemoteSystemClients {
     @LoadBalanced
     @RequestMapping(value = "logRequest/save", method = RequestMethod.POST)
     Result save(@RequestBody LogRequestVo logRequestVo);
+
+    @LoadBalanced
+    @RequestMapping(value = "logLogin/save", method = RequestMethod.POST)
+    Result save(@RequestBody LogLoginVo logLoginVo);
 }

@@ -28,7 +28,7 @@
         where 1=1
         or (
         sml.type = 1 and sml.contact_id in
-        <foreach collection="deptIdSet" item="item" open="(" separator="," close=")">
+        <foreach collection="groupIdSet" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
         )

@@ -2,6 +2,7 @@ package com.action.system.service;
 
 import com.action.common.entity.SecurityAuthUser;
 import com.action.system.dto.SysUserExtend;
+import com.action.system.entity.SysScope;
 import com.action.system.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,14 @@ public interface ISysUserService extends IService<SysUser> {
      * @return Boolean
      */
     Boolean editInfo(SysUser sysUser);
+
+    /**
+     * 设置用户默认角色
+     *
+     * @param sysUserExtend 用户扩展对象
+     * @return Boolean
+     */
+    void setUserDefaultRole(SysUserExtend sysUserExtend);
 
     /**
      * 修改密码
@@ -90,4 +99,21 @@ public interface ISysUserService extends IService<SysUser> {
      * @return SecurityAuthUser
      */
     SecurityAuthUser getUserByUserName(String username);
+
+    /**
+     * 保存用户扩展信息（包含菜单权限和角色）
+     *
+     * @param sysUserExtend 用户扩展对象
+     * @return void
+     */
+    void saveUserExtendInfo(SysUserExtend sysUserExtend);
+
+    /**
+     * 更新用户扩展信息（包含菜单权限和角色）
+     *
+     * @param sysUser       用户对象
+     * @param sysUserExtend 用户扩展对象
+     * @return SecurityAuthUser
+     */
+    void updateUserExtendInfo(SysUser sysUser, SysUserExtend sysUserExtend);
 }

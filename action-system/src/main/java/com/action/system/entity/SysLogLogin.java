@@ -1,5 +1,7 @@
 package com.action.system.entity;
 
+import com.action.call.vo.LogLoginVo;
+import com.action.call.vo.LogRequestVo;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -26,5 +28,43 @@ public class SysLogLogin {
     private String msg;
     @TableField("request_time")
     private Date requestTime;
+    @TableField("browser_name")
+    private String browserName;
+    @TableField("browser_type")
+    private String browserType;
+    @TableField("browser_group")
+    private String browserGroup;
+    @TableField("browser_manufacturer")
+    private String browserManufacturer;
+    @TableField("browser_renderingengine")
+    private String browserRenderingengine;
+    @TableField("browser_version")
+    private String browserVersion;
+    @TableField("os_name")
+    private String osName;
+    @TableField("os_type")
+    private String osType;
+    @TableField("os_group")
+    private String osGroup;
+    @TableField("os_manufacturer")
+    private String osManufacturer;
 
+    public SysLogLogin buildSysLogLogin(LogLoginVo logLoginVo) {
+        this.username = logLoginVo.getUsername();
+        this.ipAddress = logLoginVo.getIpAddress();
+        this.status = logLoginVo.getStatus();
+        this.msg = logLoginVo.getMsg();
+        this.requestTime = logLoginVo.getRequestTime();
+        this.browserName = logLoginVo.getBrowserName();
+        this.browserType = logLoginVo.getBrowserType();
+        this.browserGroup = logLoginVo.getBrowserGroup();
+        this.browserManufacturer = logLoginVo.getBrowserManufacturer();
+        this.browserRenderingengine = logLoginVo.getBrowserRenderingengine();
+        this.browserVersion = logLoginVo.getBrowserVersion();
+        this.osName = logLoginVo.getOsName();
+        this.osType = logLoginVo.getOsType();
+        this.osGroup = logLoginVo.getOsGroup();
+        this.osManufacturer = logLoginVo.getOsManufacturer();
+        return this;
+    }
 }

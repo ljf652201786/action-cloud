@@ -12,18 +12,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface RemoteAuthClients {
 
     @LoadBalanced  //启用负载均衡
-    @RequestMapping(value = "generatePwd", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/extend/generatePwd", method = RequestMethod.GET)
     Result generatePwd(@RequestParam("password") String password);
 
     @LoadBalanced
-    @RequestMapping(value = "getDefaultPwd", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/extend/getDefaultPwd", method = RequestMethod.GET)
     Result getDefaultPwd();
 
     @LoadBalanced
-    @RequestMapping(value = "getCurrentUser", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/extend/getCurrentUser", method = RequestMethod.GET)
     Result getCurrentUser();
 
     @LoadBalanced
-    @RequestMapping(value = "pwdMatches", method = RequestMethod.GET)
+    @RequestMapping(value = "auth/extend/getCurrentUserName", method = RequestMethod.GET)
+    Result getCurrentUserName();
+
+    @LoadBalanced
+    @RequestMapping(value = "auth/extend/pwdMatches", method = RequestMethod.GET)
     Result pwdMatches(@RequestParam("rawPassword") String rawPassword);
 }

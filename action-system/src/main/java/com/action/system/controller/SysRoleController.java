@@ -8,7 +8,6 @@ import com.action.system.entity.SysUserRole;
 import com.action.system.service.ISysRoleService;
 import com.action.system.service.ISysUserRoleService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
@@ -180,14 +179,7 @@ public class SysRoleController {
         }
         sysRole.setStatus(UseType.DISABLED.getStatus());
         iSysRoleService.updateById(sysRole);
-        SysUserRole sysUserRole = new SysUserRole();
-        sysUserRole.setStatus(UseType.DISABLED.getStatus());
-        iSysUserRoleService.update(sysUserRole, new UpdateWrapper<SysUserRole>().eq("role_id", id));
-        //刷新缓存权限
-        /*List<UserRole> userIdScopeList = userRoleService.list(new QueryWrapper<UserRole>().select("user_id").eq("role_id", roleId));
-        String userIdsVar = userIdScopeList.stream().map(sp -> sp.getUserId()).collect(Collectors.joining(","));
-        List<String> usernames = userService.list(new QueryWrapper<User>().in("id", userIdsVar)).stream().map(user -> user.getUsername()).collect(Collectors.toList());
-        userService.refreshPermissions(usernames, false);*/
+        iSysUserRoleService.updateGroupStatus(id, UseType.DISABLED.getStatus());
         return Result.success("禁用成功");
     }
 
@@ -207,14 +199,7 @@ public class SysRoleController {
         }
         sysRole.setStatus(UseType.ENABLE.getStatus());
         iSysRoleService.updateById(sysRole);
-        SysUserRole sysUserRole = new SysUserRole();
-        sysUserRole.setStatus(UseType.ENABLE.getStatus());
-        iSysUserRoleService.update(sysUserRole, new UpdateWrapper<SysUserRole>().eq("role_id", id));
-        //刷新缓存权限
-        /*List<UserRole> userIdScopeList = userRoleService.list(new QueryWrapper<UserRole>().select("user_id").eq("role_id", roleId));
-        String userIdsVar = userIdScopeList.stream().map(sp -> sp.getUserId()).collect(Collectors.joining(","));
-        List<String> usernames = userService.list(new QueryWrapper<User>().in("id", userIdsVar)).stream().map(user -> user.getUsername()).collect(Collectors.toList());
-        userService.refreshPermissions(usernames, false);*/
+        iSysUserRoleService.updateGroupStatus(id, UseType.ENABLE.getStatus());
         return Result.success("激活成功");
     }
 }

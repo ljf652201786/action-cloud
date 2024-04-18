@@ -8,14 +8,8 @@ import com.action.common.entity.SecurityAuthUser;
 import com.action.common.enums.UseType;
 import com.action.system.dto.SysUserQuery;
 import com.action.system.dto.SysUserExtend;
-import com.action.system.entity.SysRole;
-import com.action.system.entity.SysScope;
 import com.action.system.entity.SysUser;
-import com.action.system.entity.SysUserRole;
-import com.action.system.service.ISysRoleService;
-import com.action.system.service.ISysScopeService;
-import com.action.system.service.ISysUserRoleService;
-import com.action.system.service.ISysUserService;
+import com.action.system.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
@@ -25,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 /**
@@ -39,21 +32,7 @@ public class SysUserController {
     @Resource
     private ISysUserService iSysUserService;
     @Resource
-    private ISysRoleService iSysRoleService;
-    @Resource
-    private ISysUserRoleService iSysUserRoleService;
-    @Resource
-    private ISysScopeService iSysScopeService;
-    @Resource
-    private RedisCacheServices redisCacheService;
-
-
-    @RequestMapping(value = "v", method = RequestMethod.GET)
-    public Result v() {
-        redisCacheService.set("k", "234");
-        Object k = redisCacheService.get("k");
-        return Result.success("ok");
-    }
+    private RedisCacheServices redisCacheServices;
 
     /**
      * @param query 查询 查询参数
@@ -85,7 +64,7 @@ public class SysUserController {
     }
 
     /**
-     * @param sysUser 用户扩展对象
+     * @param sysUserExtend 用户扩展对象
      * @Description: 添加用户
      * @return: Result 结果集
      * @throws:
@@ -93,45 +72,34 @@ public class SysUserController {
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    public Result save(@RequestBody SysUserExtend sysUser) {
-        List<String> roleList = sysUser.getRoleList();
-        List<SysScope> scopeList = sysUser.getSysScopeList();
-
-        if (StringUtils.isEmpty(sysUser.getUsername()) || StringUtils.isEmpty(sysUser.getEmail()) || StringUtils.isEmpty(sysUser.getPhone())) {
+    public Result save(@RequestBody SysUserExtend sysUserExtend) {
+        if (StringUtils.isEmpty(sysUserExtend.getUsername()) || StringUtils.isEmpty(sysUserExtend.getEmail()) || StringUtils.isEmpty(sysUserExtend.getPhone())) {
             return Result.error("缺少必需表单字段");
         }
 
-        if (Objects.nonNull(iSysUserService.findByUsername(sysUser.getUsername()))) {
+        if (Objects.nonNull(iSysUserService.findByUsername(sysUserExtend.getUsername()))) {
             return Result.error("该用户名已被注册");
         }
 
-        if (Objects.nonNull(iSysUserService.findByEmail(sysUser.getEmail()))) {
+        if (Objects.nonNull(iSysUserService.findByEmail(sysUserExtend.getEmail()))) {
             return Result.error("该邮箱已被注册");
         }
 
-        if (Objects.nonNull(iSysUserService.findByPhone(sysUser.getEmail()))) {
+        if (Objects.nonNull(iSysUserService.findByPhone(sysUserExtend.getEmail()))) {
             return Result.error("该手机号已被注册");
         }
 
-        sysUser.setAvatar(sysUser.getAvatar() == null ? UserSetConstants.DEFAULT_AVATAR : sysUser.getAvatar());
-        boolean isSave = iSysUserService.save(sysUser);
+        sysUserExtend.setAvatar(sysUserExtend.getAvatar() == null ? UserSetConstants.DEFAULT_AVATAR : sysUserExtend.getAvatar());
+        boolean isSave = iSysUserService.save(sysUserExtend);
         if (!isSave) {
             return Result.error("添加用户失败");
         }
-        if (!CollectionUtils.isEmpty(roleList)) {
-            List<SysUserRole> userRoleList = roleList.stream().map(roleId -> {
-                return new SysUserRole(sysUser.getId(), roleId, UseType.ENABLE.getStatus());
-            }).collect(Collectors.toList());
-            iSysUserRoleService.saveBatch(userRoleList);
-        }
-        if (!CollectionUtils.isEmpty(scopeList)) {
-            iSysScopeService.saveBatch(scopeList);
-        }
+        iSysUserService.saveUserExtendInfo(sysUserExtend);
         return Result.success("添加用户成功");
     }
 
     /**
-     * @param sysUser 用户扩展对象
+     * @param sysUserExtend 用户扩展对象
      * @Description: 修改用户
      * @return: Result 结果集
      * @throws:
@@ -139,49 +107,33 @@ public class SysUserController {
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "update", method = RequestMethod.PUT)
-    public Result update(@RequestBody SysUserExtend sysUser) {
-        List<String> roles = sysUser.getRoleList();
-        List<SysScope> scopeList = sysUser.getSysScopeList();
-        SysUser oldUser = iSysUserService.getById(sysUser);
-        if (Objects.isNull(oldUser) || oldUser.getUsername().equalsIgnoreCase(sysUser.getUsername())) {
+    public Result update(@RequestBody SysUserExtend sysUserExtend) {
+        SysUser oldUser = iSysUserService.getById(sysUserExtend);
+        if (Objects.isNull(oldUser) || oldUser.getUsername().equalsIgnoreCase(sysUserExtend.getUsername())) {
             return Result.error("该用户不存在");
         }
-        if (Objects.nonNull(iSysUserService.findByPhone(sysUser.getPhone())) && !StringUtils.isEmpty(oldUser.getPhone()) && !oldUser.getPhone().equalsIgnoreCase(sysUser.getPhone())) {
+        if (Objects.nonNull(iSysUserService.findByPhone(sysUserExtend.getPhone())) && !StringUtils.isEmpty(oldUser.getPhone()) && !oldUser.getPhone().equalsIgnoreCase(sysUserExtend.getPhone())) {
             return Result.error("该手机号已绑定其他账户");
         }
-        oldUser.setPhone(sysUser.getPhone());
-        if (Objects.nonNull(iSysUserService.findByEmail(sysUser.getEmail())) && !StringUtils.isEmpty(oldUser.getEmail()) && !oldUser.getEmail().equalsIgnoreCase(sysUser.getEmail())) {
+        oldUser.setPhone(sysUserExtend.getPhone());
+        if (Objects.nonNull(iSysUserService.findByEmail(sysUserExtend.getEmail())) && !StringUtils.isEmpty(oldUser.getEmail()) && !oldUser.getEmail().equalsIgnoreCase(sysUserExtend.getEmail())) {
             return Result.error("该邮箱已绑定其他账户");
         }
-        oldUser.setEmail(sysUser.getEmail());
-        oldUser.setNickName(sysUser.getNickName());
-        oldUser.setAvatar(sysUser.getAvatar());
-        oldUser.setSex(sysUser.getSex());
+        oldUser.setEmail(sysUserExtend.getEmail());
+        oldUser.setNickName(sysUserExtend.getNickName());
+        oldUser.setAvatar(sysUserExtend.getAvatar());
+        oldUser.setSex(sysUserExtend.getSex());
         Boolean isUpdate = iSysUserService.updateById(oldUser);
         if (!isUpdate) {
             return Result.error("用户更新失败");
         }
-        iSysUserRoleService.remove(new QueryWrapper<SysUserRole>().eq("user_id", oldUser.getId()));
-        if (!CollectionUtils.isEmpty(roles)) {
-            List<SysUserRole> userRoleList = roles.stream().map(roleId -> {
-                return new SysUserRole(oldUser.getId(), roleId, UseType.ENABLE.getStatus());
-            }).collect(Collectors.toList());
-            iSysUserRoleService.saveBatch(userRoleList);
-        }
-        iSysScopeService.remove(new QueryWrapper<SysScope>().eq("user_id", oldUser.getId()));
-        if (!CollectionUtils.isEmpty(scopeList)) {
-            scopeList.stream().forEach(scope -> {
-                scope.setUserId(oldUser.getId());
-                scope.setStatus(UseType.ENABLE.getStatus());
-            });
-            iSysScopeService.saveBatch(scopeList);
-        }
+        iSysUserService.updateUserExtendInfo(oldUser, sysUserExtend);
         return Result.success("用户信息修改成功");
     }
 
     /**
      * @param sysUser 用户扩展对象
-     * @Description: 用户注册
+     * @Description: 用户邮箱注册
      * @return: Result 结果集
      * @throws:
      * @Author: ljf  <lin652210786@163.com>
@@ -207,28 +159,21 @@ public class SysUserController {
             return Result.error("该手机号已被注册");
         }
 
-        String key = RedisSetConstants.EMAIL_KEY + sysUser.getEmail();
+        String email_key = RedisSetConstants.AUTH_EMAIL + sysUser.getEmail();
         //获取邮箱验证码
-        /*String v = redisTemplate.opsForValue().get(key);
-        if (StringUtils.isEmpty(v)) {
-            return Result.error("验证码已失效");
+        Object o = redisCacheServices.get(email_key);
+        if (Objects.isNull(o)) {
+            return Result.error("验证码失效");
         }
-
-         if (!StringUtils.equalsIgnoreCase(v, sysUser.getCode())) {
+        if (!StringUtils.equalsIgnoreCase(o.toString(), sysUser.getCode())) {
             return Result.error("验证码错误！");
-        }*/
+        }
         Boolean isRegist = iSysUserService.regist(sysUser);
         if (!isRegist) {
-//            redisTemplate.delete(key);
+            redisCacheServices.remove(email_key);
             return Result.error("注册失败");
         }
-        List<SysRole> roleList = iSysRoleService.listObjs(new QueryWrapper<SysRole>().eq("default_role", true));
-        if (CollectionUtils.isEmpty(roleList)) {
-            List<SysUserRole> sysUserRoleList = roleList.stream().map(sysRole -> {
-                return new SysUserRole(sysUser.getId(), sysRole.getId(), UseType.ENABLE.getStatus());
-            }).collect(Collectors.toList());
-            iSysUserRoleService.saveBatch(sysUserRoleList);
-        }
+        iSysUserService.setUserDefaultRole(sysUser);
         return Result.success("注册成功", sysUser.getId());
     }
 
@@ -248,7 +193,6 @@ public class SysUserController {
         }
         return Result.success("修改成功");
     }
-
 
     /**
      * @param id 用户id
@@ -339,15 +283,15 @@ public class SysUserController {
         if (StringUtils.isBlank(sysUser.getPassword()) || StringUtils.isBlank(sysUser.getEmail()) || StringUtils.isBlank(sysUser.getCode())) {
             return Result.error("缺少必需表单字段");
         }
-        /*String key = RedisConstants.EMAIL_CODE_RETRIEVE_PASSWORD + u.getEmail();
+        String email_key = RedisSetConstants.AUTH_EMAIL + sysUser.getEmail();
         //获取邮箱验证码
-        String v = redisTemplate.opsForValue().get(key);
-        if (!StringUtils.equalsIgnoreCase(v, u.getCode())) {
+        Object o = redisCacheServices.get(email_key);
+        if (Objects.isNull(o)) {
+            return Result.error("验证码失效");
+        }
+        if (!StringUtils.equalsIgnoreCase(o.toString(), sysUser.getCode())) {
             return Result.error("验证码错误！");
         }
-        if (StringUtils.isBlank(v)) {
-            return Result.error("验证码已失效！");
-        }*/
         SysUser user = iSysUserService.getOne(new QueryWrapper<SysUser>().eq("email", sysUser.getEmail()));
         if (Objects.isNull(user)) {
             return Result.error("该邮箱还未注册");
@@ -358,7 +302,6 @@ public class SysUserController {
         }
         return Result.error("找回密码失败");
     }
-
 
     /**
      * @param phone 手机号

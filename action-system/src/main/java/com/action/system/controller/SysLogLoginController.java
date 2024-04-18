@@ -4,7 +4,7 @@ import com.action.common.core.common.Result;
 import com.action.system.dto.SysLogLoginQuery;
 import com.action.system.entity.SysLogLogin;
 import com.action.system.service.ISysLogLoginService;
-import com.action.system.vo.LogLoginVo;
+import com.action.call.vo.LogLoginVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class SysLogLoginController {
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody LogLoginVo logLoginVo) {
-        boolean isSave = iSysLogLoginService.save(logLoginVo.buildSysLogLogin());
+        boolean isSave = iSysLogLoginService.save(new SysLogLogin().buildSysLogLogin(logLoginVo));
         if (isSave) {
             return Result.success("保存数据成功");
         }

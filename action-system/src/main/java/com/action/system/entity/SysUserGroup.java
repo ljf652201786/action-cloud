@@ -8,25 +8,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @Description: 范围表
+ * @Description: 用户用户组中间表
  * @Author: ljf  <lin652210786@163.com>
  * @Date: 2024/04/07
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("sys_scope")
-public class SysScope {
+@TableName("sys_user_group")
+public class SysUserGroup {
     @TableId(value = "id")
     private String id;
     @TableField("user_id")
     private String userId;
-    @TableField("dept_id")
-    private String deptId;
-    @TableField("post_id")
-    private String postId;
-    @TableField("dept_status")
-    private String deptStatus;
-    @TableField("post_status")
-    private String postStatus;
+    @TableField("group_id")
+    private String groupId;
+    @TableField("status")
+    private String status;
+
+    public SysUserGroup(String userId, String groupId, String status) {
+        this.userId = userId;
+        this.groupId = groupId;
+        this.status = status;
+    }
 }

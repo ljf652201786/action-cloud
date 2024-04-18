@@ -13,5 +13,5 @@ import java.util.Set;
  * @Date: 2024/04/07
  */
 public interface SysMenuLimitMapper extends BaseMapper<SysMenuLimit> {
-    Set<SysMenu> getSysMenuByScope(@Param("deptIdSet") Set<String> deptIdSet, @Param("postIdSet") Set<String> postIdSet, @Param("roleIdSet") Set<String> roleIdSet);
+    Set<SysMenu> getSysMenuByScope(@Param("groupIdSet") Set<String> groupIdSet, @Param("postIdSet") Set<String> postIdSet, @Param("roleIdSet") Set<String> roleIdSet);
 }

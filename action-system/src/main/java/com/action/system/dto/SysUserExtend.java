@@ -1,6 +1,5 @@
 package com.action.system.dto;
 
-import com.action.system.entity.SysRole;
 import com.action.system.entity.SysScope;
 import com.action.system.entity.SysUser;
 
@@ -13,6 +12,7 @@ import java.util.List;
  */
 public class SysUserExtend extends SysUser {
     private String code;
+    private List<String> groupList;
     private List<String> roleList;
     private List<SysScope> sysScopeList;
 
@@ -22,6 +22,14 @@ public class SysUserExtend extends SysUser {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public List<String> getGroupList() {
+        return groupList;
+    }
+
+    public void setGroupList(List<String> groupList) {
+        this.groupList = groupList;
     }
 
     public List<String> getRoleList() {

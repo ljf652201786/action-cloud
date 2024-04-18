@@ -1,20 +1,17 @@
 package com.action.system.service.Impl;
 
 import com.action.call.clients.RemoteAuthClients;
+import com.action.common.common.RedisSetConstants;
 import com.action.common.common.UserSetConstants;
 import com.action.common.core.base.BaseSecurityMenu;
-import com.action.common.core.base.BaseSecurityRole;
 import com.action.common.core.common.Result;
+import com.action.common.core.service.RedisCacheServices;
 import com.action.common.entity.SecurityAuthUser;
+import com.action.common.enums.UseType;
 import com.action.system.dto.SysUserExtend;
-import com.action.system.entity.SysMenu;
-import com.action.system.entity.SysRole;
-import com.action.system.entity.SysScope;
-import com.action.system.entity.SysUser;
+import com.action.system.entity.*;
 import com.action.system.mapper.*;
-import com.action.system.service.ISysMenuLimitService;
-import com.action.system.service.ISysScopeService;
-import com.action.system.service.ISysUserService;
+import com.action.system.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
@@ -41,9 +38,15 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
     @Resource
     private ISysScopeService iSysScopeService;
     @Resource
-    private SysUserRoleMapper sysUserRoleMapper;
+    private ISysRoleService iSysRoleService;
+    @Resource
+    private ISysUserRoleService iSysUserRoleService;
+    @Resource
+    private ISysUserGroupService iSysUserGroupService;
     @Resource
     private RemoteAuthClients authClients;
+    @Resource
+    private RedisCacheServices redisCacheServices;
 
     @Override
     public Boolean regist(SysUserExtend sysUser) {
@@ -67,6 +70,17 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
         sysUser.setUsername(u.getUsername());//用户名不允许修改
         sysUser.setPassword(u.getPassword());//密码不允许修改
         return SqlHelper.retBool(sysUserMapper.updateById(u));
+    }
+
+    @Override
+    public void setUserDefaultRole(SysUserExtend sysUserExtend) {
+        List<SysRole> roleList = iSysRoleService.listObjs(new QueryWrapper<SysRole>().eq("default_role", true));
+        if (CollectionUtils.isEmpty(roleList)) {
+            List<SysUserRole> sysUserRoleList = roleList.stream().map(sysRole -> {
+                return new SysUserRole(sysUserExtend.getId(), sysRole.getId(), UseType.ENABLE.getStatus());
+            }).collect(Collectors.toList());
+            iSysUserRoleService.saveBatch(sysUserRoleList);
+        }
     }
 
     @Override
@@ -117,18 +131,12 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
 
     @Override
     public SysUser findByPhone(String phone) {
-        SysUser user = new SysUser();
-        user.setUsername("wangwu");
-        return user;
-//        return sysUserMapper.selectOne(new QueryWrapper<SysUser>().eq("phone", phone));
+        return sysUserMapper.selectOne(new QueryWrapper<SysUser>().eq("phone", phone));
     }
 
     @Override
     public SysUser findByEmail(String email) {
-        SysUser user = new SysUser();
-        user.setUsername("wangwu");
-        return user;
-//        return sysUserMapper.selectOne(new QueryWrapper<SysUser>().eq("email", email));
+        return sysUserMapper.selectOne(new QueryWrapper<SysUser>().eq("email", email));
     }
 
     @Override
@@ -138,40 +146,130 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
 
     @Override
     public SecurityAuthUser getUserByUserName(String username) {
-        SysUser sysUser = this.findByUsername(username);
-        if (Objects.isNull(sysUser)) {
-            return null;
+        SecurityAuthUser securityAuthUser;
+        Object cacheUser = redisCacheServices.get(RedisSetConstants.USER_BASIS + username);
+        if (Objects.nonNull(cacheUser)) {
+            securityAuthUser = new SecurityAuthUser((SysUser) cacheUser);
+        } else {
+            SysUser sysUser = this.findByUsername(username);
+            if (Objects.isNull(sysUser)) {
+                return null;
+            }
+            securityAuthUser = new SecurityAuthUser(sysUser);
+            redisCacheServices.set(RedisSetConstants.USER_BASIS + username, sysUser);
         }
-        SecurityAuthUser securityAuthUser = new SecurityAuthUser(sysUser);
-        //获取用户所拥有的部门、岗位、角色信息
-        Set<String> deptIdSet = new HashSet<String>();
-        Set<String> postIdSet = new HashSet<String>();
-        Set<String> roleIdSet = new HashSet<String>();
-        List<SysScope> sysScopeList = iSysScopeService.getSysScopeByUserId(sysUser.getId());
-        if (!CollectionUtils.isEmpty(sysScopeList)) {
-            sysScopeList.stream().forEach(sysScope -> {
-                deptIdSet.add(sysScope.getDeptId());
-                postIdSet.add(sysScope.getPostId());
-            });
-        }
-        //获取用户角色
-        List<SysRole> sysRoleList = sysUserRoleMapper.getSysRoleByUserId(sysUser.getId());
-        if (!CollectionUtils.isEmpty(sysRoleList)) {
-            Set<BaseSecurityRole> baseSecurityRoleSet = sysRoleList.stream().map(sysRole -> {
-                roleIdSet.add(sysRole.getId());
-                return new BaseSecurityRole(sysRole.getRoleCode());
-            }).collect(Collectors.toSet());
-            securityAuthUser.setRoleScopeList(baseSecurityRoleSet);
-        }
-        //获取用户菜单权限
-        Set<SysMenu> sysMenuSet = iSysMenuLimitService.getSysMenuByScope(deptIdSet, postIdSet, roleIdSet);
-        if (!CollectionUtils.isEmpty(sysMenuSet)) {
-            Set<BaseSecurityMenu> baseSecurityMenuSet = sysMenuSet.stream().map(sysMenu -> {
-                return new BaseSecurityMenu(sysMenu.getRouteUrl(), sysMenu.getMenuPerm());
-            }).collect(Collectors.toSet());
+        Object cacheMenuPerm = redisCacheServices.get(RedisSetConstants.USER_MENUPERM + username);
+        if (Objects.nonNull(cacheMenuPerm)) {
+            securityAuthUser.setMenuScopeList((Set<BaseSecurityMenu>) cacheMenuPerm);
+            return securityAuthUser;
+        } else {
+            //获取用户所拥有的用户组信息
+            Set<String> groupIdSet = new HashSet<String>();
+            Object cacheGroupIdSet = redisCacheServices.get(RedisSetConstants.USER_GROUP + username);
+            if (Objects.nonNull(cacheGroupIdSet)) {
+                groupIdSet = (Set<String>) cacheGroupIdSet;
+            } else {
+                //获取用户组(已激活的)
+                List<SysUserGroup> sysUserGroupList = iSysUserGroupService.getSysUserGroupByUserId(securityAuthUser.getId());
+                if (!CollectionUtils.isEmpty(sysUserGroupList)) {
+                    groupIdSet = sysUserGroupList.stream().map(sysUserGroup -> sysUserGroup.getGroupId()).collect(Collectors.toSet());
+                }
+                redisCacheServices.set(RedisSetConstants.USER_GROUP + username, groupIdSet);
+            }
+            //获取用户所拥有的岗位信息
+            Set<String> postIdSet = new HashSet<String>();
+            Object cachePostIdSet = redisCacheServices.get(RedisSetConstants.USER_POST + username);
+            if (Objects.nonNull(cachePostIdSet)) {
+                postIdSet = (Set<String>) cachePostIdSet;
+            } else {
+                //获取用户岗位(已激活的)
+                List<SysScope> sysScopeList = iSysScopeService.getSysScopeByUserId(securityAuthUser.getId());
+                if (!CollectionUtils.isEmpty(sysScopeList)) {
+                    postIdSet = sysScopeList.stream().map(sysScope -> sysScope.getPostId()).collect(Collectors.toSet());
+                }
+                redisCacheServices.set(RedisSetConstants.USER_POST + username, postIdSet);
+            }
+            //获取用户所拥有的角色信息
+            Set<String> roleIdSet = new HashSet<String>();
+            Object cacheRoleIdSet = redisCacheServices.get(RedisSetConstants.USER_ROLE + username);
+            if (Objects.nonNull(cacheRoleIdSet)) {
+                roleIdSet = (Set<String>) cacheRoleIdSet;
+            } else {
+                //获取用户角色(已激活的)
+                List<SysUserRole> sysUserRoleList = iSysUserRoleService.getSysUserRoleByUserId(securityAuthUser.getId());
+                if (!CollectionUtils.isEmpty(sysUserRoleList)) {
+                    roleIdSet = sysUserRoleList.stream().map(sysUserRole -> sysUserRole.getId()).collect(Collectors.toSet());
+                }
+                redisCacheServices.set(RedisSetConstants.USER_ROLE + username, roleIdSet);
+            }
+            //获取用户菜单权限
+            Set<BaseSecurityMenu> baseSecurityMenuSet = iSysMenuLimitService.getBaseSecurityMenuByScope(groupIdSet, postIdSet, roleIdSet);
+            redisCacheServices.set(RedisSetConstants.USER_MENUPERM + username, baseSecurityMenuSet);
             securityAuthUser.setMenuScopeList(baseSecurityMenuSet);
         }
         return securityAuthUser;
+    }
+
+    @Override
+    public void saveUserExtendInfo(SysUserExtend sysUserExtend) {
+        List<String> roleList = sysUserExtend.getRoleList();
+        List<SysScope> scopeList = sysUserExtend.getSysScopeList();
+        List<String> groupList = sysUserExtend.getGroupList();
+        if (!CollectionUtils.isEmpty(roleList)) {
+            List<SysUserRole> userRoleList = roleList.stream().map(roleId -> {
+                return new SysUserRole(sysUserExtend.getId(), roleId, UseType.ENABLE.getStatus());
+            }).collect(Collectors.toList());
+            iSysUserRoleService.saveBatch(userRoleList);
+        }
+        if (!CollectionUtils.isEmpty(scopeList)) {
+            scopeList.stream().forEach(scope -> {
+                scope.setUserId(sysUserExtend.getId());
+                scope.setDeptStatus(UseType.ENABLE.getStatus());
+                scope.setPostStatus(UseType.ENABLE.getStatus());
+            });
+            iSysScopeService.saveBatch(scopeList);
+        }
+        if (!CollectionUtils.isEmpty(groupList)) {
+            List<SysUserGroup> userGroupList = groupList.stream().map(groupId -> {
+                return new SysUserGroup(sysUserExtend.getId(), groupId, UseType.ENABLE.getStatus());
+            }).collect(Collectors.toList());
+            iSysUserGroupService.saveBatch(userGroupList);
+        }
+    }
+
+    @Override
+    public void updateUserExtendInfo(SysUser sysUser, SysUserExtend sysUserExtend) {
+        List<String> roles = sysUserExtend.getRoleList();
+        List<SysScope> scopeList = sysUserExtend.getSysScopeList();
+        List<String> groupIdList = sysUserExtend.getGroupList();
+        Set<String> groupIdSet = new HashSet<>(groupIdList);
+        Set<String> postIdSet = new HashSet<String>();
+        Set<String> roleIdSet = new HashSet<String>();
+        iSysUserRoleService.remove(new QueryWrapper<SysUserRole>().eq("user_id", sysUser.getId()));
+        if (!CollectionUtils.isEmpty(roles)) {
+            List<SysUserRole> userRoleList = roles.stream().map(roleId -> {
+                roleIdSet.add(roleId);
+                return new SysUserRole(sysUser.getId(), roleId, UseType.ENABLE.getStatus());
+            }).collect(Collectors.toList());
+            iSysUserRoleService.saveBatch(userRoleList);
+        }
+        iSysScopeService.remove(new QueryWrapper<SysScope>().eq("user_id", sysUser.getId()));
+        if (!CollectionUtils.isEmpty(scopeList)) {
+            scopeList.stream().forEach(scope -> {
+                postIdSet.add(scope.getPostId());
+                scope.setUserId(sysUser.getId());
+                scope.setDeptStatus(UseType.ENABLE.getStatus());
+                scope.setPostStatus(UseType.ENABLE.getStatus());
+            });
+            iSysScopeService.saveBatch(scopeList);
+        }
+        Set<BaseSecurityMenu> baseSecurityMenuSet = iSysMenuLimitService.getBaseSecurityMenuByScope(groupIdSet, postIdSet, roleIdSet);
+        //更新用户缓存信息
+        redisCacheServices.set(RedisSetConstants.USER_BASIS + sysUser.getUsername(), sysUser);
+        redisCacheServices.set(RedisSetConstants.USER_GROUP + sysUser.getUsername(), groupIdSet);
+        redisCacheServices.set(RedisSetConstants.USER_POST + sysUser.getUsername(), postIdSet);
+        redisCacheServices.set(RedisSetConstants.USER_ROLE + sysUser.getUsername(), roleIdSet);
+        redisCacheServices.set(RedisSetConstants.USER_MENUPERM + sysUser.getUsername(), baseSecurityMenuSet);
     }
 
 }

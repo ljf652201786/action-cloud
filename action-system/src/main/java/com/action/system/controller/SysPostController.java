@@ -100,7 +100,7 @@ public class SysPostController {
         List<String> idList = new ArrayList<>();
         List<String> idExistList = new ArrayList<>();
         for (int i = 0; i < ids.size(); i++) {
-            long num = iSysScopeService.count(new QueryWrapper<SysScope>().eq("dept_id", ids.get(i)));
+            long num = iSysScopeService.postNum(ids.get(i));
             if (num == 0) {
                 idList.add(ids.get(i));
             } else {
@@ -132,11 +132,7 @@ public class SysPostController {
         }
         sysPost.setStatus(UseType.DISABLED.getStatus());
         iSysPostService.updateById(sysPost);
-        //刷新缓存权限
-        /*List<Scope> userIdScopeList = iScopeService.list(new QueryWrapper<Scope>().select("user_id").eq("dept_id", deptId));
-        String userIdsVar = userIdScopeList.stream().map(sp -> sp.getUserId()).collect(Collectors.joining(","));
-        List<String> usernames = userService.list(new QueryWrapper<User>().in("id", userIdsVar)).stream().map(user -> user.getUsername()).collect(Collectors.toList());
-        userService.refreshPermissions(usernames, false);*/
+        iSysScopeService.updatePostStatus(id, UseType.DISABLED.getStatus());
         return Result.success();
     }
 
@@ -156,11 +152,7 @@ public class SysPostController {
         }
         sysPost.setStatus(UseType.ENABLE.getStatus());
         iSysPostService.updateById(sysPost);
-        //刷新缓存权限
-        /*List<Scope> userIdScopeList = iScopeService.list(new QueryWrapper<Scope>().select("user_id").eq("dept_id", deptId));
-        String userIdsVar = userIdScopeList.stream().map(sp -> sp.getUserId()).collect(Collectors.joining(","));
-        List<String> usernames = userService.list(new QueryWrapper<User>().in("id", userIdsVar)).stream().map(user -> user.getUsername()).collect(Collectors.toList());
-        userService.refreshPermissions(usernames, false);*/
+        iSysScopeService.updatePostStatus(id, UseType.ENABLE.getStatus());
         return Result.success();
     }
 }
