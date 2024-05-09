@@ -2,14 +2,12 @@ package com.action.system.controller;
 
 import com.action.common.core.common.Result;
 import com.action.common.enums.UseType;
-import com.action.system.dto.SysPostQuery;
+import com.action.common.mybatisplus.extend.base.BaseController;
+import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.entity.SysPost;
-import com.action.system.entity.SysScope;
 import com.action.system.service.ISysPostService;
 import com.action.system.service.ISysScopeService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,11 +21,10 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("post")
-public class SysPostController {
-    @Resource
-    private ISysPostService iSysPostService;
-    @Resource
-    private ISysScopeService iSysScopeService;
+@AllArgsConstructor
+public class SysPostController implements BaseController<ISysPostService, SysPost> {
+    private final ISysPostService iSysPostService;
+    private final ISysScopeService iSysScopeService;
 
     /**
      * @param query 查询对象
@@ -38,10 +35,8 @@ public class SysPostController {
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result listPage(SysPostQuery query) {
-        Page<SysPost> rowPage = new Page(query.getPage(), query.getLimit());
-        List<SysPost> sysRoleList = iSysPostService.list(rowPage, new QueryWrapper<>());
-        return Result.success("分页获取系统管理-岗位基础信息表列表成功", sysRoleList);
+    public Result listPage(SysPost sysPost, BaseQuery query) {
+        return this.page(iSysPostService, sysPost, query);
     }
 
     /**
@@ -54,7 +49,7 @@ public class SysPostController {
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody SysPost sysPost) {
-        SysPost sp = iSysPostService.getOne(new QueryWrapper<SysPost>().eq("post_code", sysPost.getPostCode()));
+        SysPost sp = iSysPostService.getOne(this.getLambdaQueryWrapper().eq(SysPost::getPostCode, sysPost.getPostCode()));
         if (Objects.nonNull(sp)) {
             return Result.error("岗位编码已存在");
         }
@@ -62,7 +57,7 @@ public class SysPostController {
         if (isSave) {
             return Result.success("保存数据成功");
         }
-        return Result.error("数据保存失败");
+        return Result.error("保存数据失败");
     }
 
     /**
@@ -76,7 +71,7 @@ public class SysPostController {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Result update(@RequestBody SysPost sysPost) {
         SysPost oldPost = iSysPostService.getById(sysPost.getId());
-        SysPost sp = iSysPostService.getOne(new QueryWrapper<SysPost>().eq("post_code", sysPost.getPostCode()));
+        SysPost sp = iSysPostService.getOne(this.getLambdaQueryWrapper().eq(SysPost::getPostCode, sysPost.getPostCode()));
         if (!oldPost.getPostCode().equals(sysPost.getPostCode()) && Objects.nonNull(sp)) {
             return Result.error("岗位编码已存在");
         }

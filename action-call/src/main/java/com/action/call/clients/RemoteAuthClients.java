@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(contextId = "authClients", value = "springcloud-auth", fallbackFactory = RemoteAuthClientsFallbackFactory.class)
+@FeignClient(contextId = "authClients", value = ClientsCirectoryTable.AUTH_SERVICE, fallbackFactory = RemoteAuthClientsFallbackFactory.class)
 public interface RemoteAuthClients {
 
     @LoadBalanced  //启用负载均衡

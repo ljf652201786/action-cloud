@@ -6,20 +6,18 @@ import com.action.common.core.common.Result;
 import com.action.common.core.service.RedisCacheServices;
 import com.action.common.entity.SecurityAuthUser;
 import com.action.common.enums.UseType;
-import com.action.system.dto.SysUserQuery;
+import com.action.common.mybatisplus.extend.base.BaseController;
+import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.dto.SysUserExtend;
 import com.action.system.entity.SysUser;
 import com.action.system.service.*;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import jakarta.annotation.Resource;
-import org.apache.commons.lang3.StringUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.util.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
-
 
 /**
  * @Description: 用户管理
@@ -28,11 +26,10 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("user")
-public class SysUserController {
-    @Resource
-    private ISysUserService iSysUserService;
-    @Resource
-    private RedisCacheServices redisCacheServices;
+@AllArgsConstructor
+public class SysUserController implements BaseController<ISysUserService, SysUser> {
+    private final ISysUserService iSysUserService;
+    private final RedisCacheServices redisCacheServices;
 
     /**
      * @param query 查询 查询参数
@@ -43,10 +40,8 @@ public class SysUserController {
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result listPage(SysUserQuery query) {
-        Page<SysUser> rowPage = new Page(query.getPage(), query.getLimit());
-        List<SysUser> sysUserList = iSysUserService.list(rowPage, new QueryWrapper<>());
-        return Result.success("分页获取系统管理-用户基础信息表列表成功", sysUserList);
+    public Result listPage(SysUser sysUser, BaseQuery query) {
+        return this.page(iSysUserService, sysUser, query);
     }
 
     /**
@@ -59,8 +54,7 @@ public class SysUserController {
      */
     @RequestMapping(value = "getInfoById", method = RequestMethod.GET)
     public Result getInfoById(@RequestParam("id") String id) {
-        SysUser sysUser = iSysUserService.getById(id);
-        return Result.success("获取用户信息成功", sysUser);
+        return this.getInfoById(iSysUserService, id);
     }
 
     /**
@@ -292,7 +286,8 @@ public class SysUserController {
         if (!StringUtils.equalsIgnoreCase(o.toString(), sysUser.getCode())) {
             return Result.error("验证码错误！");
         }
-        SysUser user = iSysUserService.getOne(new QueryWrapper<SysUser>().eq("email", sysUser.getEmail()));
+
+        SysUser user = iSysUserService.getOne(this.getLambdaQueryWrapper().eq(SysUser::getEmail, sysUser.getEmail()));
         if (Objects.isNull(user)) {
             return Result.error("该邮箱还未注册");
         }

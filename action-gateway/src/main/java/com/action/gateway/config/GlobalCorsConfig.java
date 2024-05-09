@@ -1,6 +1,8 @@
 /*
 package com.action.gateway.config;
 
+import com.action.gateway.properties.AuthProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -16,18 +18,19 @@ import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 */
-/**
+/*
  * @Description: 跨域配置
  * @Author: ljf  <lin652210786@163.com>
- * @Date: 2024/04/01
- *//*
-
+ * @Date: 2024/05/09
+*//*
 
 @Configuration
+@EnableConfigurationProperties(AuthProperties.class)
 public class GlobalCorsConfig {
     private static final String MAX_AGE = "18000L";
 
-    @Bean
+    */
+/*@Bean
     public WebFilter corsFilter() {
         return (ServerWebExchange ctx, WebFilterChain chain) -> {
             ServerHttpRequest request = ctx.getRequest();
@@ -59,7 +62,8 @@ public class GlobalCorsConfig {
                 return chain.filter(exchange);
             }
         };
-    }
+    }*//*
+
 }
 
 */

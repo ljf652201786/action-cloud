@@ -1,18 +1,15 @@
 package com.action.system.controller;
 
 import com.action.common.core.common.Result;
-import com.action.system.dto.SysDictDetailQuery;
-import com.action.system.entity.SysDept;
+import com.action.common.mybatisplus.extend.base.BaseController;
+import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.entity.SysDictDetail;
 import com.action.system.service.ISysDictDetailService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
-
 
 /**
  * @Description: 字典详情管理
@@ -21,9 +18,9 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("dictDetail")
-public class SysDictDetailController {
-    @Autowired
-    private ISysDictDetailService iSysDictDetailService;
+@AllArgsConstructor
+public class SysDictDetailController implements BaseController<ISysDictDetailService, SysDictDetail> {
+    private final ISysDictDetailService iSysDictDetailService;
 
     /**
      * @param query 查询对象
@@ -34,10 +31,8 @@ public class SysDictDetailController {
      * @Date: 2024/4/14
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result listPage(SysDictDetailQuery query) {
-        Page<SysDictDetail> rowPage = new Page<>(query.getPage(), query.getLimit());
-        List<SysDictDetail> sysDictDetailList = iSysDictDetailService.list(rowPage, new QueryWrapper<>());
-        return Result.success("获取字典详情列表", sysDictDetailList);
+    public Result listPage(SysDictDetail sysDictDetail, BaseQuery query) {
+        return this.page(iSysDictDetailService, sysDictDetail, query);
     }
 
     /**
@@ -50,7 +45,7 @@ public class SysDictDetailController {
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody SysDictDetail sysDictDetail) {
-        SysDictDetail sdd = iSysDictDetailService.getOne(new QueryWrapper<SysDictDetail>().eq("code", sysDictDetail.getCode()));
+        SysDictDetail sdd = iSysDictDetailService.getOne(this.getLambdaQueryWrapper().eq(SysDictDetail::getCode, sysDictDetail.getCode()));
         if (Objects.nonNull(sdd)) {
             return Result.error("字典详情编码已存在");
         }
@@ -72,7 +67,7 @@ public class SysDictDetailController {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Result update(@RequestBody SysDictDetail sysDictDetail) {
         SysDictDetail oldDictDetail = iSysDictDetailService.getById(sysDictDetail.getId());
-        SysDictDetail sdd = iSysDictDetailService.getOne(new QueryWrapper<SysDictDetail>().eq("code", sysDictDetail.getCode()));
+        SysDictDetail sdd = iSysDictDetailService.getOne(this.getLambdaQueryWrapper().eq(SysDictDetail::getCode, sysDictDetail.getCode()));
         if (!oldDictDetail.getCode().equals(sysDictDetail.getCode()) && Objects.nonNull(sdd)) {
             return Result.error("字典详情编码已存在");
         }

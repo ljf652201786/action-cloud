@@ -1,10 +1,10 @@
 package com.action.system.controller;
 
 import com.action.common.core.common.Result;
+import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.system.entity.*;
 import com.action.system.service.*;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,13 +17,11 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("data")
-public class SysDataController {
-    @Resource
-    private ISysDataService iSysDataService;
-    @Resource
-    private ISysDataRowLimitService iSysDataRowLimitService;
-    @Resource
-    private ISysDataColumnLimitService iSysDataColumnLimitService;
+@AllArgsConstructor
+public class SysDataController implements BaseController<ISysDataService, SysData> {
+    private final ISysDataService iSysDataService;
+    private final ISysDataRowLimitService iSysDataRowLimitService;
+    private final ISysDataColumnLimitService iSysDataColumnLimitService;
 
     /**
      * @param sysData 数据对象
@@ -35,7 +33,7 @@ public class SysDataController {
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody SysData sysData) {
-        SysData sd = iSysDataService.getOne(new QueryWrapper<SysData>().eq("data_code", sysData.getDataCode()));
+        SysData sd = iSysDataService.getOne(this.getLambdaQueryWrapper().eq(SysData::getDataCode, sysData.getDataCode()));
         if (Objects.nonNull(sd)) {
             return Result.error("数据编码已存在");
         }
@@ -57,7 +55,7 @@ public class SysDataController {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Result update(@RequestBody SysData sysData) {
         SysData oldData = iSysDataService.getById(sysData.getId());
-        SysData sd = iSysDataService.getOne(new QueryWrapper<SysData>().eq("data_code", sysData.getDataCode()));
+        SysData sd = iSysDataService.getOne(this.getLambdaQueryWrapper().eq(SysData::getDataCode, sysData.getDataCode()));
         if (!oldData.getDataCode().equals(sysData.getDataCode()) && Objects.nonNull(sd)) {
             return Result.error("数据编码已存在");
         }
@@ -78,8 +76,8 @@ public class SysDataController {
      */
     @RequestMapping(value = "deleteById", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("id") String id) {
-        SysDataRowLimit sysDataRowLimit = iSysDataRowLimitService.getOne(new QueryWrapper<SysDataRowLimit>().eq("data_id", id));
-        SysDataColumnLimit sysDataColumnLimit = iSysDataColumnLimitService.getOne(new QueryWrapper<SysDataColumnLimit>().eq("data_id", id));
+        SysDataRowLimit sysDataRowLimit = iSysDataRowLimitService.getOne(this.getLambdaQueryWrapper(new SysDataRowLimit()).eq(SysDataRowLimit::getDataId, id));
+        SysDataColumnLimit sysDataColumnLimit = iSysDataColumnLimitService.getOne(this.getLambdaQueryWrapper(new SysDataColumnLimit()).eq(SysDataColumnLimit::getDataId, id));
         if (Objects.nonNull(sysDataRowLimit) || Objects.nonNull(sysDataColumnLimit)) {
             return Result.error("该数据删除失败，因为包含正被使用");
         }

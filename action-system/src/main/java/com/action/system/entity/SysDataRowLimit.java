@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("sys_row_limit")
+@TableName("sys_data_row_limit")
 public class SysDataRowLimit extends BaseEntity {
     @TableId(value = "id")
     private String id;
@@ -26,16 +26,18 @@ public class SysDataRowLimit extends BaseEntity {
     private String type;
     @TableField("contact_id")
     private String contactId;
-    @TableField("condition")
-    private String condition;
-    @TableField("limit_type")
-    private String limitType;
+    @TableField("relation")
+    private String relation;
     @TableField("limit_field")
     private String limitField;
     @TableField("limit_field_desc")
     private String limitFieldDesc;
+    @TableField("limit_condition")
+    private String limitCondition;
     @TableField("val")
     private String val;
     @TableField("status")
     private String status;
+    @TableField(exist = false)
+    private String tableName;
 }

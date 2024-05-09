@@ -1,18 +1,18 @@
 package com.action.system.controller;
 
 import com.action.common.core.common.Result;
+import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.system.entity.SysDataColumnLimit;
 import com.action.system.service.ISysDataColumnLimitService;
 import com.action.system.vo.ColumnAllocationVo;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import jakarta.annotation.Resource;
-import org.apache.commons.lang3.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import lombok.AllArgsConstructor;
 import org.springframework.util.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 /**
  * @Description: 数据列权限管理
@@ -21,9 +21,9 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("dataColumn")
-public class SysDataColumnController {
-    @Resource
-    private ISysDataColumnLimitService iSysDataColumnLimitService;
+@AllArgsConstructor
+public class SysDataColumnController implements BaseController<ISysDataColumnLimitService, SysDataColumnLimit> {
+    private final ISysDataColumnLimitService iSysDataColumnLimitService;
 
     /**
      * @param columnAllocationVo 数据列对象
@@ -38,7 +38,11 @@ public class SysDataColumnController {
         if (StringUtils.isEmpty(columnAllocationVo.getDataId()) || StringUtils.isEmpty(columnAllocationVo.getContactId()) || StringUtils.isEmpty(columnAllocationVo.getType())) {
             return Result.error("缺少必要数据");
         }
-        iSysDataColumnLimitService.remove(new QueryWrapper<SysDataColumnLimit>().eq("data_id", columnAllocationVo.getDataId()).eq("contact_id", columnAllocationVo.getContactId()).eq("type", columnAllocationVo.getType()));
+
+        iSysDataColumnLimitService.remove(((LambdaQueryWrapper<SysDataColumnLimit>) this.getLambdaQueryWrapper())
+                .eq(SysDataColumnLimit::getDataId, columnAllocationVo.getDataId())
+                .eq(SysDataColumnLimit::getContactId, columnAllocationVo.getContactId())
+                .eq(SysDataColumnLimit::getType, columnAllocationVo.getType()));
         if (CollectionUtils.isEmpty(columnAllocationVo.getColumnVoList())) {
             return Result.success("保存数据成功");
         }

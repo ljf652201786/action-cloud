@@ -19,7 +19,7 @@ import java.util.Set;
  * @Author: ljf  <lin652210786@163.com>
  * @Date: 2024/04/02
  */
-@FeignClient(contextId = "systemClients", value = "springcloud-system", fallbackFactory = RemoteSystemClientsFallbackFactory.class)
+@FeignClient(contextId = "systemClients", value = ClientsCirectoryTable.SYSTEM_SERVICE, fallbackFactory = RemoteSystemClientsFallbackFactory.class)
 public interface RemoteSystemClients {
 
     @LoadBalanced  //启用负载均衡

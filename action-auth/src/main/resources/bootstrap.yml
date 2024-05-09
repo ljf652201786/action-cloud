@@ -2,7 +2,7 @@ server:
   port: 8886
 spring:
   application:
-    name: springcloud-auth
+    name: action-auth
   profiles:
     # 环境配置
     active: dev

@@ -35,7 +35,7 @@ public class ISysMenuLimitServiceImpl extends ServiceImpl<SysMenuLimitMapper, Sy
         Set<BaseSecurityMenu> baseSecurityMenuSet = new HashSet<>();
         if (!CollectionUtils.isEmpty(sysMenuSet)) {
             baseSecurityMenuSet = sysMenuSet.stream().map(sysMenu -> {
-                return new BaseSecurityMenu(sysMenu.getRouteUrl(), sysMenu.getMenuPerm());
+                return new BaseSecurityMenu(sysMenu.getId(), sysMenu.getRouteUrl(), sysMenu.getMenuPerm());
             }).collect(Collectors.toSet());
         }
         return baseSecurityMenuSet;

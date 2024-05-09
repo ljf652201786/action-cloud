@@ -1,12 +1,12 @@
 package com.action.system.service.Impl;
 
 import com.action.call.clients.RemoteAuthClients;
-import com.action.common.common.RedisSetConstants;
 import com.action.common.common.UserSetConstants;
 import com.action.common.core.base.BaseSecurityMenu;
 import com.action.common.core.common.Result;
 import com.action.common.entity.SecurityAuthUser;
 import com.action.common.enums.UseType;
+import com.action.common.mybatisplus.extend.filter.datapermission.DataRowFilterStruct;
 import com.action.system.dto.SysUserExtend;
 import com.action.system.entity.*;
 import com.action.system.mapper.*;
@@ -16,15 +16,15 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @Description:
+ * @Description: 用户服务实现类
  * @Author: ljf  <lin652210786@163.com>
  * @Date: 2024/04/02
  */
@@ -42,6 +42,8 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
     private ISysUserRoleService iSysUserRoleService;
     @Resource
     private ISysUserGroupService iSysUserGroupService;
+    @Resource
+    private ISysDataService iSysDataService;
     @Resource
     private RemoteAuthClients authClients;
     @Resource
@@ -157,13 +159,15 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
             securityAuthUser = new SecurityAuthUser(sysUser);
             iCacheService.setUserBasisCache(username, sysUser);
         }
+        Set<String> groupIdSet = new HashSet<String>();
+        Set<String> postIdSet = new HashSet<String>();
+        Set<String> roleIdSet = new HashSet<String>();
         Set<BaseSecurityMenu> cacheMenuPerm = iCacheService.getUserMenupermCache(username);
         if (Objects.nonNull(cacheMenuPerm)) {
             securityAuthUser.setMenuScopeList(cacheMenuPerm);
             return securityAuthUser;
         } else {
             //获取用户所拥有的用户组信息
-            Set<String> groupIdSet = new HashSet<String>();
             Set<String> cacheGroupIdSet = iCacheService.getUserGroupCache(username);
             if (Objects.nonNull(cacheGroupIdSet)) {
                 groupIdSet = cacheGroupIdSet;
@@ -176,7 +180,6 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
                 iCacheService.setUserGroupCache(username, groupIdSet);
             }
             //获取用户所拥有的岗位信息
-            Set<String> postIdSet = new HashSet<String>();
             Set<String> cachePostIdSet = iCacheService.getUserPostCache(username);
             if (Objects.nonNull(cachePostIdSet)) {
                 postIdSet = cachePostIdSet;
@@ -189,7 +192,6 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
                 iCacheService.setUserPostCache(username, postIdSet);
             }
             //获取用户所拥有的角色信息
-            Set<String> roleIdSet = new HashSet<String>();
             Set<String> cacheRoleIdSet = iCacheService.getUserRoleCache(username);
             if (Objects.nonNull(cacheRoleIdSet)) {
                 roleIdSet = cacheRoleIdSet;
@@ -203,8 +205,19 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
             }
             //获取用户菜单权限
             Set<BaseSecurityMenu> baseSecurityMenuSet = iSysMenuLimitService.getBaseSecurityMenuByScope(groupIdSet, postIdSet, roleIdSet);
-            iCacheService.setUserMenupermCache(username, baseSecurityMenuSet);
             securityAuthUser.setMenuScopeList(baseSecurityMenuSet);
+            iCacheService.setUserMenupermCache(username, baseSecurityMenuSet);
+        }
+        //异步获取用户数据权限
+        Set<DataRowFilterStruct> userDataPermRowCache = iCacheService.getUserDataPermRowCache(username);
+        if (Objects.isNull(userDataPermRowCache)) {
+            userDataPermRowCache = iSysDataService.getUserDataRowPerm(groupIdSet, postIdSet, roleIdSet);
+            iCacheService.setUserDataPermRowCache(username, userDataPermRowCache);
+        }
+        Map<String, Set<String>> userDataPermColumnCache = iCacheService.getUserDataPermColumnCache(username);
+        if (Objects.isNull(userDataPermColumnCache)) {
+            userDataPermColumnCache = iSysDataService.getUserDataColumnPerm(groupIdSet, postIdSet, roleIdSet);
+            iCacheService.setUserDataPermColumnCache(username, userDataPermColumnCache);
         }
         return securityAuthUser;
     }

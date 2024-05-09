@@ -1,9 +1,10 @@
 package com.action.system.holder;
 
-
 import com.action.common.mybatisplus.extend.IDataScopeHolder;
 import com.action.common.mybatisplus.extend.filter.datapermission.DataRowFilterStruct;
 import com.action.common.mybatisplus.extend.filter.dytablename.TableStruct;
+import com.action.system.service.ICacheService;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -15,34 +16,23 @@ import java.util.*;
  */
 @Service
 public class ExtendScopeHolder implements IDataScopeHolder {
+    @Resource
+    private ICacheService iCacheService;
+
     /*
      * 数据列权限配置
      * */
     @Override
     public Map<String, Set<String>> getDataColumnScope() {
-        Map<String, Set<String>> queryDataScopeMap = new HashMap<String, Set<String>>() {{
-            Set<String> strings = new HashSet<>();
-            strings.add("user_name");
-            strings.add("id");
-            put("sys_user", strings);
-        }};
-        return queryDataScopeMap;
+        return iCacheService.getUserDataPermColumnCache();
     }
 
     /*
      * 数据行权限配置
      * */
     @Override
-    public List<DataRowFilterStruct> getDataRowScope() {
-        List<DataRowFilterStruct> dataRowFilterStructs = new ArrayList<>();
-        DataRowFilterStruct dataRowFilterStruct = new DataRowFilterStruct();
-        dataRowFilterStruct.setTableName("sys_user");
-        dataRowFilterStruct.setTableField("sex");
-        dataRowFilterStruct.setRelation("and");
-        dataRowFilterStruct.setCondition("=");
-        dataRowFilterStruct.setVal("1");
-        dataRowFilterStructs.add(dataRowFilterStruct);
-        return dataRowFilterStructs;
+    public Set<DataRowFilterStruct> getDataRowScope() {
+        return iCacheService.getUserDataPermRowCache();
     }
 
     /*
@@ -51,7 +41,7 @@ public class ExtendScopeHolder implements IDataScopeHolder {
     @Override
     public Map<String, TableStruct> getTableStruct() {
         Map<String, TableStruct> map = new HashMap<>();
-        map.put("sys_user", null);
+//        map.put("sys_user", null);
         return map;
     }
 }

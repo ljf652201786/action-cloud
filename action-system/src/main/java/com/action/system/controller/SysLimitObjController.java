@@ -1,13 +1,12 @@
 package com.action.system.controller;
 
 import com.action.common.core.common.Result;
-import com.action.system.dto.SysLimitObjQuery;
+import com.action.common.mybatisplus.extend.base.BaseController;
+import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.entity.*;
 import com.action.system.service.ISysLimitObjService;
 import com.action.system.service.ISysRuleService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -21,11 +20,10 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("limitObj")
-public class SysLimitObjController {
-    @Resource
-    private ISysLimitObjService iSysLimitObjService;
-    @Resource
-    private ISysRuleService iSysRuleService;
+@AllArgsConstructor
+public class SysLimitObjController implements BaseController<ISysLimitObjService, SysLimitObj> {
+    private final ISysLimitObjService iSysLimitObjService;
+    private final ISysRuleService iSysRuleService;
 
     /**
      * @param query 查询 查询参数
@@ -36,10 +34,8 @@ public class SysLimitObjController {
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result listPage(SysLimitObjQuery query) {
-        Page<SysLimitObj> rowPage = new Page(query.getPage(), query.getLimit());
-        List<SysLimitObj> sysLimitObjList = iSysLimitObjService.list(rowPage, new QueryWrapper<>());
-        return Result.success("分页获取系统管理-限制对象表列表成功", sysLimitObjList);
+    public Result listPage(SysLimitObj sysLimitObj, BaseQuery query) {
+        return this.page(iSysLimitObjService, sysLimitObj, query);
     }
 
     /**
@@ -52,8 +48,7 @@ public class SysLimitObjController {
      */
     @RequestMapping(value = "getInfo", method = RequestMethod.GET)
     public Result getInfo(String id) {
-        SysLimitObj sysLimitObj = iSysLimitObjService.getById(id);
-        return Result.success("获取数据成功", sysLimitObj);
+        return this.getInfoById(iSysLimitObjService, id);
     }
 
     /**
@@ -66,7 +61,7 @@ public class SysLimitObjController {
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody SysLimitObj sysLimitObj) {
-        SysLimitObj slo = iSysLimitObjService.getOne(new QueryWrapper<SysLimitObj>().eq("limit_obj", sysLimitObj.getLimitObj()));
+        SysLimitObj slo = iSysLimitObjService.getOne(this.getLambdaQueryWrapper().eq(SysLimitObj::getLimitObj, sysLimitObj.getLimitObj()));
         if (Objects.nonNull(slo)) {
             return Result.error("权限标识已存在");
         }
@@ -88,7 +83,7 @@ public class SysLimitObjController {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Result update(@RequestBody SysLimitObj sysLimitObj) {
         SysLimitObj oldLimitObj = iSysLimitObjService.getById(sysLimitObj.getId());
-        SysLimitObj slo = iSysLimitObjService.getOne(new QueryWrapper<SysLimitObj>().eq("limit_obj", sysLimitObj.getLimitObj()));
+        SysLimitObj slo = iSysLimitObjService.getOne(this.getLambdaQueryWrapper().eq(SysLimitObj::getLimitObj, sysLimitObj.getLimitObj()));
         if (!oldLimitObj.getLimitObj().equals(sysLimitObj.getLimitObj()) && Objects.nonNull(slo)) {
             return Result.error("权限标识已使用");
         }
@@ -112,7 +107,7 @@ public class SysLimitObjController {
         List<String> idList = new ArrayList<>();
         List<String> idExistList = new ArrayList<>();
         for (int i = 0; i < ids.size(); i++) {
-            long num = iSysRuleService.count(new QueryWrapper<SysRule>().eq("limit_obj_id", ids.get(i)));
+            long num = iSysRuleService.count(this.getLambdaQueryWrapper(new SysRule()).eq(SysRule::getLimitObjId, ids.get(i)));
             if (num == 0) {
                 idList.add(ids.get(i));
             } else {

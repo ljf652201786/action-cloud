@@ -16,6 +16,7 @@
         <module>action-gateway</module>
         <module>action-system</module>
         <module>action-call</module>
+        <module>action-file</module>
     </modules>
 
     <properties>
@@ -79,6 +80,11 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
 
     </dependencies>

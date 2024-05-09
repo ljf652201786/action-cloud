@@ -1,14 +1,13 @@
 package com.action.system.controller;
 
 import com.action.common.core.common.Result;
-import com.action.system.dto.SysRuleQuery;
-import com.action.system.entity.SysMenuLimit;
+import com.action.common.mybatisplus.extend.base.BaseController;
+import com.action.common.mybatisplus.extend.base.BaseQuery;
+import com.action.system.entity.SysMenuRule;
 import com.action.system.entity.SysRule;
-import com.action.system.service.ISysMenuLimitService;
+import com.action.system.service.ISysMenuRuleService;
 import com.action.system.service.ISysRuleService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,11 +21,10 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("rule")
-public class SysRuleController {
-    @Resource
-    private ISysRuleService iSysRuleService;
-    @Resource
-    private ISysMenuLimitService iSysMenuLimitService;
+@AllArgsConstructor
+public class SysRuleController implements BaseController<ISysRuleService, SysRule> {
+    private final ISysRuleService iSysRuleService;
+    private final ISysMenuRuleService iSysMenuRuleService;
 
     /**
      * @param query 查询 查询参数
@@ -37,10 +35,8 @@ public class SysRuleController {
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result listPage(SysRuleQuery query) {
-        Page<SysRule> rowPage = new Page(query.getPage(), query.getLimit());
-        List<SysRule> sysLimitObjList = iSysRuleService.list(rowPage, new QueryWrapper<>());
-        return Result.success("分页获取系统管理-规则表列表成功", sysLimitObjList);
+    public Result listPage(SysRule sysRule, BaseQuery query) {
+        return this.page(iSysRuleService, sysRule, query);
     }
 
     /**
@@ -53,8 +49,7 @@ public class SysRuleController {
      */
     @RequestMapping(value = "getInfo", method = RequestMethod.GET)
     public Result getInfo(String id) {
-        SysRule sysRule = iSysRuleService.getById(id);
-        return Result.success("获取数据成功", sysRule);
+        return this.getInfoById(iSysRuleService, id);
     }
 
     /**
@@ -67,7 +62,7 @@ public class SysRuleController {
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody SysRule sysRule) {
-        SysRule sr = iSysRuleService.getOne(new QueryWrapper<SysRule>().eq("rule_code", sysRule.getRuleCode()));
+        SysRule sr = iSysRuleService.getOne(this.getLambdaQueryWrapper().eq(SysRule::getRuleCode, sysRule.getRuleCode()));
         if (Objects.nonNull(sr)) {
             return Result.error("规则标识已存在");
         }
@@ -89,7 +84,7 @@ public class SysRuleController {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Result update(@RequestBody SysRule sysRule) {
         SysRule oldRule = iSysRuleService.getById(sysRule.getId());
-        SysRule sr = iSysRuleService.getOne(new QueryWrapper<SysRule>().eq("rule_code", sysRule.getRuleCode()));
+        SysRule sr = iSysRuleService.getOne(this.getLambdaQueryWrapper().eq(SysRule::getRuleCode, sysRule.getRuleCode()));
         if (!oldRule.getRuleCode().equals(sysRule.getRuleCode()) && Objects.nonNull(sr)) {
             return Result.error("规则标识已使用");
         }
@@ -113,7 +108,7 @@ public class SysRuleController {
         List<String> idList = new ArrayList<>();
         List<String> idExistList = new ArrayList<>();
         for (int i = 0; i < ids.size(); i++) {
-            long num = iSysMenuLimitService.count(new QueryWrapper<SysMenuLimit>().eq("rule_id", ids.get(i)));
+            long num = iSysMenuRuleService.count(this.getLambdaQueryWrapper(new SysMenuRule()).eq(SysMenuRule::getRuleId, ids.get(i)));
             if (num == 0) {
                 idList.add(ids.get(i));
             } else {

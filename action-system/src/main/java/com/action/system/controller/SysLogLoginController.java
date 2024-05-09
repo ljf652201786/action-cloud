@@ -1,13 +1,12 @@
 package com.action.system.controller;
 
 import com.action.common.core.common.Result;
-import com.action.system.dto.SysLogLoginQuery;
+import com.action.common.mybatisplus.extend.base.BaseController;
+import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.entity.SysLogLogin;
 import com.action.system.service.ISysLogLoginService;
 import com.action.call.vo.LogLoginVo;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,9 +18,9 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("logLogin")
-public class SysLogLoginController {
-    @Autowired
-    private ISysLogLoginService iSysLogLoginService;
+@AllArgsConstructor
+public class SysLogLoginController implements BaseController<ISysLogLoginService, SysLogLogin> {
+    private final ISysLogLoginService iSysLogLoginService;
 
     /**
      * @param query 查询对象
@@ -32,10 +31,8 @@ public class SysLogLoginController {
      * @Date: 2024/4/14
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result getDictList(SysLogLoginQuery query) {
-        Page<SysLogLogin> rowPage = new Page<>(query.getPage(), query.getLimit());
-        List<SysLogLogin> sysLogLoginList = iSysLogLoginService.list(rowPage, new QueryWrapper<>());
-        return Result.success("获取登录日志列表", sysLogLoginList);
+    public Result getDictList(SysLogLogin sysLogLogin, BaseQuery query) {
+        return this.page(iSysLogLoginService, sysLogLogin, query);
     }
 
     /**

@@ -2,7 +2,7 @@ server:
   port: 8889
 spring:
   application:
-    name: springcloud-gateway
+    name: action-gateway
   profiles:
     active: dev
   cloud:
@@ -16,3 +16,9 @@ spring:
       discovery:
         locator:
           enabled: true
+  data:
+    redis:
+      repositories:
+        enabled: false
+
+

@@ -1,6 +1,8 @@
 package com.action.system.entity;
 
 import com.action.common.base.BaseEntity;
+import com.action.common.mybatisplus.extend.annotation.SensitiveField;
+import com.action.common.mybatisplus.extend.enums.SensitiveTypeEnums;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -22,10 +24,12 @@ public class SysUser extends BaseEntity {
     private String id;
     @TableField("avatar")
     private String avatar;
+    @SensitiveField(SensitiveTypeEnums.CHINESE_NAME)
     @TableField("user_name")
     private String username;
     @TableField("nick_name")
     private String nickName;
+    @SensitiveField(value = SensitiveTypeEnums.PASSWORD)
     @TableField("password")
     private String password;
     @TableField("email")

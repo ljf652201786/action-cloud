@@ -1,11 +1,11 @@
 package com.action.system.controller;
 
 import com.action.common.core.common.Result;
+import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.system.entity.*;
 import com.action.system.service.ISysMenuLimitService;
 import com.action.system.service.ISysMenuService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +18,10 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("menu")
-public class SysMenuController {
-    @Resource
-    private ISysMenuService iSysMenuService;
-    @Resource
-    private ISysMenuLimitService iSysMenuLimitService;
+@AllArgsConstructor
+public class SysMenuController implements BaseController<ISysMenuService, SysMenu> {
+    private final ISysMenuService iSysMenuService;
+    private final ISysMenuLimitService iSysMenuLimitService;
 
     /**
      * @Description: 获取菜单详情
@@ -33,8 +32,7 @@ public class SysMenuController {
      */
     @RequestMapping(value = "getInfo", method = RequestMethod.GET)
     public Result getInfo(String id) {
-        SysMenu sysMenu = iSysMenuService.getById(id);
-        return Result.success("获取数据成功", sysMenu);
+        return this.getInfoById(iSysMenuService, id);
     }
 
     /**
@@ -47,7 +45,7 @@ public class SysMenuController {
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody SysMenu sysMenu) {
-        SysMenu sm = iSysMenuService.getOne(new QueryWrapper<SysMenu>().eq("menu_perm", sysMenu.getMenuPerm()));
+        SysMenu sm = iSysMenuService.getOne(this.getLambdaQueryWrapper().eq(SysMenu::getMenuPerm, sysMenu.getMenuPerm()));
         if (Objects.nonNull(sm)) {
             return Result.error("权限标识已使用");
         }
@@ -69,7 +67,7 @@ public class SysMenuController {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Result update(@RequestBody SysMenu sysMenu) {
         SysMenu oldMenu = iSysMenuService.getById(sysMenu.getId());
-        SysMenu sm = iSysMenuService.getOne(new QueryWrapper<SysMenu>().eq("menu_perm", sysMenu.getMenuPerm()));
+        SysMenu sm = iSysMenuService.getOne(this.getLambdaQueryWrapper().eq(SysMenu::getMenuPerm, sysMenu.getMenuPerm()));
         if (!oldMenu.getMenuPerm().equals(sysMenu.getMenuPerm()) && Objects.nonNull(sm)) {
             return Result.error("权限标识已使用");
         }
@@ -90,7 +88,7 @@ public class SysMenuController {
      */
     @RequestMapping(value = "deleteById", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("id") String id) {
-        SysMenuLimit sysMenuLimit = iSysMenuLimitService.getOne(new QueryWrapper<SysMenuLimit>().eq("menu_id", id));
+        SysMenuLimit sysMenuLimit = iSysMenuLimitService.getOne(this.getLambdaQueryWrapper(new SysMenuLimit()).eq(SysMenuLimit::getMenuId, id));
         if (Objects.nonNull(sysMenuLimit)) {
             return Result.error("该数据删除失败，因为包含正被使用");
         }

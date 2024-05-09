@@ -2,14 +2,14 @@ package com.action.system.controller;
 
 import com.action.common.core.common.Result;
 import com.action.common.enums.UseType;
+import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.system.entity.SysDataRowLimit;
 import com.action.system.service.ISysDataRowLimitService;
-import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
-
 
 /**
  * @Description: 数据行权限管理
@@ -18,9 +18,9 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("dataRow")
-public class SysDataRowController {
-    @Resource
-    private ISysDataRowLimitService iSysDataRowLimitService;
+@AllArgsConstructor
+public class SysDataRowController implements BaseController<ISysDataRowLimitService, SysDataRowLimit> {
+    private final ISysDataRowLimitService iSysDataRowLimitService;
 
     /**
      * @param sysDataRowLimit 数据行对象
@@ -36,7 +36,7 @@ public class SysDataRowController {
             return Result.error("缺少必要数据");
         }
         sysDataRowLimit.setStatus(UseType.ENABLE.getStatus());
-        sysDataRowLimit.setCondition("And");
+        sysDataRowLimit.setRelation("and");
         boolean isSave = iSysDataRowLimitService.save(sysDataRowLimit);
         if (isSave) {
             return Result.success("保存数据成功");
@@ -58,7 +58,7 @@ public class SysDataRowController {
             return Result.error("缺少必要数据");
         }
         sysDataRowLimit.setStatus(UseType.ENABLE.getStatus());
-        sysDataRowLimit.setCondition("And");
+        sysDataRowLimit.setRelation("and");
         boolean isUpdate = iSysDataRowLimitService.updateById(sysDataRowLimit);
         if (isUpdate) {
             return Result.success("更新数据成功");
@@ -96,12 +96,8 @@ public class SysDataRowController {
         }
         sysDataRowLimit.setStatus(UseType.DISABLED.getStatus());
         iSysDataRowLimitService.updateById(sysDataRowLimit);
-        //刷新缓存权限
-        /*List<Scope> userIdScopeList = iScopeService.list(new QueryWrapper<Scope>().select("user_id").eq("dept_id", deptId));
-        String userIdsVar = userIdScopeList.stream().map(sp -> sp.getUserId()).collect(Collectors.joining(","));
-        List<String> usernames = userService.list(new QueryWrapper<User>().in("id", userIdsVar)).stream().map(user -> user.getUsername()).collect(Collectors.toList());
-        userService.refreshPermissions(usernames, false);*/
-        return Result.success();
+        iSysDataRowLimitService.updateDataRowLimitStatus(id, UseType.DISABLED.getStatus());
+        return Result.success("禁用成功");
     }
 
     /**
@@ -120,11 +116,7 @@ public class SysDataRowController {
         }
         sysDataRowLimit.setStatus(UseType.ENABLE.getStatus());
         iSysDataRowLimitService.updateById(sysDataRowLimit);
-        //刷新缓存权限
-        /*List<Scope> userIdScopeList = iScopeService.list(new QueryWrapper<Scope>().select("user_id").eq("dept_id", deptId));
-        String userIdsVar = userIdScopeList.stream().map(sp -> sp.getUserId()).collect(Collectors.joining(","));
-        List<String> usernames = userService.list(new QueryWrapper<User>().in("id", userIdsVar)).stream().map(user -> user.getUsername()).collect(Collectors.toList());
-        userService.refreshPermissions(usernames, false);*/
-        return Result.success();
+        iSysDataRowLimitService.updateDataRowLimitStatus(id, UseType.ENABLE.getStatus());
+        return Result.success("激活成功");
     }
 }

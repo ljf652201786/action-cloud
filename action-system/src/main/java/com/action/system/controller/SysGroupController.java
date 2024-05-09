@@ -2,14 +2,13 @@ package com.action.system.controller;
 
 import com.action.common.core.common.Result;
 import com.action.common.enums.UseType;
-import com.action.system.dto.SysGroupQuery;
+import com.action.common.mybatisplus.extend.base.BaseController;
+import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.entity.SysGroup;
 import com.action.system.entity.SysUserGroup;
 import com.action.system.service.ISysGroupService;
 import com.action.system.service.ISysUserGroupService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,11 +22,10 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("group")
-public class SysGroupController {
-    @Resource
-    private ISysGroupService iSysGroupService;
-    @Resource
-    private ISysUserGroupService iSysUserGroupService;
+@AllArgsConstructor
+public class SysGroupController implements BaseController<ISysGroupService, SysGroup> {
+    private final ISysGroupService iSysGroupService;
+    private final ISysUserGroupService iSysUserGroupService;
 
     /**
      * @param query 查询对象
@@ -38,10 +36,8 @@ public class SysGroupController {
      * @Date: 2024/4/14
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result getDictList(SysGroupQuery query) {
-        Page<SysGroup> rowPage = new Page<>(query.getPage(), query.getLimit());
-        List<SysGroup> sysDictList = iSysGroupService.list(rowPage, new QueryWrapper<>());
-        return Result.success("获取用户组列表", sysDictList);
+    public Result getDictList(SysGroup sysGroup, BaseQuery query) {
+        return this.page(iSysGroupService, sysGroup, query);
     }
 
     /**
@@ -54,7 +50,7 @@ public class SysGroupController {
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody SysGroup sysGroup) {
-        SysGroup sg = iSysGroupService.getOne(new QueryWrapper<SysGroup>().eq("group_code", sysGroup.getGroupCode()));
+        SysGroup sg = iSysGroupService.getOne(this.getLambdaQueryWrapper().eq(SysGroup::getGroupCode, sysGroup.getGroupCode()));
         if (Objects.nonNull(sg)) {
             return Result.error("用户组编码已存在");
         }
@@ -76,7 +72,7 @@ public class SysGroupController {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Result update(@RequestBody SysGroup sysGroup) {
         SysGroup oldGroup = iSysGroupService.getById(sysGroup.getId());
-        SysGroup sg = iSysGroupService.getOne(new QueryWrapper<SysGroup>().eq("group_code", sysGroup.getGroupCode()));
+        SysGroup sg = iSysGroupService.getOne(this.getLambdaQueryWrapper().eq(SysGroup::getGroupCode, sysGroup.getGroupCode()));
         if (!oldGroup.getGroupCode().equals(sysGroup.getGroupCode()) && Objects.nonNull(sg)) {
             return Result.error("字典编码已存在");
         }
@@ -100,7 +96,7 @@ public class SysGroupController {
         List<String> idList = new ArrayList<>();
         List<String> idExistList = new ArrayList<>();
         for (int i = 0; i < ids.size(); i++) {
-            long num = iSysUserGroupService.count(new QueryWrapper<SysUserGroup>().eq("group_id", ids.get(i)));
+            long num = iSysUserGroupService.count(this.getLambdaQueryWrapper(new SysUserGroup()).eq(SysUserGroup::getGroupId, ids.get(i)));
             if (num == 0) {
                 idList.add(ids.get(i));
             } else {

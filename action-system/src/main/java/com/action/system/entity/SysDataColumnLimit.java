@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("sys_column_limit")
+@TableName("sys_data_column_limit")
 public class SysDataColumnLimit extends BaseEntity {
     @TableId(value = "id")
     private String id;
@@ -30,6 +30,8 @@ public class SysDataColumnLimit extends BaseEntity {
     private String limitField;
     @TableField("limit_field_desc")
     private String limitFieldDesc;
+    @TableField(exist = false)
+    private String tableName;
 
     public SysDataColumnLimit(String dataId, String type, String contactId, String limitField, String limitFieldDesc) {
         this.dataId = dataId;

@@ -2,14 +2,13 @@ package com.action.system.controller;
 
 import com.action.common.core.common.Result;
 import com.action.common.enums.UseType;
-import com.action.system.dto.SysRoleQuery;
+import com.action.common.mybatisplus.extend.base.BaseController;
+import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.entity.SysRole;
 import com.action.system.entity.SysUserRole;
 import com.action.system.service.ISysRoleService;
 import com.action.system.service.ISysUserRoleService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,11 +22,10 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("role")
-public class SysRoleController {
-    @Resource
-    private ISysRoleService iSysRoleService;
-    @Resource
-    private ISysUserRoleService iSysUserRoleService;
+@AllArgsConstructor
+public class SysRoleController implements BaseController<ISysRoleService, SysRole> {
+    private final ISysRoleService iSysRoleService;
+    private final ISysUserRoleService iSysUserRoleService;
 
     /**
      * @param query 查询对象
@@ -38,10 +36,8 @@ public class SysRoleController {
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result listPage(SysRoleQuery query) {
-        Page<SysRole> rowPage = new Page(query.getPage(), query.getLimit());
-        List<SysRole> sysRoleList = iSysRoleService.list(rowPage, new QueryWrapper<>());
-        return Result.success("分页获取系统管理-角色基础信息表列表成功", sysRoleList);
+    public Result listPage(SysRole sysRole, BaseQuery query) {
+        return this.page(iSysRoleService, sysRole, query);
     }
 
     /**
@@ -54,8 +50,7 @@ public class SysRoleController {
      */
     @RequestMapping(value = "getInfoById", method = RequestMethod.GET)
     public Result getInfoById(@RequestParam("id") String id) {
-        SysRole sysRole = iSysRoleService.getById(id);
-        return Result.success("获取角色信息成功", sysRole);
+        return this.getInfoById(iSysRoleService, id);
     }
 
     /**
@@ -81,7 +76,7 @@ public class SysRoleController {
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody SysRole sysRole) {
-        SysRole sr = iSysRoleService.getOne(new QueryWrapper<SysRole>().eq("role_code", sysRole.getRoleCode()));
+        SysRole sr = iSysRoleService.getOne(this.getLambdaQueryWrapper().eq(SysRole::getRoleCode, sysRole.getRoleCode()));
         if (Objects.nonNull(sr)) {
             return Result.error("角色编码已存在");
         }
@@ -103,7 +98,7 @@ public class SysRoleController {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Result update(@RequestBody SysRole sysRole) {
         SysRole oldRole = iSysRoleService.getById(sysRole.getId());
-        SysRole sr = iSysRoleService.getOne(new QueryWrapper<SysRole>().eq("role_code", sysRole.getRoleCode()));
+        SysRole sr = iSysRoleService.getOne(this.getLambdaQueryWrapper().eq(SysRole::getRoleCode, sysRole.getRoleCode()));
         if (!oldRole.getRoleCode().equals(sysRole.getRoleCode()) && Objects.nonNull(sr)) {
             return Result.error("角色编码已存在");
         }
@@ -127,7 +122,7 @@ public class SysRoleController {
         List<String> idList = new ArrayList<>();
         List<String> idExistList = new ArrayList<>();
         for (int i = 0; i < ids.size(); i++) {
-            long num = iSysUserRoleService.count(new QueryWrapper<SysUserRole>().eq("role_id", ids.get(i)));
+            long num = iSysUserRoleService.count(this.getLambdaQueryWrapper(new SysUserRole()).eq(SysUserRole::getRoleId, ids.get(i)));
             if (num == 0) {
                 idList.add(ids.get(i));
             } else {

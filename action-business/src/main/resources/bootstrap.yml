@@ -2,7 +2,7 @@ server:
   port: 8887
 spring:
   application:
-    name: springcloud-business
+    name: action-business
   profiles:
     # 环境配置
     active: dev

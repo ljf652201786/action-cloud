@@ -10,9 +10,9 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import jakarta.annotation.Resource;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -53,7 +53,7 @@ public class ISysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> 
         boolean isUpdate = SqlHelper.retBool(sysScopeMapper.update(null, new UpdateWrapper<SysScope>().set(!StringUtils.isEmpty(status), "dept_status", status).eq("dept_id", deptId)));
         if (isUpdate) {
             Set<String> postIds = sysScopeList.stream().map(sysScope -> sysScope.getPostId()).collect(Collectors.toSet());
-            iCacheService.cleanUserPostCache(postIds);
+            iCacheService.cleanPostCache(postIds);
         }
         return isUpdate;
     }
@@ -62,7 +62,7 @@ public class ISysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> 
     public boolean updatePostStatus(String postId, String status) {
         boolean isUpdate = SqlHelper.retBool(sysScopeMapper.update(null, new UpdateWrapper<SysScope>().set(!StringUtils.isEmpty(status), "post_status", status).eq("post_id", postId)));
         if (isUpdate) {
-            iCacheService.cleanUserPostCache(postId);
+            iCacheService.cleanPostCache(postId);
         }
         return isUpdate;
     }

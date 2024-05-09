@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 /**
  * @Description: 数据列权限表
  * @Author: ljf  <lin652210786@163.com>
@@ -17,4 +19,8 @@ public class ISysDataColumnLimitServiceImpl extends ServiceImpl<SysDataColumnLim
     @Resource
     private SysDataColumnLimitMapper sysDataColumnLimitMapper;
 
+    @Override
+    public Set<SysDataColumnLimit> getUserDataColumnPerm(Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet) {
+        return sysDataColumnLimitMapper.getUserDataColumnPerm(groupIdSet, postIdSet, roleIdSet);
+    }
 }

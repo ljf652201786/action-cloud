@@ -2,16 +2,18 @@ package com.action.system.controller;
 
 import com.action.common.core.common.Result;
 import com.action.common.enums.UseType;
+import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.system.entity.SysMenuLimit;
 import com.action.system.entity.SysMenuRule;
 import com.action.system.service.ISysMenuLimitService;
 import com.action.system.service.ISysMenuRuleService;
 import com.action.system.vo.PermAllocationVo;
 import com.action.system.vo.RuleAllocationVo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import jakarta.annotation.Resource;
-import org.apache.commons.lang3.StringUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.util.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,11 +26,10 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("perm")
-public class SysPermAllocationController {
-    @Resource
-    private ISysMenuLimitService iSysMenuLimitService;
-    @Resource
-    private ISysMenuRuleService iSysMenuRuleService;
+@AllArgsConstructor
+public class SysPermAllocationController implements BaseController {
+    private final ISysMenuLimitService iSysMenuLimitService;
+    private final ISysMenuRuleService iSysMenuRuleService;
 
     /**
      * @param permAllocationVo 分配对象
@@ -43,7 +44,9 @@ public class SysPermAllocationController {
         if (StringUtils.isEmpty(permAllocationVo.getContactId()) || StringUtils.isEmpty(permAllocationVo.getType())) {
             return Result.error("请先选择所属分配对象");
         }
-        boolean isRemove = iSysMenuLimitService.remove(new QueryWrapper<SysMenuLimit>().eq("type", permAllocationVo.getType()).eq("contactId", permAllocationVo.getContactId()));
+        boolean isRemove = iSysMenuLimitService.remove(((LambdaQueryWrapper<SysMenuLimit>) this.getLambdaQueryWrapper())
+                .eq(SysMenuLimit::getType, permAllocationVo.getType())
+                .eq(SysMenuLimit::getContactId, permAllocationVo.getContactId()));
         if (isRemove) {
             if (CollectionUtils.isEmpty(permAllocationVo.getMenuIds())) {
                 return Result.error("请先选择分配的菜单");

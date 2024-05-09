@@ -2,12 +2,11 @@ package com.action.system.controller;
 
 import com.action.common.core.common.Result;
 import com.action.common.enums.UseType;
-import com.action.system.dto.SysDeptQuery;
+import com.action.common.mybatisplus.extend.base.BaseController;
+import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.entity.*;
 import com.action.system.service.*;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import jakarta.annotation.Resource;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -21,11 +20,10 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("dept")
-public class SysDeptController {
-    @Resource
-    private ISysDeptService iSysDeptService;
-    @Resource
-    private ISysScopeService iSysScopeService;
+@AllArgsConstructor
+public class SysDeptController implements BaseController<ISysDeptService, SysDept> {
+    private final ISysDeptService iSysDeptService;
+    private final ISysScopeService iSysScopeService;
 
     /**
      * @param query 查询对象
@@ -36,10 +34,8 @@ public class SysDeptController {
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result listPage(SysDeptQuery query) {
-        Page<SysDept> rowPage = new Page(query.getPage(), query.getLimit());
-        List<SysDept> sysDeptList = iSysDeptService.list(rowPage, new QueryWrapper<>());
-        return Result.success("分页获取系统管理-部门基础信息表列表成功", sysDeptList);
+    public Result listPage(SysDept sysDept, BaseQuery query) {
+        return this.page(iSysDeptService, sysDept, query);
     }
 
     /**
@@ -52,7 +48,7 @@ public class SysDeptController {
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody SysDept sysDept) {
-        SysDept sd = iSysDeptService.getOne(new QueryWrapper<SysDept>().eq("dept_code", sysDept.getDeptCode()));
+        SysDept sd = iSysDeptService.getOne(this.getLambdaQueryWrapper().eq(SysDept::getDeptCode, sysDept.getDeptCode()));
         if (Objects.nonNull(sd)) {
             return Result.error("部门编码已存在");
         }
@@ -74,7 +70,7 @@ public class SysDeptController {
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Result update(@RequestBody SysDept sysDept) {
         SysDept oldDept = iSysDeptService.getById(sysDept.getId());
-        SysDept sd = iSysDeptService.getOne(new QueryWrapper<SysDept>().eq("dept_code", sysDept.getDeptCode()));
+        SysDept sd = iSysDeptService.getOne(this.getLambdaQueryWrapper().eq(SysDept::getDeptCode, sysDept.getDeptCode()));
         if (!oldDept.getDeptCode().equals(sysDept.getDeptCode()) && Objects.nonNull(sd)) {
             return Result.error("部门编码已存在");
         }

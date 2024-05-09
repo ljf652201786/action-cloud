@@ -52,7 +52,7 @@ public class ISysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> imp
             return new HashSet<>();
         }
         Set<BaseSecurityMenu> securityMenuSet = sysMenuList.stream().map(sysMenu -> {
-            return new BaseSecurityMenu(sysMenu.getRouteUrl(), sysMenu.getMenuPerm());
+            return new BaseSecurityMenu(sysMenu.getId(), sysMenu.getRouteUrl(), sysMenu.getMenuPerm());
         }).collect(Collectors.toSet());
         return securityMenuSet;
     }

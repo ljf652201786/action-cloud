@@ -10,8 +10,8 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import jakarta.annotation.Resource;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class ISysUserGroupServiceImpl extends ServiceImpl<SysUserGroupMapper, Sy
     public boolean updateGroupStatus(String groupId, String status) {
         boolean isUpdate = SqlHelper.retBool(sysUserGroupMapper.update(new UpdateWrapper<SysUserGroup>().set(!StringUtils.isEmpty(status), "status", status).eq("group_id", groupId)));
         if (isUpdate) {
-            iCacheService.cleanUserGroupCache(groupId);
+            iCacheService.cleanGroupCache(groupId);
         }
         return isUpdate;
     }
