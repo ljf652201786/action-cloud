@@ -11,7 +11,7 @@
  Target Server Version : 50725
  File Encoding         : 65001
 
- Date: 26/04/2024 15:28:18
+ Date: 15/05/2024 15:56:58
 */
 
 SET NAMES utf8mb4;
@@ -183,6 +183,101 @@ INSERT INTO `sys_dict_detail` VALUES (1664549953634222081, 1664549910374170626, 
 INSERT INTO `sys_dict_detail` VALUES (1664549985406074881, 1664549910374170626, 'sys_enable_disable', '启用', '1', 0, '0', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
+-- Table structure for sys_file
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_file`;
+CREATE TABLE `sys_file`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `file_original_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '原始文件名',
+  `file_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '自动生成的文件名',
+  `file_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件类型',
+  `file_path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件储存路径',
+  `file_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件访问地址',
+  `file_size` bigint(20) NULL DEFAULT NULL COMMENT '文件大小，单位：kb',
+  `upload_user_id` bigint(20) NULL DEFAULT NULL COMMENT '上传人id',
+  `upload_user_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '上传人名字',
+  `del_flag` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '删除标志（1代表存在 0代表删除）',
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1788085059450974211 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '附件表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_file
+-- ----------------------------
+INSERT INTO `sys_file` VALUES (1, '调研概要v2.1.docx', '3916a8f8-1ddf-4d0e-a24d-2972772fa72b', 'docx', 'D:/platform/uploadPath\\3916a8f8-1ddf-4d0e-a24d-2972772fa72b', 'http://localhost:9300/statics3916a8f8-1ddf-4d0e-a24d-2972772fa72b', 2841044, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (2, '应急管理平台建设方案(20190907133619).pdf', 'a6872741-a74b-4281-8ae6-c59a2d68430f', 'pdf', 'D:/platform/uploadPath\\a6872741-a74b-4281-8ae6-c59a2d68430f', 'http://localhost:9300/staticsa6872741-a74b-4281-8ae6-c59a2d68430f', 39320212, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (3, '广州市外网协同办公平台可复用可共用接入指引.pdf', '38af4210-11d5-45e0-a381-9cd61a0cbe76', 'pdf', 'D:/platform/uploadPath\\38af4210-11d5-45e0-a381-9cd61a0cbe76', 'http://localhost:9300/statics38af4210-11d5-45e0-a381-9cd61a0cbe76', 826904915, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (4, '应急管理平台建设方案(20190907133619).pdf', '80acd290-caa6-4ecb-98cf-551b6a71aa13', 'pdf', 'D:/platform/uploadPath\\80acd290-caa6-4ecb-98cf-551b6a71aa13', 'http://localhost:9300/statics\\80acd290-caa6-4ecb-98cf-551b6a71aa13', 39320212, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (5, '应急管理平台建设方案(20190907133619).pdf', '27aece4e-337a-4383-a67e-0d81202e664b', 'pdf', 'D:/platform/uploadPath\\27aece4e-337a-4383-a67e-0d81202e664b', 'http://localhost:9300/statics\\27aece4e-337a-4383-a67e-0d81202e664b', 39320212, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (6, 'img11.jpg', 'd2d53b8c-3e4a-4631-bfe6-fe6936591c12', 'jpg', 'D:/platform/uploadPath\\d2d53b8c-3e4a-4631-bfe6-fe6936591c12', 'http://localhost:9300D:/platform/uploadPath\\d2d53b8c-3e4a-4631-bfe6-fe6936591c12', 68767, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (7, 'img11.jpg', 'e578985c-3d29-4944-9807-ee85a28a7a7c', 'jpg', 'D:/platform/uploadPath\\e578985c-3d29-4944-9807-ee85a28a7a7c', 'http://localhost:9300D:/platform/uploadPath\\e578985c-3d29-4944-9807-ee85a28a7a7c', 68767, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (8, 'img11.jpg', '174cae4b-5368-483c-a054-0baef202077e', 'jpg', 'D:/platform/uploadPath\\174cae4b-5368-483c-a054-0baef202077e', 'http://localhost:9300D:/platform/uploadPath\\174cae4b-5368-483c-a054-0baef202077e', 68767, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (9, 'img11.jpg', '3c9ca272-59ca-4fa8-8b44-bc8589f13c9d', 'jpg', 'D:/platform/uploadPath\\3c9ca272-59ca-4fa8-8b44-bc8589f13c9d', 'http://localhost:9300D:/platform/uploadPath\\3c9ca272-59ca-4fa8-8b44-bc8589f13c9d', 68767, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (10, 'img11.jpg', 'a813ad95-8dc2-4659-9c62-422c84ce6192', 'jpg', 'D:/platform/uploadPath\\a813ad95-8dc2-4659-9c62-422c84ce6192', 'http://localhost:9300D:/platform/uploadPath\\a813ad95-8dc2-4659-9c62-422c84ce6192', 68767, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (11, 'im11g11.jpg', '90a8c869-0428-4088-a7ae-77869cc5b8d3', 'jpg', 'D:/platform/uploadPath\\90a8c869-0428-4088-a7ae-77869cc5b8d3', 'http://localhost:9300D:/platform/uploadPath\\90a8c869-0428-4088-a7ae-77869cc5b8d3', 68767, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (12, 'mycat', 'ae0d613e-8255-4374-aacf-2844f9dfd170', 'mycat', 'D:/platform/uploadPath\\ae0d613e-8255-4374-aacf-2844f9dfd170', 'http://localhost:9300D:/platform/uploadPath\\ae0d613e-8255-4374-aacf-2844f9dfd170', 68767, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (13, 'cat', 'b3eda1d7-d4b1-4db3-a885-618dfd736c70', 'cat', 'D:/platform/uploadPath\\b3eda1d7-d4b1-4db3-a885-618dfd736c70', 'http://localhost:9300D:/platform/uploadPath\\b3eda1d7-d4b1-4db3-a885-618dfd736c70', 1607095, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (14, 'mycat.jpg', '965437b3-d462-4805-a233-01f2d6867c17', 'jpg', 'D:/platform/uploadPath\\965437b3-d462-4805-a233-01f2d6867c17', 'http://localhost:9300D:/platform/uploadPath\\965437b3-d462-4805-a233-01f2d6867c17', 68767, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (15, '1工程.docx', 'cc0d4e39-f40b-43f3-80c7-29d35a531e66', 'docx', 'D:/platform/uploadPath\\cc0d4e39-f40b-43f3-80c7-29d35a531e66', 'http://localhost:9300D:/platform/uploadPath\\cc0d4e39-f40b-43f3-80c7-29d35a531e66', 45080, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (16, '1工程.docx', '0ecf65dd-5f71-4217-8cdd-a689b571edbb', 'docx', 'D:/platform/uploadPath\\0ecf65dd-5f71-4217-8cdd-a689b571edbb', 'http://localhost:9300D:/platform/uploadPath\\0ecf65dd-5f71-4217-8cdd-a689b571edbb', 45080, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (17, 'im11g11.jpg', 'f93cb23f-c8be-46c6-b5db-76da81de1f93', 'jpg', 'D:/platform/uploadPath\\f93cb23f-c8be-46c6-b5db-76da81de1f93', 'http://192.168.1.188:9300D:/platform/uploadPath\\f93cb23f-c8be-46c6-b5db-76da81de1f93', 68767, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (18, 'mycat.jpg', '759ec0d1-a7e5-451a-9c0d-a626ae0c97e0', 'jpg', 'D:/platform/uploadPath\\759ec0d1-a7e5-451a-9c0d-a626ae0c97e0', 'http://192.168.1.188:9300D:/platform/uploadPath\\759ec0d1-a7e5-451a-9c0d-a626ae0c97e0', 68767, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (19, 'mycat.jpg', 'e77fe5a9-1146-4478-a891-33db55469a91', 'jpg', 'D:/platform/uploadPath\\e77fe5a9-1146-4478-a891-33db55469a91', 'http://192.168.1.188:9300D:/platform/uploadPath\\e77fe5a9-1146-4478-a891-33db55469a91', 68767, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (20, 'im11g11.jpg', '5f845e2d-9e94-45cf-a286-368d943691e8', 'jpg', 'D:/platform/uploadPath\\5f845e2d-9e94-45cf-a286-368d943691e8', 'http://192.168.1.188:9300/statics5f845e2d-9e94-45cf-a286-368d943691e8', 68767, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (21, '1工程.docx', '0d3b13ba-d10d-4afb-a754-b7b772ebac20', 'docx', 'D:/platform/uploadPath\\0d3b13ba-d10d-4afb-a754-b7b772ebac20', 'http://192.168.1.188:9300\\/statics0d3b13ba-d10d-4afb-a754-b7b772ebac20', 45080, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (22, '05需求规格说明书.zip', 'a1e3b5c2-7335-4d2f-8898-98148945535d', 'zip', 'D:/platform/uploadPath\\a1e3b5c2-7335-4d2f-8898-98148945535d', 'http://192.168.1.188:9300\\/staticsa1e3b5c2-7335-4d2f-8898-98148945535d', 10161968, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (23, 'cat.jpg', '3b0d4d6b-a433-4717-88cb-a343b3d273bc', 'jpg', 'D:/platform/uploadPath\\3b0d4d6b-a433-4717-88cb-a343b3d273bc', 'http://192.168.1.188:9300\\/statics3b0d4d6b-a433-4717-88cb-a343b3d273bc', 1607095, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (24, 'cat.jpg', 'f06ed420-2754-4221-93cb-56360d97c733', 'jpg', 'D:/platform/uploadPath\\f06ed420-2754-4221-93cb-56360d97c733', 'http://192.168.1.188:9300\\/staticsf06ed420-2754-4221-93cb-56360d97c733', 1607095, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (25, 'mycat.jpg', '2abd4c6a-f594-4724-baf0-b89232cc5471', 'jpg', 'D:/platform/uploadPath\\2abd4c6a-f594-4724-baf0-b89232cc5471', 'http://192.168.1.188:9300\\/statics2abd4c6a-f594-4724-baf0-b89232cc5471', 68767, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (26, 'cat.jpg', '212b5b25-ff99-4fe7-8cd9-1b417e512253', 'jpg', 'D:/platform/uploadPath\\212b5b25-ff99-4fe7-8cd9-1b417e512253', 'http://192.168.1.188:9300/statics\\212b5b25-ff99-4fe7-8cd9-1b417e512253', 1607095, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (27, 'mycat.jpg', '0d56f91c-7886-44e0-be6a-27cc38e12c04', 'jpg', 'D:/platform/uploadPath\\0d56f91c-7886-44e0-be6a-27cc38e12c04', 'http://192.168.1.188:9300/statics\\0d56f91c-7886-44e0-be6a-27cc38e12c04', 68767, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (28, 'mycat.jpg', 'fd98ad8e-dd5a-4ee7-904d-88155c3cdeab', 'jpg', 'D:/platform/uploadPath\\fd98ad8e-dd5a-4ee7-904d-88155c3cdeab', 'http://192.168.1.188:9300/statics\\fd98ad8e-dd5a-4ee7-904d-88155c3cdeab', 68767, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (29, 'cat.jpg', 'eac9222c-5de0-4282-880c-a8b2502931f3', 'jpg', 'D:/platform/uploadPath\\eac9222c-5de0-4282-880c-a8b2502931f3', 'http://192.168.1.188:9300/statics\\eac9222c-5de0-4282-880c-a8b2502931f3', 1607095, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (30, 'avatar.jpg', '90404936-a512-4b91-a87d-c60d01a8e1b7', 'jpg', 'D:/platform/uploadPath\\90404936-a512-4b91-a87d-c60d01a8e1b7', 'http://192.168.1.188:9300/statics\\90404936-a512-4b91-a87d-c60d01a8e1b7', 8106, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (31, 'photo4.jpg', '39b638b0-025c-477d-b958-70b84283d866', 'jpg', 'D:/platform/uploadPath\\39b638b0-025c-477d-b958-70b84283d866', 'http://192.168.1.188:9300/statics\\39b638b0-025c-477d-b958-70b84283d866', 53923, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (32, '05需求规格说明书.zip', '9e1b66af-34b5-41a8-83cc-0875390f9ad3', 'zip', 'D:/platform/uploadPath\\9e1b66af-34b5-41a8-83cc-0875390f9ad3', 'http://192.168.1.188:9300/statics\\9e1b66af-34b5-41a8-83cc-0875390f9ad3', 10161968, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (33, '1工程.docx', 'ab58e9eb-9348-40d5-91bc-656410a439dd', 'docx', 'D:/platform/uploadPath\\ab58e9eb-9348-40d5-91bc-656410a439dd', 'http://192.168.1.188:9300/statics\\ab58e9eb-9348-40d5-91bc-656410a439dd', 45080, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (34, '1.png', 'bc30728b-b63e-4d35-9b85-e865a068960d', 'png', 'D:/platform/uploadPath\\bc30728b-b63e-4d35-9b85-e865a068960d', 'http://192.168.1.188:9300/statics\\bc30728b-b63e-4d35-9b85-e865a068960d', 59284, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (35, '1.png', '58962f4b-5416-425a-9016-684044ea9b05', 'png', 'D:/platform/uploadPath\\58962f4b-5416-425a-9016-684044ea9b05', 'http://192.168.1.188:9300/statics\\58962f4b-5416-425a-9016-684044ea9b05', 59284, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (36, '1工程.docx', '15363d62-9403-4443-ac90-0c3f743d4157', 'docx', 'D:/platform/uploadPath\\15363d62-9403-4443-ac90-0c3f743d4157', 'http://192.168.1.188:9300/statics\\15363d62-9403-4443-ac90-0c3f743d4157', 45080, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (37, '1.png', '5650e898-50f2-4b53-b678-bc7940c2b3a0', 'png', 'D:/platform/uploadPath\\5650e898-50f2-4b53-b678-bc7940c2b3a0', 'http://192.168.1.188:9300/statics\\5650e898-50f2-4b53-b678-bc7940c2b3a0', 59284, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (38, '1.png', 'a26e746a-a91e-4dea-a0e0-f1121938468b', 'png', 'D:/platform/uploadPath\\a26e746a-a91e-4dea-a0e0-f1121938468b', 'http://192.168.1.188:9300/statics\\a26e746a-a91e-4dea-a0e0-f1121938468b', 59284, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (39, '1工程.docx', '9a387d6a-7ac1-4897-ac62-86bd3e7084a9', 'docx', 'D:/platform/uploadPath\\9a387d6a-7ac1-4897-ac62-86bd3e7084a9', 'http://192.168.1.188:9300/statics\\9a387d6a-7ac1-4897-ac62-86bd3e7084a9', 45080, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (40, '1.png', 'cc9493ef-31ff-47b7-8415-2f9d36e9d2a3', 'png', 'D:/platform/uploadPath\\cc9493ef-31ff-47b7-8415-2f9d36e9d2a3', 'http://192.168.1.188:9300/statics\\cc9493ef-31ff-47b7-8415-2f9d36e9d2a3', 59284, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (41, '1工程.docx', '93bb64ac-c4d0-4201-9e31-7d802ae04638', 'docx', 'D:/platform/uploadPath\\93bb64ac-c4d0-4201-9e31-7d802ae04638', 'http://192.168.1.188:9300/statics\\93bb64ac-c4d0-4201-9e31-7d802ae04638', 45080, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (42, '1.png', '0ca56fc7-8f70-48ef-aee5-e38b0d164797', 'png', 'D:/platform/uploadPath\\0ca56fc7-8f70-48ef-aee5-e38b0d164797', 'http://192.168.1.188:9300/statics\\0ca56fc7-8f70-48ef-aee5-e38b0d164797', 59284, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (43, '1工程.docx', 'ec65a5a4-2faf-4eaa-a206-e164869a302a', 'docx', 'D:/platform/uploadPath\\ec65a5a4-2faf-4eaa-a206-e164869a302a', 'http://192.168.1.188:9300/statics\\ec65a5a4-2faf-4eaa-a206-e164869a302a', 45080, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (44, '1.png', '287038f6-d26c-40b3-bedc-dc9b8c2a0b5f', 'png', 'D:/platform/uploadPath\\287038f6-d26c-40b3-bedc-dc9b8c2a0b5f', '/statics\\287038f6-d26c-40b3-bedc-dc9b8c2a0b5f', 59284, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (45, '1工程.docx', 'b11455dc-1bea-443b-8cc8-5411cae5e6a6', 'docx', 'D:/platform/uploadPath\\b11455dc-1bea-443b-8cc8-5411cae5e6a6', '/statics\\b11455dc-1bea-443b-8cc8-5411cae5e6a6', 45080, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (46, '05需求规格说明书.zip', '653ded74-fcf4-4f92-bac6-eee5eebc787e', 'zip', 'D:/platform/uploadPath\\653ded74-fcf4-4f92-bac6-eee5eebc787e', '/statics\\653ded74-fcf4-4f92-bac6-eee5eebc787e', 10161968, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (47, '05需求规格说明书.zip', '0b825e03-d075-4186-bbd8-2ac68be5277f', 'zip', 'D:/platform/uploadPath\\0b825e03-d075-4186-bbd8-2ac68be5277f', '/statics\\0b825e03-d075-4186-bbd8-2ac68be5277f', 10161968, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (48, '2养护.docx', '85c92bd6-d77f-4dc7-b334-ea78d19cde3f', 'docx', 'D:/platform/uploadPath\\85c92bd6-d77f-4dc7-b334-ea78d19cde3f', '/statics\\85c92bd6-d77f-4dc7-b334-ea78d19cde3f', 70006, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (49, '1工程.docx', '4a90db08-f8b6-4918-a2d9-0e1eeffef2b2', 'docx', 'D:/platform/uploadPath\\4a90db08-f8b6-4918-a2d9-0e1eeffef2b2', '/statics\\4a90db08-f8b6-4918-a2d9-0e1eeffef2b2', 45080, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (50, '05需求规格说明书.zip', 'b03999c2-d4a1-4a99-b9e0-7550aab0579e', 'zip', 'D:/platform/uploadPath\\b03999c2-d4a1-4a99-b9e0-7550aab0579e', '/statics\\b03999c2-d4a1-4a99-b9e0-7550aab0579e', 10161968, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (51, '集客重点项目标前评估汇报（广州市第二老人院项目二期工程10KV供配电工程施工专业承包项目(第二次)）(1)(1).pptx', 'be60ac47-07cb-401f-81e5-a0b02bc2b9a6', 'pptx', 'D:/platform/uploadPath\\be60ac47-07cb-401f-81e5-a0b02bc2b9a6', '/statics\\be60ac47-07cb-401f-81e5-a0b02bc2b9a6', 3750603, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (52, '项目2.docx', '6c410635-def6-45fd-8fb2-77e0041b2e0e', 'docx', 'D:/platform/uploadPath\\6c410635-def6-45fd-8fb2-77e0041b2e0e', '/statics\\6c410635-def6-45fd-8fb2-77e0041b2e0e', 5430454, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (53, 'demo.zip', '9cea0676-a345-4ee7-b1ff-7bc1190f3888', 'zip', 'D:/platform/uploadPath\\9cea0676-a345-4ee7-b1ff-7bc1190f3888', '/statics\\9cea0676-a345-4ee7-b1ff-7bc1190f3888', 8900441, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (54, 'demo.zip', '1c05e1ca-6562-45e7-ac2a-7129991a9c08', 'zip', 'D:/platform/uploadPath\\1c05e1ca-6562-45e7-ac2a-7129991a9c08', '/statics\\1c05e1ca-6562-45e7-ac2a-7129991a9c08', 8900441, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (55, '1工程.docx', '1488c3ca-0867-4570-b9e3-715b6ba1ab7e', 'docx', 'D:/platform/uploadPath\\1488c3ca-0867-4570-b9e3-715b6ba1ab7e', '/statics\\1488c3ca-0867-4570-b9e3-715b6ba1ab7e', 45080, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (56, '项目2.docx', 'f53edb60-d1f6-4c5e-89cf-05bfab2413cd', 'docx', 'D:/platform/uploadPath\\f53edb60-d1f6-4c5e-89cf-05bfab2413cd', '/statics\\f53edb60-d1f6-4c5e-89cf-05bfab2413cd', 5430454, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (57, 'yyzz.png', 'd130dbaf-f562-4b03-9d82-b0a929110448', 'png', 'D:/platform/uploadPath\\d130dbaf-f562-4b03-9d82-b0a929110448', '/statics\\d130dbaf-f562-4b03-9d82-b0a929110448', 2278550, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (58, 'nginx.exe', '7ee1df8a-52c5-448e-99df-2a97c7e0d69a', 'exe', 'D:/platform/uploadPath\\7ee1df8a-52c5-448e-99df-2a97c7e0d69a', '/statics\\7ee1df8a-52c5-448e-99df-2a97c7e0d69a', 3691520, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (59, 'dist2.zip', '5260acec-e113-4fe8-b02c-6e9afcb1410d', 'zip', 'D:/platform/uploadPath\\5260acec-e113-4fe8-b02c-6e9afcb1410d', '/statics\\5260acec-e113-4fe8-b02c-6e9afcb1410d', 1386696, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (60, '集客重点项目标前评估汇报（广州市第二老人院项目二期工程10KV供配电工程施工专业承包项目(第二次)）(1)(1).pptx', '3889adae-9c10-437f-8ea6-f92deced8f56', 'pptx', 'D:/platform/uploadPath\\3889adae-9c10-437f-8ea6-f92deced8f56', '/statics\\3889adae-9c10-437f-8ea6-f92deced8f56', 3750603, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (61, '项目2.docx', '26d4f6ca-3677-4dda-bfc7-bcae4eeb8eaa', 'docx', 'D:/platform/uploadPath\\26d4f6ca-3677-4dda-bfc7-bcae4eeb8eaa', '/statics\\26d4f6ca-3677-4dda-bfc7-bcae4eeb8eaa', 5107126, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (62, '项目3.docx', '9610f0f3-0e30-4995-90a4-ac20914448f5', 'docx', 'D:/platform/uploadPath\\9610f0f3-0e30-4995-90a4-ac20914448f5', '/statics\\9610f0f3-0e30-4995-90a4-ac20914448f5', 5738917, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (63, '__UNI__2AF36A0_20210506095516.apk', '5b0ba877-79d2-4cae-a791-698698749d75', 'apk', 'D:/platform/uploadPath\\5b0ba877-79d2-4cae-a791-698698749d75', '/statics\\5b0ba877-79d2-4cae-a791-698698749d75', 19505209, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (64, '集客重点项目标前评估汇报（广州市第二老人院项目二期工程10KV供配电工程施工专业承包项目(第二次)）(1)(1).pptx', 'a249390c-604e-4532-af73-8e16425fc21e', 'pptx', 'D:/platform/uploadPath\\a249390c-604e-4532-af73-8e16425fc21e', '/statics\\a249390c-604e-4532-af73-8e16425fc21e', 3906699, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (65, '__UNI__2AF36A0_20210506095516.apk', 'f6ed2877-ab24-48a7-971d-444ff7d737a5', 'apk', 'D:/platform/uploadPath\\f6ed2877-ab24-48a7-971d-444ff7d737a5', '/statics\\f6ed2877-ab24-48a7-971d-444ff7d737a5', 19505209, 1, 'admin', '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (66, 'im11g11.jpg', '838d965d-c654-430d-9b68-d3cf63f31621', 'jpg', 'D:/platform/uploadPath\\838d965d-c654-430d-9b68-d3cf63f31621', '/statics\\838d965d-c654-430d-9b68-d3cf63f31621', 68767, NULL, NULL, '0', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (67, '111.xlsx', '111.xlsx', 'xlsx', 'C:\\Users\\ljf\\Desktop\\kkkkk\\999\\', '/api/file/111.xlsx', 12, NULL, 'admin', '1', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sys_file` VALUES (1788085059450974210, 'avatar.png', '9f7e28ad-1c75-4897-b47a-8d3db135fa27.png', 'image/png', 'C:\\Users\\ljf\\Desktop\\kkkkk\\999\\', '/api/file/9f7e28ad-1c75-4897-b47a-8d3db135fa27.png', 11406, NULL, 'admin', '1', NULL, NULL, NULL, NULL, NULL);
+
+-- ----------------------------
 -- Table structure for sys_group
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_group`;
@@ -266,7 +361,7 @@ CREATE TABLE `sys_log_request`  (
   `login_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '登录状态',
   `exception_msg` blob NULL COMMENT '异常信息',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1765268486747308034 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '操作日志记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_log_request
@@ -433,7 +528,7 @@ CREATE TABLE `sys_menu_limit`  (
   `menu_id` bigint(20) NOT NULL COMMENT '菜单ID',
   `status` char(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态 1  启用 0 禁用',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1669227777372606467 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '功能权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '功能权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_menu_rule
@@ -516,7 +611,7 @@ CREATE TABLE `sys_rule`  (
   `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1669227731109433346 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '规则表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '规则表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_scope
@@ -530,7 +625,7 @@ CREATE TABLE `sys_scope`  (
   `dept_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '部门状态（1正常 0停用）',
   `post_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '岗位状态（1正常 0停用）',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1683741281328746500 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '范围表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '范围表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -558,7 +653,7 @@ CREATE TABLE `sys_user`  (
 -- Records of sys_user
 -- ----------------------------
 INSERT INTO `sys_user` VALUES (1, '/api/file/2023/05/31/3989b38e-c10f-415f-9dce-9b12ebf47cf4.png', 'admin', '张三', '2889b4ce36d64937c1489ed9ba3ca80112aa62c0', 'ry@163.com', '15888888888', '1', '1', '12', '2018-03-16 11:33:00', 'ry', '2021-06-25 10:53:14', '管理员');
-INSERT INTO `sys_user` VALUES (1769929093765304322, '', 'user3', '张三3', '{bcrypt}$2a$10$vXmtX1s5VFFPHf2ZqcHM7euv5P3NUfG/qh9d.tbBVXx3tXFG3U1am', '', '', '0', '0', '', NULL, '', NULL, NULL);
+INSERT INTO `sys_user` VALUES (1769929093765304322, '', 'user3', '张三3', '$2a$10$b02AzHxH3KLzk0NMwTFWv.qBIo3.g8.kyXY9uJjXhdE9OND1IgbRe', '', '', '0', '0', '', NULL, '', NULL, NULL);
 INSERT INTO `sys_user` VALUES (1770275787111649281, '', 'wangwu', '王五', '{bcrypt}$2a$10$vXmtX1s5VFFPHf2ZqcHM7euv5P3NUfG/qh9d.tbBVXx3tXFG3U1am', '', '', '1', '0', '', NULL, '', NULL, NULL);
 
 -- ----------------------------
@@ -583,6 +678,6 @@ CREATE TABLE `sys_user_role`  (
   `role_id` bigint(20) NOT NULL COMMENT '角色ID',
   `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态 1  启用 0 禁用',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1683741281261637635 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户和角色关联表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户和角色关联表' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
