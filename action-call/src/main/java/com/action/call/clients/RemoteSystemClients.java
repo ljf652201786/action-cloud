@@ -3,6 +3,7 @@ package com.action.call.clients;
 import com.action.call.factory.RemoteSystemClientsFallbackFactory;
 import com.action.call.vo.LogLoginVo;
 import com.action.call.vo.LogRequestVo;
+import com.action.call.vo.LogSMSVo;
 import com.action.common.core.base.BaseSecurityMenu;
 import com.action.common.core.common.Result;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -25,6 +26,10 @@ public interface RemoteSystemClients {
     @LoadBalanced  //启用负载均衡
     @RequestMapping(value = "user/getUserByPhone", method = RequestMethod.GET)
     Result getUserByPhone(@RequestParam("phone") String phone);
+
+    @LoadBalanced  //启用负载均衡
+    @RequestMapping(value = "user/getUserByOpenId", method = RequestMethod.GET)
+    Result getUserByOpenId(@RequestParam("openid") String openid);
 
     @LoadBalanced
     @RequestMapping(value = "user/getUserByEmail", method = RequestMethod.GET)
@@ -49,4 +54,8 @@ public interface RemoteSystemClients {
     @LoadBalanced
     @RequestMapping(value = "logLogin/save", method = RequestMethod.POST)
     Result save(@RequestBody LogLoginVo logLoginVo);
+
+    @LoadBalanced
+    @RequestMapping(value = "logSMS/save", method = RequestMethod.POST)
+    Result save(@RequestBody LogSMSVo logSMSVo);
 }

@@ -5,12 +5,14 @@ import com.action.common.mybatisplus.extend.filter.datapermission.DataRowFilterS
 import com.action.system.entity.SysData;
 import com.action.system.entity.SysDataColumnLimit;
 import com.action.system.entity.SysDataRowLimit;
+import com.action.system.entity.SysScope;
 import com.action.system.enums.NodeType;
 import com.action.system.mapper.SysDataMapper;
 import com.action.system.service.ISysDataColumnLimitService;
 import com.action.system.service.ISysDataRowLimitService;
 import com.action.system.service.ISysDataService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -35,7 +37,7 @@ public class ISysDataServiceImpl extends ServiceImpl<SysDataMapper, SysData> imp
 
     @Override
     public List<SysData> buildDataTreeSelect() {
-        List<SysData> sysDataList = sysDataMapper.selectList(new QueryWrapper<SysData>().eq("status", UseType.ENABLE.getStatus()));
+        List<SysData> sysDataList = sysDataMapper.selectList(Wrappers.<SysData>lambdaQuery().eq(SysData::getStatus, UseType.ENABLE.getStatus()));
         if (CollectionUtils.isEmpty(sysDataList)) {
             return List.of();
         }

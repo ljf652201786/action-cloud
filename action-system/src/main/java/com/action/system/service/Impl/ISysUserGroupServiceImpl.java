@@ -7,6 +7,7 @@ import com.action.system.service.ICacheService;
 import com.action.system.service.ISysUserGroupService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import jakarta.annotation.Resource;
@@ -29,12 +30,12 @@ public class ISysUserGroupServiceImpl extends ServiceImpl<SysUserGroupMapper, Sy
 
     @Override
     public List<SysUserGroup> getSysUserGroupByUserId(String userId) {
-        return sysUserGroupMapper.selectList(new QueryWrapper<SysUserGroup>().eq("user_id", userId).eq("status", UseType.ENABLE.getStatus()));
+        return sysUserGroupMapper.selectList(Wrappers.<SysUserGroup>lambdaQuery().eq(SysUserGroup::getUserId, userId).eq(SysUserGroup::getStatus, UseType.ENABLE.getStatus()));
     }
 
     @Override
     public boolean updateGroupStatus(String groupId, String status) {
-        boolean isUpdate = SqlHelper.retBool(sysUserGroupMapper.update(new UpdateWrapper<SysUserGroup>().set(!StringUtils.isEmpty(status), "status", status).eq("group_id", groupId)));
+        boolean isUpdate = SqlHelper.retBool(sysUserGroupMapper.update(Wrappers.<SysUserGroup>lambdaUpdate().set(!StringUtils.isEmpty(status), SysUserGroup::getStatus, status).eq(SysUserGroup::getGroupId, groupId)));
         if (isUpdate) {
             iCacheService.cleanGroupCache(groupId);
         }

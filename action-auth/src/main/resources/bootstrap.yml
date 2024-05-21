@@ -1,8 +1,8 @@
 server:
-  port: 8886
+  port: 8887
 spring:
   application:
-    name: action-auth
+    name: action-auth-server
   profiles:
     # 环境配置
     active: dev
@@ -13,3 +13,8 @@ spring:
       password: nacos
       config:
         file-extension: yaml
+        shared-configs[0]:
+          data-id: action-common.yaml
+          refresh: true
+
+

@@ -4,38 +4,48 @@
 
     <select id="getUserDataRowPerm" resultType="com.action.system.entity.SysDataRowLimit">
         select sdrl.id,
-            sdrl.data_id,
-            sdrl.type,
-            sdrl.contact_id,
-            sdrl.condition,
-            sdrl.limit_type,
-            sdrl.limit_field,
-            sdrl.limit_field_desc,
-            sdrl.val,
-            sdrl.status,
-            sdrl.create_by,
-            sdrl.create_time,
-            sdrl.update_by,
-            sd.table_name
+        sdrl.data_id,
+        sdrl.type,
+        sdrl.contact_id,
+        sdrl.relation,
+        sdrl.limit_field,
+        sdrl.limit_field_desc,
+        sdrl.limit_condition,
+        sdrl.val,
+        sdrl.status,
+        sdrl.create_by,
+        sdrl.create_time,
+        sdrl.update_by,
+        sd.table_name
         from sys_data_row_limit sdrl
-        left join sys_data sd on sd.id = scl.data_id
-        where 1=1
-        or (
-        sdrl.type = 1 and sdrl.contact_id in
-        <foreach collection="groupIdSet" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-        )
-        or ( sdrl.type = 2 and sdrl.contact_id in
-        <foreach collection="postIdSet" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-        )
-        or ( sdrl.type = 3 and sdrl.contact_id in
-        <foreach collection="roleIdSet" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-        )
+        left join sys_data sd on sd.id = sdrl.data_id
+        <where>
+            1=1
+            <choose>
+                <when test="groupIdSet!=null and groupIdSet.size>0">
+                    or (
+                    sdrl.type = 1 and sdrl.contact_id in
+                    <foreach collection="groupIdSet" item="item" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                    )
+                </when>
+                <when test="postIdSet!=null and postIdSet.size>0">
+                    or ( sdrl.type = 2 and sdrl.contact_id in
+                    <foreach collection="postIdSet" item="item" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                    )
+                </when>
+                <when test="roleIdSet!=null and roleIdSet.size>0">
+                    or ( sdrl.type = 3 and sdrl.contact_id in
+                    <foreach collection="roleIdSet" item="item" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                    )
+                </when>
+            </choose>
+        </where>
     </select>
 
 </mapper>

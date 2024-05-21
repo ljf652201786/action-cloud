@@ -8,6 +8,7 @@ import com.action.system.mapper.SysDeptMapper;
 import com.action.system.mapper.SysPostMapper;
 import com.action.system.service.ISysDeptService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -46,8 +47,8 @@ public class ISysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> imp
 
     @Override
     public List<SysDept> buildDeptPostTreeSelect() {
-        List<SysDept> sysDeptList = sysDeptMapper.selectList(new QueryWrapper<SysDept>().eq("status", UseType.ENABLE.getStatus()));
-        List<SysPost> sysPostList = sysPostMapper.selectList(new QueryWrapper<SysPost>().eq("status", UseType.ENABLE.getStatus()));
+        List<SysDept> sysDeptList = sysDeptMapper.selectList(Wrappers.<SysDept>lambdaQuery().eq(SysDept::getStatus, UseType.ENABLE.getStatus()));
+        List<SysPost> sysPostList = sysPostMapper.selectList(Wrappers.<SysPost>lambdaQuery().eq(SysPost::getStatus, UseType.ENABLE.getStatus()));
         if (CollectionUtils.isEmpty(sysDeptList)) {
             return List.of();
         }

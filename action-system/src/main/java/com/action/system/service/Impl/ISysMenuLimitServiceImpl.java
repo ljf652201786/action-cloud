@@ -10,7 +10,9 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,13 +32,13 @@ public class ISysMenuLimitServiceImpl extends ServiceImpl<SysMenuLimitMapper, Sy
     }
 
     @Override
-    public Set<BaseSecurityMenu> getBaseSecurityMenuByScope(Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet) {
+    public List<BaseSecurityMenu> getBaseSecurityMenuByScope(Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet) {
         Set<SysMenu> sysMenuSet = this.getSysMenuByScope(groupIdSet, postIdSet, roleIdSet);
-        Set<BaseSecurityMenu> baseSecurityMenuSet = new HashSet<>();
+        List<BaseSecurityMenu> baseSecurityMenuSet = new ArrayList<>();
         if (!CollectionUtils.isEmpty(sysMenuSet)) {
             baseSecurityMenuSet = sysMenuSet.stream().map(sysMenu -> {
                 return new BaseSecurityMenu(sysMenu.getId(), sysMenu.getRouteUrl(), sysMenu.getMenuPerm());
-            }).collect(Collectors.toSet());
+            }).collect(Collectors.toList());
         }
         return baseSecurityMenuSet;
     }

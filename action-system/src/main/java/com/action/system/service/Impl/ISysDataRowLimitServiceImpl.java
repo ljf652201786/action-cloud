@@ -1,10 +1,12 @@
 package com.action.system.service.Impl;
 
 import com.action.system.entity.SysDataRowLimit;
+import com.action.system.entity.SysMenuRule;
 import com.action.system.mapper.SysDataRowLimitMapper;
 import com.action.system.service.ICacheService;
 import com.action.system.service.ISysDataRowLimitService;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import jakarta.annotation.Resource;
@@ -32,7 +34,7 @@ public class ISysDataRowLimitServiceImpl extends ServiceImpl<SysDataRowLimitMapp
 
     @Override
     public boolean updateDataRowLimitStatus(String dataRowLimitId, String status) {
-        boolean isUpdate = SqlHelper.retBool(sysDataRowLimitMapper.update(null, new UpdateWrapper<SysDataRowLimit>().set(!StringUtils.isEmpty(status), "status", status).eq("id", dataRowLimitId)));
+        boolean isUpdate = SqlHelper.retBool(sysDataRowLimitMapper.update(null, Wrappers.<SysDataRowLimit>lambdaUpdate().set(!StringUtils.isEmpty(status), SysDataRowLimit::getStatus, status).eq(SysDataRowLimit::getId, dataRowLimitId)));
         if (isUpdate) {
             iCacheService.cleanDataRowLimitCache(dataRowLimitId);
         }

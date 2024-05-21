@@ -4,34 +4,44 @@
 
     <select id="getUserDataColumnPerm" resultType="com.action.system.entity.SysDataColumnLimit">
         select sdcl.id,
-            sdcl.data_id,
-            sdcl.type,
-            sdcl.contact_id,
-            sdcl.limit_field,
-            sdcl.limit_field_desc,
-            sdcl.create_by,
-            sdcl.create_time,
-            sdcl.update_by,
-            sd.table_name
+        sdcl.data_id,
+        sdcl.type,
+        sdcl.contact_id,
+        sdcl.limit_field,
+        sdcl.limit_field_desc,
+        sdcl.create_by,
+        sdcl.create_time,
+        sdcl.update_by,
+        sd.table_name
         from sys_data_column_limit sdcl
         left join sys_data sd on sd.id = sdcl.data_id
-        where 1=1
-        or (
-        sdcl.type = 1 and sdcl.contact_id in
-        <foreach collection="groupIdSet" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-        )
-        or ( sdcl.type = 2 and sdcl.contact_id in
-        <foreach collection="postIdSet" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-        )
-        or ( sdcl.type = 3 and sdcl.contact_id in
-        <foreach collection="roleIdSet" item="item" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-        )
+        <where>
+            1=1
+            <choose>
+                <when test="groupIdSet!=null and groupIdSet.size>0">
+                    or (
+                    sdcl.type = 1 and sdcl.contact_id in
+                    <foreach collection="groupIdSet" item="item" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                    )
+                </when>
+                <when test="postIdSet!=null and postIdSet.size>0">
+                    or ( sdcl.type = 2 and sdcl.contact_id in
+                    <foreach collection="postIdSet" item="item" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                    )
+                </when>
+                <when test="roleIdSet!=null and roleIdSet.size>0">
+                    or ( sdcl.type = 3 and sdcl.contact_id in
+                    <foreach collection="roleIdSet" item="item" open="(" separator="," close=")">
+                        #{item}
+                    </foreach>
+                    )
+                </when>
+            </choose>
+        </where>
     </select>
 
 </mapper>

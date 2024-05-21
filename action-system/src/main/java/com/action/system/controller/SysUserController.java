@@ -12,6 +12,7 @@ import com.action.system.dto.SysUserExtend;
 import com.action.system.entity.SysUser;
 import com.action.system.service.*;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -205,6 +206,13 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
         sysUser.setStatus(UseType.DISABLED.getStatus());
         iSysUserService.updateById(sysUser);
         return Result.success("禁用成功");
+    }
+
+    @PreAuthorize("@ss.hasPerm('sys:user:delete')")
+    @RequestMapping(value = "e", method = RequestMethod.GET)
+    public Result ese(){
+        System.out.println("23424");
+        return Result.success();
     }
 
     /**

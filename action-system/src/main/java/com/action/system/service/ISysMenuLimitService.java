@@ -5,11 +5,12 @@ import com.action.system.entity.SysMenu;
 import com.action.system.entity.SysMenuLimit;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
 import java.util.Set;
 
 
 public interface ISysMenuLimitService extends IService<SysMenuLimit> {
     Set<SysMenu> getSysMenuByScope(Set<String> deptIdSet, Set<String> postIdSet, Set<String> roleIdSet);
 
-    Set<BaseSecurityMenu> getBaseSecurityMenuByScope(Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet);
+    List<BaseSecurityMenu> getBaseSecurityMenuByScope(Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet);
 }

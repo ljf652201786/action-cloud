@@ -8,6 +8,7 @@ import com.action.system.service.ICacheService;
 import com.action.system.service.ISysUserRoleService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import jakarta.annotation.Resource;
@@ -35,12 +36,12 @@ public class ISysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysU
 
     @Override
     public List<SysUserRole> getSysUserRoleByUserId(String userId) {
-        return sysUserRoleMapper.selectList(new QueryWrapper<SysUserRole>().eq("user_id", userId).eq("status", UseType.ENABLE.getStatus()));
+        return sysUserRoleMapper.selectList(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, userId).eq(SysUserRole::getStatus, UseType.ENABLE.getStatus()));
     }
 
     @Override
     public boolean updateRoleStatus(String roleId, String status) {
-        boolean isUpdate = SqlHelper.retBool(sysUserRoleMapper.update(new UpdateWrapper<SysUserRole>().set(!StringUtils.isEmpty(status), "status", status).eq("role_id", roleId)));
+        boolean isUpdate = SqlHelper.retBool(sysUserRoleMapper.update(Wrappers.<SysUserRole>lambdaUpdate().set(!StringUtils.isEmpty(status), SysUserRole::getStatus, status).eq(SysUserRole::getRoleId, roleId)));
         if (isUpdate) {
             iCacheService.cleanRoleCache(roleId);
         }

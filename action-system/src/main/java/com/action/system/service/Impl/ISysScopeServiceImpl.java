@@ -7,6 +7,7 @@ import com.action.system.service.ICacheService;
 import com.action.system.service.ISysScopeService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import jakarta.annotation.Resource;
@@ -31,26 +32,26 @@ public class ISysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> 
     private ICacheService iCacheService;
 
     public List<SysScope> getSysScopeByUserId(String userId) {
-        return sysScopeMapper.selectList(new QueryWrapper<SysScope>().eq("user_id", userId).eq("dept_status", UseType.ENABLE.getStatus()).eq("post_status", UseType.ENABLE.getStatus()));
+        return sysScopeMapper.selectList(Wrappers.<SysScope>lambdaQuery().eq(SysScope::getUserId, userId).eq(SysScope::getDeptStatus, UseType.ENABLE.getStatus()).eq(SysScope::getPostStatus, UseType.ENABLE.getStatus()));
     }
 
     @Override
     public Long deptNum(String deptId) {
-        return sysScopeMapper.selectCount(new QueryWrapper<SysScope>().eq("dept_id", deptId));
+        return sysScopeMapper.selectCount(Wrappers.<SysScope>lambdaQuery().eq(SysScope::getDeptId, deptId));
     }
 
     @Override
     public Long postNum(String deptId) {
-        return sysScopeMapper.selectCount(new QueryWrapper<SysScope>().eq("post_id", deptId));
+        return sysScopeMapper.selectCount(Wrappers.<SysScope>lambdaQuery().eq(SysScope::getPostId, deptId));
     }
 
     @Override
     public boolean updateDeptStatus(String deptId, String status) {
-        List<SysScope> sysScopeList = sysScopeMapper.selectList(new QueryWrapper<SysScope>().eq("dept_id", deptId).eq("post_status", UseType.ENABLE.getStatus()));
+        List<SysScope> sysScopeList = sysScopeMapper.selectList(Wrappers.<SysScope>lambdaQuery().eq(SysScope::getDeptId, deptId).eq(SysScope::getPostStatus, UseType.ENABLE.getStatus()));
         if (CollectionUtils.isEmpty(sysScopeList)) {
             return true;
         }
-        boolean isUpdate = SqlHelper.retBool(sysScopeMapper.update(null, new UpdateWrapper<SysScope>().set(!StringUtils.isEmpty(status), "dept_status", status).eq("dept_id", deptId)));
+        boolean isUpdate = SqlHelper.retBool(sysScopeMapper.update(null, Wrappers.<SysScope>lambdaUpdate().set(!StringUtils.isEmpty(status), SysScope::getDeptStatus, status).eq(SysScope::getDeptId, deptId)));
         if (isUpdate) {
             Set<String> postIds = sysScopeList.stream().map(sysScope -> sysScope.getPostId()).collect(Collectors.toSet());
             iCacheService.cleanPostCache(postIds);
@@ -60,7 +61,7 @@ public class ISysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> 
 
     @Override
     public boolean updatePostStatus(String postId, String status) {
-        boolean isUpdate = SqlHelper.retBool(sysScopeMapper.update(null, new UpdateWrapper<SysScope>().set(!StringUtils.isEmpty(status), "post_status", status).eq("post_id", postId)));
+        boolean isUpdate = SqlHelper.retBool(sysScopeMapper.update(null, Wrappers.<SysScope>lambdaUpdate().set(!StringUtils.isEmpty(status), SysScope::getPostStatus, status).eq(SysScope::getPostId, postId)));
         if (isUpdate) {
             iCacheService.cleanPostCache(postId);
         }

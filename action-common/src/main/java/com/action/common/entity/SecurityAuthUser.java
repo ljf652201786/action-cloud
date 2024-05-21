@@ -23,14 +23,26 @@ public class SecurityAuthUser extends BaseSecurityUser {
 
     public SecurityAuthUser(Object o) {
         if (Objects.nonNull(o)) {
+            Map map;
             if (o instanceof Map) {
+                map = (Map) o;
+            } else {
                 try {
-                    BeanUtils.populate(this, (Map) o);
+                    map = BeanUtils.describe(o);
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 } catch (InvocationTargetException e) {
                     throw new RuntimeException(e);
+                } catch (NoSuchMethodException e) {
+                    throw new RuntimeException(e);
                 }
+            }
+            try {
+                BeanUtils.populate(this, map);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new RuntimeException(e);
             }
         }
     }

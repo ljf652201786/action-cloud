@@ -8,6 +8,7 @@ import com.action.system.enums.NodeType;
 import com.action.system.mapper.SysMenuMapper;
 import com.action.system.service.ISysMenuService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class ISysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> imp
 
     @Override
     public Set<? extends BaseSecurityMenu> getSysPermission() {
-        List<SysMenu> sysMenuList = sysMenuMapper.selectList(new QueryWrapper<SysMenu>().eq("status", UseType.ENABLE.getStatus()));
+        List<SysMenu> sysMenuList = sysMenuMapper.selectList(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getStatus, UseType.ENABLE.getStatus()));
         if (CollectionUtils.isEmpty(sysMenuList)) {
             return new HashSet<>();
         }

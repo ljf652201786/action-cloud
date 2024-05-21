@@ -12,6 +12,7 @@ import com.action.system.entity.*;
 import com.action.system.mapper.*;
 import com.action.system.service.*;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import jakarta.annotation.Resource;
@@ -75,7 +76,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
 
     @Override
     public void setUserDefaultRole(SysUserExtend sysUserExtend) {
-        List<SysRole> roleList = iSysRoleService.listObjs(new QueryWrapper<SysRole>().eq("default_role", true));
+        List<SysRole> roleList = iSysRoleService.listObjs(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getDefaultRole, true));
         if (CollectionUtils.isEmpty(roleList)) {
             List<SysUserRole> sysUserRoleList = roleList.stream().map(sysRole -> {
                 return new SysUserRole(sysUserExtend.getId(), sysRole.getId(), UseType.ENABLE.getStatus());
@@ -127,17 +128,17 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
 
     @Override
     public SysUser findByUsername(String username) {
-        return sysUserMapper.selectOne(new QueryWrapper<SysUser>().eq("username", username));
+        return sysUserMapper.selectOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username));
     }
 
     @Override
     public SysUser findByPhone(String phone) {
-        return sysUserMapper.selectOne(new QueryWrapper<SysUser>().eq("phone", phone));
+        return sysUserMapper.selectOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, phone));
     }
 
     @Override
     public SysUser findByEmail(String email) {
-        return sysUserMapper.selectOne(new QueryWrapper<SysUser>().eq("email", email));
+        return sysUserMapper.selectOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getEmail, email));
     }
 
     @Override
@@ -162,7 +163,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
         Set<String> groupIdSet = new HashSet<String>();
         Set<String> postIdSet = new HashSet<String>();
         Set<String> roleIdSet = new HashSet<String>();
-        Set<BaseSecurityMenu> cacheMenuPerm = iCacheService.getUserMenupermCache(username);
+        List<BaseSecurityMenu> cacheMenuPerm = iCacheService.getUserMenupermCache(username);
         if (Objects.nonNull(cacheMenuPerm)) {
             securityAuthUser.setMenuScopeList(cacheMenuPerm);
             return securityAuthUser;
@@ -204,7 +205,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
                 iCacheService.setUserRoleCache(username, roleIdSet);
             }
             //获取用户菜单权限
-            Set<BaseSecurityMenu> baseSecurityMenuSet = iSysMenuLimitService.getBaseSecurityMenuByScope(groupIdSet, postIdSet, roleIdSet);
+            List<BaseSecurityMenu> baseSecurityMenuSet = iSysMenuLimitService.getBaseSecurityMenuByScope(groupIdSet, postIdSet, roleIdSet);
             securityAuthUser.setMenuScopeList(baseSecurityMenuSet);
             iCacheService.setUserMenupermCache(username, baseSecurityMenuSet);
         }
@@ -257,7 +258,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
         Set<String> groupIdSet = new HashSet<>(groupIdList);
         Set<String> postIdSet = new HashSet<String>();
         Set<String> roleIdSet = new HashSet<String>();
-        iSysUserRoleService.remove(new QueryWrapper<SysUserRole>().eq("user_id", sysUser.getId()));
+        iSysUserRoleService.remove(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, sysUser.getId()));
         if (!CollectionUtils.isEmpty(roles)) {
             List<SysUserRole> userRoleList = roles.stream().map(roleId -> {
                 roleIdSet.add(roleId);
@@ -265,7 +266,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
             }).collect(Collectors.toList());
             iSysUserRoleService.saveBatch(userRoleList);
         }
-        iSysScopeService.remove(new QueryWrapper<SysScope>().eq("user_id", sysUser.getId()));
+        iSysScopeService.remove(Wrappers.<SysScope>lambdaQuery().eq(SysScope::getUserId, sysUser.getId()));
         if (!CollectionUtils.isEmpty(scopeList)) {
             scopeList.stream().forEach(scope -> {
                 postIdSet.add(scope.getPostId());
@@ -275,7 +276,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
             });
             iSysScopeService.saveBatch(scopeList);
         }
-        Set<BaseSecurityMenu> baseSecurityMenuSet = iSysMenuLimitService.getBaseSecurityMenuByScope(groupIdSet, postIdSet, roleIdSet);
+        List<BaseSecurityMenu> baseSecurityMenuSet = iSysMenuLimitService.getBaseSecurityMenuByScope(groupIdSet, postIdSet, roleIdSet);
         //更新用户缓存信息
         iCacheService.setUserExtendInfoCache(sysUser, groupIdSet, postIdSet, roleIdSet, baseSecurityMenuSet);
     }

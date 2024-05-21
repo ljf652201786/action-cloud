@@ -13,13 +13,13 @@ public interface ICacheService {
 
     void setUserDataPermColumnCache(String username, Map<String, Set<String>> dataColumnFilterMap);
 
-    void setUserExtendInfoCache(String username, SysUser sysUser, Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet, Set<BaseSecurityMenu> baseSecurityMenuSet);
+    void setUserExtendInfoCache(String username, SysUser sysUser, Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet, List<BaseSecurityMenu> baseSecurityMenuSet);
 
-    void setUserExtendInfoCache(SysUser sysUser, Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet, Set<BaseSecurityMenu> baseSecurityMenuSet);
+    void setUserExtendInfoCache(SysUser sysUser, Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet, List<BaseSecurityMenu> baseSecurityMenuSet);
 
     void setUserBasisCache(String username, SysUser sysUser);
 
-    void setUserMenupermCache(String username, Set<BaseSecurityMenu> baseSecurityMenuSet);
+    void setUserMenupermCache(String username, List<BaseSecurityMenu> baseSecurityMenuSet);
 
     void setUserGroupCache(String username, Set<String> groupIdSet);
 
@@ -37,7 +37,7 @@ public interface ICacheService {
 
     SysUser getUserBasisCache(String username);
 
-    Set<BaseSecurityMenu> getUserMenupermCache(String username);
+    List<BaseSecurityMenu> getUserMenupermCache(String username);
 
     Set<String> getUserGroupCache(String username);
 

@@ -13,6 +13,7 @@
 
  Date: 12/05/2024 09:45:44
 */
+use action-oauth2;
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;

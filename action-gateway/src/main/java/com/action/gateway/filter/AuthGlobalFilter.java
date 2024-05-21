@@ -1,3 +1,4 @@
+/*
 package com.action.gateway.filter;
 
 import com.action.gateway.properties.AuthProperties;
@@ -15,12 +16,14 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+*/
 /*
  *
  * @Description: 鉴权过滤器
  * @Author: ljf  <lin652210786@163.com>
  * @Date: 2024/04/01
- */
+ *//*
+
 @Service
 public class AuthGlobalFilter implements GlobalFilter, Ordered {
     @Resource
@@ -49,7 +52,8 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         return 1;
     }
 
-    /*private boolean tokenNotRequired(ServerHttpRequest request) {
+    */
+/*private boolean tokenNotRequired(ServerHttpRequest request) {
         List<String> ignoreUrls = resourceProperties.getIgnoreUrls();
         if (Objects.nonNull(ignoreUrls)) {
             Optional<String> optional = ignoreUrls.stream().filter(url -> new AntPathRequestMatcher(url).matches(request)).findFirst();
@@ -58,6 +62,8 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
             }
         }
         return false;
-    }*/
+    }*//*
+
 }
 
+*/

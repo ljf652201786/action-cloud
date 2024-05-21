@@ -35,7 +35,7 @@ public class ISysCacheServiceImpl implements ICacheService {
 
     @Override
     public void setUserDataPermRowCache(String username, Set<DataRowFilterStruct> dataRowFilterStructList) {
-        redisCacheServices.get(RedisSetConstants.USER_DATAPERM_ROW + username, dataRowFilterStructList);
+        redisCacheServices.set(RedisSetConstants.USER_DATAPERM_ROW + username, dataRowFilterStructList);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ISysCacheServiceImpl implements ICacheService {
     }
 
     @Override
-    public void setUserExtendInfoCache(String username, SysUser sysUser, Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet, Set<BaseSecurityMenu> baseSecurityMenuSet) {
+    public void setUserExtendInfoCache(String username, SysUser sysUser, Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet, List<BaseSecurityMenu> baseSecurityMenuSet) {
         this.setUserBasisCache(username, sysUser);
         this.setUserGroupCache(username, groupIdSet);
         this.setUserPostCache(username, postIdSet);
@@ -53,7 +53,7 @@ public class ISysCacheServiceImpl implements ICacheService {
     }
 
     @Override
-    public void setUserExtendInfoCache(SysUser sysUser, Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet, Set<BaseSecurityMenu> baseSecurityMenuSet) {
+    public void setUserExtendInfoCache(SysUser sysUser, Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet, List<BaseSecurityMenu> baseSecurityMenuSet) {
         this.setUserBasisCache(sysUser.getUsername(), sysUser);
         this.setUserGroupCache(sysUser.getUsername(), groupIdSet);
         this.setUserPostCache(sysUser.getUsername(), postIdSet);
@@ -65,7 +65,7 @@ public class ISysCacheServiceImpl implements ICacheService {
         redisCacheServices.set(RedisSetConstants.USER_BASIS + username, sysUser);
     }
 
-    public void setUserMenupermCache(String username, Set<BaseSecurityMenu> baseSecurityMenuSet) {
+    public void setUserMenupermCache(String username, List<BaseSecurityMenu> baseSecurityMenuSet) {
         redisCacheServices.set(RedisSetConstants.USER_MENUPERM + username, baseSecurityMenuSet);
     }
 
@@ -130,12 +130,12 @@ public class ISysCacheServiceImpl implements ICacheService {
     }
 
     @Override
-    public Set<BaseSecurityMenu> getUserMenupermCache(String username) {
+    public List<BaseSecurityMenu> getUserMenupermCache(String username) {
         Object o = redisCacheServices.get(RedisSetConstants.USER_MENUPERM + username);
         if (Objects.isNull(o)) {
             return null;
         }
-        return (Set<BaseSecurityMenu>) o;
+        return (List<BaseSecurityMenu>) o;
     }
 
     @Override

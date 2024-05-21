@@ -3,6 +3,7 @@ package com.action.system.controller;
 import com.action.common.core.common.Result;
 import com.action.common.enums.UseType;
 import com.action.common.mybatisplus.extend.base.BaseController;
+import com.action.system.entity.SysData;
 import com.action.system.entity.SysMenuLimit;
 import com.action.system.entity.SysMenuRule;
 import com.action.system.service.ISysMenuLimitService;
@@ -11,6 +12,7 @@ import com.action.system.vo.PermAllocationVo;
 import com.action.system.vo.RuleAllocationVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
 import org.springframework.util.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -75,7 +77,7 @@ public class SysPermAllocationController implements BaseController {
         if (StringUtils.isEmpty(ruleAllocationVo.getMenuId())) {
             return Result.error("请先选择所属分配对象");
         }
-        boolean isRemove = iSysMenuRuleService.remove(new QueryWrapper<SysMenuRule>().eq("menu_id", ruleAllocationVo.getMenuId()));
+        boolean isRemove = iSysMenuRuleService.remove(Wrappers.<SysMenuRule>lambdaQuery().eq(SysMenuRule::getMenuId, ruleAllocationVo.getMenuId()));
         if (isRemove) {
             if (!CollectionUtils.isEmpty(ruleAllocationVo.getRuleIds())) {
                 List<SysMenuRule> sysMenuRuleList = ruleAllocationVo.getRuleIds().stream().map(ruleId -> {
