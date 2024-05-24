@@ -13,22 +13,13 @@ public interface JwtClaimConstants {
     String USERNAME = "username";
 
     /**
-     * 部门ID
+     * 状态
      */
-    String DEPT_ID = "deptId";
-
-    /**
-     * 数据权限
-     */
-    String DATA_SCOPE = "dataScope";
+    String STATUS = "status";
 
     /**
      * 权限(角色Code)集合
      */
     String AUTHORITIES = "authorities";
 
-    /**
-     * 第三方认证用户ID
-     */
-    String THIRD_ID = "thridId";
 }

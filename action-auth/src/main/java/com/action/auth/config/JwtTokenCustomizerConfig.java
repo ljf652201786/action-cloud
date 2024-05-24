@@ -2,8 +2,6 @@ package com.action.auth.config;
 
 import com.action.auth.entity.SecurityUser;
 import com.action.auth.common.JwtClaimConstants;
-//import com.action.auth.server.entity.ThirdDetails;
-//import com.action.auth.server.entity.SysUserDetails;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,8 +39,7 @@ public class JwtTokenCustomizerConfig {
 
                         claims.claim(JwtClaimConstants.USER_ID, userDetails.getId());
                         claims.claim(JwtClaimConstants.USERNAME, userDetails.getUsername());
-//                        claims.claim(JwtClaimConstants.DEPT_ID, userDetails.getDeptId());
-//                        claims.claim(JwtClaimConstants.DATA_SCOPE, userDetails.getDataScope());
+                        claims.claim(JwtClaimConstants.STATUS, userDetails.getStatus());
 
                         // 这里存入角色至JWT，解析JWT的角色用于鉴权的位置: ResourceServerConfig#jwtAuthenticationConverter
                         var authorities = AuthorityUtils.authorityListToSet(context.getPrincipal().getAuthorities())
