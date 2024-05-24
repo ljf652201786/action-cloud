@@ -12,10 +12,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 短信验证码身份验证令牌
- *
- * @author Ray Hao
- * @since 3.0.0
+ * @Description: 短信验证码身份验证令牌
+ * @Author: ljf  <lin652210786@163.com>
+ * @Date: 2024/5/22
  */
 public class SmsCodeAuthenticationToken extends OAuth2AuthorizationGrantAuthenticationToken {
 

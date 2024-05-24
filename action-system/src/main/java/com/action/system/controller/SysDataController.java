@@ -4,7 +4,7 @@ import com.action.common.core.common.Result;
 import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.system.entity.*;
 import com.action.system.service.*;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("data")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysDataController implements BaseController<ISysDataService, SysData> {
     private final ISysDataService iSysDataService;
     private final ISysDataRowLimitService iSysDataRowLimitService;
@@ -35,13 +35,13 @@ public class SysDataController implements BaseController<ISysDataService, SysDat
     public Result save(@RequestBody SysData sysData) {
         SysData sd = iSysDataService.getOne(this.getLambdaQueryWrapper().eq(SysData::getDataCode, sysData.getDataCode()));
         if (Objects.nonNull(sd)) {
-            return Result.error("数据编码已存在");
+            return Result.failed("数据编码已存在");
         }
         boolean isSave = iSysDataService.save(sysData);
         if (isSave) {
             return Result.success("保存数据成功");
         }
-        return Result.error("数据保存失败");
+        return Result.failed("数据保存失败");
     }
 
     /**
@@ -57,13 +57,13 @@ public class SysDataController implements BaseController<ISysDataService, SysDat
         SysData oldData = iSysDataService.getById(sysData.getId());
         SysData sd = iSysDataService.getOne(this.getLambdaQueryWrapper().eq(SysData::getDataCode, sysData.getDataCode()));
         if (!oldData.getDataCode().equals(sysData.getDataCode()) && Objects.nonNull(sd)) {
-            return Result.error("数据编码已存在");
+            return Result.failed("数据编码已存在");
         }
         boolean isUpdate = iSysDataService.updateById(sysData);
         if (isUpdate) {
             return Result.success("更新数据成功");
         }
-        return Result.error("更新数据失败");
+        return Result.failed("更新数据失败");
     }
 
     /**
@@ -79,7 +79,7 @@ public class SysDataController implements BaseController<ISysDataService, SysDat
         SysDataRowLimit sysDataRowLimit = iSysDataRowLimitService.getOne(this.getLambdaQueryWrapper(new SysDataRowLimit()).eq(SysDataRowLimit::getDataId, id));
         SysDataColumnLimit sysDataColumnLimit = iSysDataColumnLimitService.getOne(this.getLambdaQueryWrapper(new SysDataColumnLimit()).eq(SysDataColumnLimit::getDataId, id));
         if (Objects.nonNull(sysDataRowLimit) || Objects.nonNull(sysDataColumnLimit)) {
-            return Result.error("该数据删除失败，因为包含正被使用");
+            return Result.failed("该数据删除失败，因为包含正被使用");
         }
         iSysDataService.removeById(id);
         return Result.success("通过id删除数据成功");

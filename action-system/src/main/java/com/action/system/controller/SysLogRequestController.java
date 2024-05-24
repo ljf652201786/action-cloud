@@ -6,7 +6,7 @@ import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.entity.SysLogRequest;
 import com.action.system.service.ISysLogRequestService;
 import com.action.call.vo.LogRequestVo;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("logRequest")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysLogRequestController implements BaseController<ISysLogRequestService, SysLogRequest> {
     private final ISysLogRequestService iSysLogRequestService;
 
@@ -49,7 +49,7 @@ public class SysLogRequestController implements BaseController<ISysLogRequestSer
         if (isSave) {
             return Result.success("保存数据成功");
         }
-        return Result.error("数据保存失败");
+        return Result.failed("数据保存失败");
     }
 
     /**
@@ -66,6 +66,6 @@ public class SysLogRequestController implements BaseController<ISysLogRequestSer
         if (isRemove) {
             return Result.success("批量通过id删除数据成功");
         }
-        return Result.error("批量删除数据失败");
+        return Result.failed("批量删除数据失败");
     }
 }

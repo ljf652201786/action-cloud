@@ -33,7 +33,7 @@ public class ActionAuthenticationFailureHandler implements AuthenticationFailure
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         OAuth2Error error = ((OAuth2AuthenticationException) exception).getError();
         ServletServerHttpResponse httpResponse = new ServletServerHttpResponse(response);
-        Result result = Result.error(error.getErrorCode());
+        Result result = Result.failed(error.getErrorCode());
         accessTokenHttpResponseConverter.write(result, null, httpResponse);
     }
 }

@@ -5,7 +5,7 @@ import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.system.entity.*;
 import com.action.system.service.ISysMenuLimitService;
 import com.action.system.service.ISysMenuService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("menu")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysMenuController implements BaseController<ISysMenuService, SysMenu> {
     private final ISysMenuService iSysMenuService;
     private final ISysMenuLimitService iSysMenuLimitService;
@@ -47,13 +47,13 @@ public class SysMenuController implements BaseController<ISysMenuService, SysMen
     public Result save(@RequestBody SysMenu sysMenu) {
         SysMenu sm = iSysMenuService.getOne(this.getLambdaQueryWrapper().eq(SysMenu::getMenuPerm, sysMenu.getMenuPerm()));
         if (Objects.nonNull(sm)) {
-            return Result.error("权限标识已使用");
+            return Result.failed("权限标识已使用");
         }
         boolean isSave = iSysMenuService.save(sysMenu);
         if (isSave) {
             return Result.success("保存数据成功");
         }
-        return Result.error("数据保存失败");
+        return Result.failed("数据保存失败");
     }
 
     /**
@@ -69,13 +69,13 @@ public class SysMenuController implements BaseController<ISysMenuService, SysMen
         SysMenu oldMenu = iSysMenuService.getById(sysMenu.getId());
         SysMenu sm = iSysMenuService.getOne(this.getLambdaQueryWrapper().eq(SysMenu::getMenuPerm, sysMenu.getMenuPerm()));
         if (!oldMenu.getMenuPerm().equals(sysMenu.getMenuPerm()) && Objects.nonNull(sm)) {
-            return Result.error("权限标识已使用");
+            return Result.failed("权限标识已使用");
         }
         boolean isUpdate = iSysMenuService.updateById(sysMenu);
         if (isUpdate) {
             return Result.success("更新数据成功");
         }
-        return Result.error("更新数据失败");
+        return Result.failed("更新数据失败");
     }
 
     /**
@@ -90,7 +90,7 @@ public class SysMenuController implements BaseController<ISysMenuService, SysMen
     public Result deleteByIds(@RequestParam("id") String id) {
         SysMenuLimit sysMenuLimit = iSysMenuLimitService.getOne(this.getLambdaQueryWrapper(new SysMenuLimit()).eq(SysMenuLimit::getMenuId, id));
         if (Objects.nonNull(sysMenuLimit)) {
-            return Result.error("该数据删除失败，因为包含正被使用");
+            return Result.failed("该数据删除失败，因为包含正被使用");
         }
         iSysMenuService.removeById(id);
         return Result.success("通过id删除数据成功");

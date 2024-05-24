@@ -16,7 +16,7 @@ public class ActionGateWayApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ActionGateWayApplication.class, args);
-
+        System.out.println("The service is fully operational *\\(^_^)/*");
     }
 }
 

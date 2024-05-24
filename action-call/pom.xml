@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
 
     <name>action-call</name>
-    <url>http://maven.apache.org</url>
+
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,7 +26,6 @@
         <dependency>
             <groupId>com.action</groupId>
             <artifactId>action-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

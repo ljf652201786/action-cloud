@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * @Date: 2024/04/02
  */
 @Service
-public class ISysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements ISysMenuService {
+public class ISysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> implements ISysMenuService{
     @Resource
     private SysMenuMapper sysMenuMapper;
 

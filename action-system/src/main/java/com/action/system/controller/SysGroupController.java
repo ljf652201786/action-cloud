@@ -8,7 +8,7 @@ import com.action.system.entity.SysGroup;
 import com.action.system.entity.SysUserGroup;
 import com.action.system.service.ISysGroupService;
 import com.action.system.service.ISysUserGroupService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("group")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysGroupController implements BaseController<ISysGroupService, SysGroup> {
     private final ISysGroupService iSysGroupService;
     private final ISysUserGroupService iSysUserGroupService;
@@ -52,13 +52,13 @@ public class SysGroupController implements BaseController<ISysGroupService, SysG
     public Result save(@RequestBody SysGroup sysGroup) {
         SysGroup sg = iSysGroupService.getOne(this.getLambdaQueryWrapper().eq(SysGroup::getGroupCode, sysGroup.getGroupCode()));
         if (Objects.nonNull(sg)) {
-            return Result.error("用户组编码已存在");
+            return Result.failed("用户组编码已存在");
         }
         boolean isSave = iSysGroupService.save(sysGroup);
         if (isSave) {
             return Result.success("保存数据成功");
         }
-        return Result.error("数据保存失败");
+        return Result.failed("数据保存失败");
     }
 
     /**
@@ -74,13 +74,13 @@ public class SysGroupController implements BaseController<ISysGroupService, SysG
         SysGroup oldGroup = iSysGroupService.getById(sysGroup.getId());
         SysGroup sg = iSysGroupService.getOne(this.getLambdaQueryWrapper().eq(SysGroup::getGroupCode, sysGroup.getGroupCode()));
         if (!oldGroup.getGroupCode().equals(sysGroup.getGroupCode()) && Objects.nonNull(sg)) {
-            return Result.error("字典编码已存在");
+            return Result.failed("字典编码已存在");
         }
         boolean isUpdate = iSysGroupService.updateById(sysGroup);
         if (isUpdate) {
             return Result.success("更新数据成功");
         }
-        return Result.error("更新数据失败");
+        return Result.failed("更新数据失败");
     }
 
     /**
@@ -107,7 +107,7 @@ public class SysGroupController implements BaseController<ISysGroupService, SysG
             iSysGroupService.removeBatchByIds(idList);
         }
         if (idExistList.size() > 0) {
-            return Result.error("该用户组删除失败，因为包含正被使用", idExistList);
+            return Result.failed("该用户组删除失败，因为包含正被使用", idExistList);
         }
         return Result.success("批量通过id删除数据成功");
     }
@@ -124,7 +124,7 @@ public class SysGroupController implements BaseController<ISysGroupService, SysG
     public Result disable(@PathVariable String id) {
         SysGroup sysGroup = iSysGroupService.getById(id);
         if (Objects.isNull(sysGroup)) {
-            return Result.error("该用户组不存在");
+            return Result.failed("该用户组不存在");
         }
         sysGroup.setStatus(UseType.DISABLED.getStatus());
         iSysGroupService.updateById(sysGroup);
@@ -144,7 +144,7 @@ public class SysGroupController implements BaseController<ISysGroupService, SysG
     public Result enable(@PathVariable String id) {
         SysGroup sysGroup = iSysGroupService.getById(id);
         if (Objects.isNull(sysGroup)) {
-            return Result.error("该用户组不存在");
+            return Result.failed("该用户组不存在");
         }
         sysGroup.setStatus(UseType.ENABLE.getStatus());
         iSysGroupService.updateById(sysGroup);

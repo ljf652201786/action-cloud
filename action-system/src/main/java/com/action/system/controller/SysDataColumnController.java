@@ -6,7 +6,7 @@ import com.action.system.entity.SysDataColumnLimit;
 import com.action.system.service.ISysDataColumnLimitService;
 import com.action.system.vo.ColumnAllocationVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.util.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("dataColumn")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysDataColumnController implements BaseController<ISysDataColumnLimitService, SysDataColumnLimit> {
     private final ISysDataColumnLimitService iSysDataColumnLimitService;
 
@@ -36,7 +36,7 @@ public class SysDataColumnController implements BaseController<ISysDataColumnLim
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody ColumnAllocationVo columnAllocationVo) {
         if (StringUtils.isEmpty(columnAllocationVo.getDataId()) || StringUtils.isEmpty(columnAllocationVo.getContactId()) || StringUtils.isEmpty(columnAllocationVo.getType())) {
-            return Result.error("缺少必要数据");
+            return Result.failed("缺少必要数据");
         }
 
         iSysDataColumnLimitService.remove(((LambdaQueryWrapper<SysDataColumnLimit>) this.getLambdaQueryWrapper())
@@ -53,6 +53,6 @@ public class SysDataColumnController implements BaseController<ISysDataColumnLim
         if (isSave) {
             return Result.success("保存数据成功");
         }
-        return Result.error("数据保存失败");
+        return Result.failed("数据保存失败");
     }
 }

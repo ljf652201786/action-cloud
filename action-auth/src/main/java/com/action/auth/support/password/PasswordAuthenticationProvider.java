@@ -1,6 +1,5 @@
 package com.action.auth.support.password;
 
-
 import com.action.auth.util.OAuth2AuthenticationProviderUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,13 +33,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 /**
- * 密码模式身份验证提供者
- * <p>
+ * @Description: 密码模式身份验证提供者
  * 处理基于用户名和密码的身份验证
- *
- * @author ljf  <lin652210786@163.com>
- * @since 3.0.0
+ * @Author: ljf  <lin652210786@163.com>
+ * @Date: 2024/5/22
  */
 @Slf4j
 public class PasswordAuthenticationProvider implements AuthenticationProvider {

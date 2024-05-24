@@ -5,7 +5,7 @@ import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.entity.SysDictDetail;
 import com.action.system.service.ISysDictDetailService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("dictDetail")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysDictDetailController implements BaseController<ISysDictDetailService, SysDictDetail> {
     private final ISysDictDetailService iSysDictDetailService;
 
@@ -47,13 +47,13 @@ public class SysDictDetailController implements BaseController<ISysDictDetailSer
     public Result save(@RequestBody SysDictDetail sysDictDetail) {
         SysDictDetail sdd = iSysDictDetailService.getOne(this.getLambdaQueryWrapper().eq(SysDictDetail::getCode, sysDictDetail.getCode()));
         if (Objects.nonNull(sdd)) {
-            return Result.error("字典详情编码已存在");
+            return Result.failed("字典详情编码已存在");
         }
         boolean isSave = iSysDictDetailService.save(sysDictDetail);
         if (isSave) {
             return Result.success("保存数据成功");
         }
-        return Result.error("数据保存失败");
+        return Result.failed("数据保存失败");
     }
 
     /**
@@ -69,13 +69,13 @@ public class SysDictDetailController implements BaseController<ISysDictDetailSer
         SysDictDetail oldDictDetail = iSysDictDetailService.getById(sysDictDetail.getId());
         SysDictDetail sdd = iSysDictDetailService.getOne(this.getLambdaQueryWrapper().eq(SysDictDetail::getCode, sysDictDetail.getCode()));
         if (!oldDictDetail.getCode().equals(sysDictDetail.getCode()) && Objects.nonNull(sdd)) {
-            return Result.error("字典详情编码已存在");
+            return Result.failed("字典详情编码已存在");
         }
         boolean isUpdate = iSysDictDetailService.updateById(sysDictDetail);
         if (isUpdate) {
             return Result.success("更新数据成功");
         }
-        return Result.error("更新数据失败");
+        return Result.failed("更新数据失败");
     }
 
     /**
@@ -92,6 +92,6 @@ public class SysDictDetailController implements BaseController<ISysDictDetailSer
         if (isRemove) {
             return Result.success("删除数据成功");
         }
-        return Result.error("删除数据失败");
+        return Result.failed("删除数据失败");
     }
 }

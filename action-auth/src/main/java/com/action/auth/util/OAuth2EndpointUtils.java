@@ -15,11 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * OAuth2 Endpoint 工具类
- *
- * @see org.springframework.security.oauth2.server.authorization.web.authentication.OAuth2EndpointUtils
- * @author Ray Hao
- * @since 3.0.0
+ * @Description: OAuth2 Endpoint 工具类
+ * @Author: ljf  <lin652210786@163.com>
+ * @Date: 2024/5/22
  */
 public class OAuth2EndpointUtils {
 

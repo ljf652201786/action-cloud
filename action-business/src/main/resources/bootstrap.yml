@@ -13,5 +13,8 @@ spring:
       password: nacos
       config:
         file-extension: yaml
+        shared-configs[0]:
+          data-id: action-common.yaml
+          refresh: true
 
 

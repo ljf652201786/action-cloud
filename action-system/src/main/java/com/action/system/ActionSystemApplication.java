@@ -15,7 +15,7 @@ public class ActionSystemApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ActionSystemApplication.class, args);
-
+        System.out.println("The service is fully operational *\\(^_^)/*");
     }
 }
 

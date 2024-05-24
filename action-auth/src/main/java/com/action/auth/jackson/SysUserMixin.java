@@ -6,13 +6,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
- * SysUserDetails 反序列化注册
- *
+ * @Description: SysUserDetails 反序列化注册
  * 刷新模式根据 refresh_token 从 oauth2_authorization 表中获取字段 attributes 内容反序列化成
- *
- * @author haoxr
  * @see org.springframework.security.jackson2.UserMixin
- * @since 2023/7/4
+ * @Author: ljf  <lin652210786@163.com>
+ * @Date: 2024/5/22
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY)
 @JsonDeserialize(using = SysUserDeserializer.class)

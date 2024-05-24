@@ -31,7 +31,7 @@ public class WebFluxUtils {
         response.getHeaders().setAccessControlAllowOrigin("*");
         response.getHeaders().setCacheControl("no-cache");
 
-        String responseBody = JSONObject.toJSONString(Result.error(Integer.valueOf(resultCode.getCode()), resultCode.getMsg()));
+        String responseBody = JSONObject.toJSONString(Result.failed(resultCode));
         DataBuffer buffer = response.bufferFactory().wrap(responseBody.getBytes(StandardCharsets.UTF_8));
         return response.writeWith(Mono.just(buffer))
                 .doOnError(error -> {

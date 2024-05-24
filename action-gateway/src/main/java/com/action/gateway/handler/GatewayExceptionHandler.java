@@ -60,7 +60,7 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler
 
         return response.writeWith(Mono.fromSupplier(() -> {
             DataBufferFactory bufferFactory = response.bufferFactory();
-            return bufferFactory.wrap(JSON.toJSONBytes(Result.error(msg)));
+            return bufferFactory.wrap(JSON.toJSONBytes(Result.failed(msg)));
         }));
     }
 }

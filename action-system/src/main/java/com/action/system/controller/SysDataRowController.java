@@ -5,7 +5,7 @@ import com.action.common.enums.UseType;
 import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.system.entity.SysDataRowLimit;
 import com.action.system.service.ISysDataRowLimitService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +18,7 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("dataRow")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysDataRowController implements BaseController<ISysDataRowLimitService, SysDataRowLimit> {
     private final ISysDataRowLimitService iSysDataRowLimitService;
 
@@ -33,7 +33,7 @@ public class SysDataRowController implements BaseController<ISysDataRowLimitServ
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody SysDataRowLimit sysDataRowLimit) {
         if (StringUtils.isEmpty(sysDataRowLimit.getDataId()) || StringUtils.isEmpty(sysDataRowLimit.getContactId()) || StringUtils.isEmpty(sysDataRowLimit.getType())) {
-            return Result.error("缺少必要数据");
+            return Result.failed("缺少必要数据");
         }
         sysDataRowLimit.setStatus(UseType.ENABLE.getStatus());
         sysDataRowLimit.setRelation("and");
@@ -41,7 +41,7 @@ public class SysDataRowController implements BaseController<ISysDataRowLimitServ
         if (isSave) {
             return Result.success("保存数据成功");
         }
-        return Result.error("数据保存失败");
+        return Result.failed("数据保存失败");
     }
 
     /**
@@ -55,7 +55,7 @@ public class SysDataRowController implements BaseController<ISysDataRowLimitServ
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Result update(@RequestBody SysDataRowLimit sysDataRowLimit) {
         if (StringUtils.isEmpty(sysDataRowLimit.getDataId()) || StringUtils.isEmpty(sysDataRowLimit.getContactId()) || StringUtils.isEmpty(sysDataRowLimit.getType())) {
-            return Result.error("缺少必要数据");
+            return Result.failed("缺少必要数据");
         }
         sysDataRowLimit.setStatus(UseType.ENABLE.getStatus());
         sysDataRowLimit.setRelation("and");
@@ -63,7 +63,7 @@ public class SysDataRowController implements BaseController<ISysDataRowLimitServ
         if (isUpdate) {
             return Result.success("更新数据成功");
         }
-        return Result.error("更新数据失败");
+        return Result.failed("更新数据失败");
     }
 
     /**
@@ -92,7 +92,7 @@ public class SysDataRowController implements BaseController<ISysDataRowLimitServ
     public Result disable(@PathVariable String id) {
         SysDataRowLimit sysDataRowLimit = iSysDataRowLimitService.getById(id);
         if (Objects.isNull(sysDataRowLimit)) {
-            return Result.error("该数据不存在");
+            return Result.failed("该数据不存在");
         }
         sysDataRowLimit.setStatus(UseType.DISABLED.getStatus());
         iSysDataRowLimitService.updateById(sysDataRowLimit);
@@ -112,7 +112,7 @@ public class SysDataRowController implements BaseController<ISysDataRowLimitServ
     public Result enable(@PathVariable String id) {
         SysDataRowLimit sysDataRowLimit = iSysDataRowLimitService.getById(id);
         if (Objects.isNull(sysDataRowLimit)) {
-            return Result.error("该数据不存在");
+            return Result.failed("该数据不存在");
         }
         sysDataRowLimit.setStatus(UseType.ENABLE.getStatus());
         iSysDataRowLimitService.updateById(sysDataRowLimit);

@@ -1,17 +1,14 @@
 package com.action.system.service.Impl;
 
-import com.action.call.clients.ClientsCirectoryTable;
-import com.action.call.clients.RemoteAuthClients;
 import com.action.common.common.RedisSetConstants;
 import com.action.common.core.base.BaseSecurityMenu;
-import com.action.common.core.common.Result;
 import com.action.common.core.constants.StringPool;
 import com.action.common.core.service.RedisCacheServices;
 import com.action.common.mybatisplus.extend.filter.datapermission.DataRowFilterStruct;
+import com.action.common.security.util.SecurityUtils;
 import com.action.system.entity.SysUser;
 import com.action.system.service.ICacheService;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,8 +27,6 @@ import java.util.stream.Collectors;
 public class ISysCacheServiceImpl implements ICacheService {
     @Resource
     private RedisCacheServices redisCacheServices;
-    @Resource
-    private RemoteAuthClients remoteAuthClients;
 
     @Override
     public void setUserDataPermRowCache(String username, Set<DataRowFilterStruct> dataRowFilterStructList) {
@@ -86,7 +81,7 @@ public class ISysCacheServiceImpl implements ICacheService {
 
     @Override
     public Set<DataRowFilterStruct> getUserDataPermRowCache() {
-        String currentUserName = this.getCurrentUserName();
+        String currentUserName = SecurityUtils.getUserName();
         if (StringUtils.isEmpty(currentUserName)) {
             return null;
         }
@@ -104,7 +99,7 @@ public class ISysCacheServiceImpl implements ICacheService {
 
     @Override
     public Map<String, Set<String>> getUserDataPermColumnCache() {
-        String currentUserName = this.getCurrentUserName();
+        String currentUserName = SecurityUtils.getUserName();
         if (StringUtils.isEmpty(currentUserName)) {
             return null;
         }
@@ -232,13 +227,5 @@ public class ISysCacheServiceImpl implements ICacheService {
             return new HashSet<>();
         }
         return idSet;
-    }
-
-    private String getCurrentUserName() {
-        Result result = remoteAuthClients.getCurrentUserName();
-        if (result.get("code").equals(HttpServletResponse.SC_OK)) {
-            return result.get("data").toString();
-        }
-        return null;
     }
 }

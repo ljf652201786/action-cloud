@@ -2,7 +2,7 @@ server:
   port: 8887
 spring:
   application:
-    name: action-auth-server
+    name: action-auth
   profiles:
     # 环境配置
     active: dev

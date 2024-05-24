@@ -8,25 +8,46 @@
     <packaging>pom</packaging>
 
     <name>action-cloud</name>
-    <url>http://maven.apache.org</url>
+
     <modules>
-        <module>action-business</module>
-        <module>action-common</module>
+        <module>action-auth</module>
         <module>action-gateway</module>
         <module>action-system</module>
-        <module>action-call</module>
         <module>action-file</module>
-        <module>action-auth</module>
+        <module>action-common</module>
+        <module>action-call</module>
+
+        <module>action-business</module>
     </modules>
 
     <properties>
+        <!-- 编码 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- jdk版本 -->
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <!-- spring cloud & alibaba -->
         <spring-cloud.version>2023.0.0</spring-cloud.version>
         <spring-cloud-alibaba.version>2023.0.0.0-RC1</spring-cloud-alibaba.version>
         <spring-boot.version>3.2.3</spring-boot.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- 数据库 & ORM -->
+        <mysql-connector-java.version>5.1.40</mysql-connector-java.version>
+        <druid-spring-boot-starter.version>1.1.18</druid-spring-boot-starter.version>
+        <mybatis-plus-boot-starter.version>3.5.5</mybatis-plus-boot-starter.version>
+        <mybatis-spring.version>3.0.3</mybatis-spring.version>
+        <!-- 微信小程序 -->
+        <weixin-java.version>4.1.5.B</weixin-java.version>
+        <!-- 阿里云短信 -->
+        <aliyun.java.sdk.core.version>4.6.4</aliyun.java.sdk.core.version>
+        <aliyun.java.sdk.dysmsapi.version>2.2.1</aliyun.java.sdk.dysmsapi.version>
+        <!-- 附加依赖 -->
+        <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
+        <!-- common依赖 -->
+        <action-common-sms.version>1.0-SNAPSHOT</action-common-sms.version>
+        <action-common-mybatisplus-extend.version>1.0-SNAPSHOT</action-common-mybatisplus-extend.version>
+        <action-common-security.version>1.0-SNAPSHOT</action-common-security.version>
+        <action-common-file.version>1.0-SNAPSHOT</action-common-file.version>
     </properties>
 
     <dependencyManagement>
@@ -56,9 +77,119 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>com.action</groupId>
+                <artifactId>action-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.action</groupId>
+                <artifactId>action-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.action</groupId>
+                <artifactId>action-call</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- common依赖 -->
+            <dependency>
+                <groupId>com.action</groupId>
+                <artifactId>action-common-core</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.action</groupId>
+                <artifactId>action-common-sms</artifactId>
+                <version>${action-common-sms.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.action</groupId>
+                <artifactId>action-common-mybatisplus-extend</artifactId>
+                <version>${action-common-mybatisplus-extend.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.action</groupId>
+                <artifactId>action-common-security</artifactId>
+                <version>${action-common-security.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.action</groupId>
+                <artifactId>action-common-file</artifactId>
+                <version>${action-common-file.version}</version>
+            </dependency>
+
+            <!-- 数据库 & ORM -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector-java.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid-spring-boot-starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis-spring</artifactId>
+                <version>${mybatis-spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus-boot-starter.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.mybatis</groupId>
+                        <artifactId>mybatis-spring</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- 微信小程序 -->
+            <dependency>
+                <groupId>com.github.binarywang</groupId>
+                <artifactId>weixin-java-miniapp</artifactId>
+                <version>${weixin-java.version}</version>
+            </dependency>
+
+            <!-- 阿里云短信 -->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-core</artifactId>
+                <version>${aliyun.java.sdk.core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+                <version>${aliyun.java.sdk.dysmsapi.version}</version>
+            </dependency>
+
+            <!-- 附加依赖 -->
+            <dependency>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>${jakarta.servlet.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
+
     <dependencies>
+        <!-- spring cloud & alibaba -->
         <!--注册中心-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -88,6 +219,7 @@
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
 
+        <!-- 服务限流降级 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>

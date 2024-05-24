@@ -29,10 +29,9 @@ import java.security.Principal;
 import java.util.Map;
 
 /**
- * 微信授权认证 Provider
- *
- * @author haoxr
- * @since 3.0.0
+ * @Description: 微信授权认证 Provider
+ * @Author: ljf  <lin652210786@163.com>
+ * @Date: 2024/5/22
  */
 @Slf4j
 public class WechatAuthenticationProvider implements AuthenticationProvider {

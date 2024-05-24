@@ -7,7 +7,7 @@ import com.action.system.entity.SysMenuRule;
 import com.action.system.entity.SysRule;
 import com.action.system.service.ISysMenuRuleService;
 import com.action.system.service.ISysRuleService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("rule")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysRuleController implements BaseController<ISysRuleService, SysRule> {
     private final ISysRuleService iSysRuleService;
     private final ISysMenuRuleService iSysMenuRuleService;
@@ -64,13 +64,13 @@ public class SysRuleController implements BaseController<ISysRuleService, SysRul
     public Result save(@RequestBody SysRule sysRule) {
         SysRule sr = iSysRuleService.getOne(this.getLambdaQueryWrapper().eq(SysRule::getRuleCode, sysRule.getRuleCode()));
         if (Objects.nonNull(sr)) {
-            return Result.error("规则标识已存在");
+            return Result.failed("规则标识已存在");
         }
         boolean isSave = iSysRuleService.save(sysRule);
         if (isSave) {
             return Result.success("保存数据成功");
         }
-        return Result.error("数据保存失败");
+        return Result.failed("数据保存失败");
     }
 
     /**
@@ -86,13 +86,13 @@ public class SysRuleController implements BaseController<ISysRuleService, SysRul
         SysRule oldRule = iSysRuleService.getById(sysRule.getId());
         SysRule sr = iSysRuleService.getOne(this.getLambdaQueryWrapper().eq(SysRule::getRuleCode, sysRule.getRuleCode()));
         if (!oldRule.getRuleCode().equals(sysRule.getRuleCode()) && Objects.nonNull(sr)) {
-            return Result.error("规则标识已使用");
+            return Result.failed("规则标识已使用");
         }
         boolean isUpdate = iSysRuleService.updateById(sysRule);
         if (isUpdate) {
             return Result.success("更新数据成功");
         }
-        return Result.error("更新数据失败");
+        return Result.failed("更新数据失败");
     }
 
     /**
@@ -119,7 +119,7 @@ public class SysRuleController implements BaseController<ISysRuleService, SysRul
             iSysRuleService.removeBatchByIds(idList);
         }
         if (idExistList.size() > 0) {
-            return Result.error("删除失败，因为包含正被用户使用", idExistList);
+            return Result.failed("删除失败，因为包含正被用户使用", idExistList);
         }
         return Result.success("批量通过id删除数据成功");
     }

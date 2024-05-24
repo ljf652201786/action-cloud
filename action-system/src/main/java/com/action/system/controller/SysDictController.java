@@ -7,7 +7,7 @@ import com.action.system.entity.SysDict;
 import com.action.system.entity.SysDictDetail;
 import com.action.system.service.ISysDictDetailService;
 import com.action.system.service.ISysDictService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("dict")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysDictController implements BaseController<ISysDictService, SysDict> {
     private final ISysDictService iSysDictService;
     private final ISysDictDetailService iSysDictDetailService;
@@ -51,13 +51,13 @@ public class SysDictController implements BaseController<ISysDictService, SysDic
     public Result save(@RequestBody SysDict sysDict) {
         SysDict sd = iSysDictService.getOne(this.getLambdaQueryWrapper().eq(SysDict::getDictCode, sysDict.getDictCode()));
         if (Objects.nonNull(sd)) {
-            return Result.error("字典编码已存在");
+            return Result.failed("字典编码已存在");
         }
         boolean isSave = iSysDictService.save(sysDict);
         if (isSave) {
             return Result.success("保存数据成功");
         }
-        return Result.error("数据保存失败");
+        return Result.failed("数据保存失败");
     }
 
     /**
@@ -73,13 +73,13 @@ public class SysDictController implements BaseController<ISysDictService, SysDic
         SysDict oldDict = iSysDictService.getById(sysDict.getId());
         SysDict sd = iSysDictService.getOne(this.getLambdaQueryWrapper().eq(SysDict::getDictCode, sysDict.getDictCode()));
         if (!oldDict.getDictCode().equals(sysDict.getDictCode()) && Objects.nonNull(sd)) {
-            return Result.error("字典编码已存在");
+            return Result.failed("字典编码已存在");
         }
         boolean isUpdate = iSysDictService.updateById(sysDict);
         if (isUpdate) {
             return Result.success("更新数据成功");
         }
-        return Result.error("更新数据失败");
+        return Result.failed("更新数据失败");
     }
 
     /**
@@ -106,7 +106,7 @@ public class SysDictController implements BaseController<ISysDictService, SysDic
             iSysDictService.removeBatchByIds(idList);
         }
         if (idExistList.size() > 0) {
-            return Result.error("该字典删除失败，因为包含正被使用", idExistList);
+            return Result.failed("该字典删除失败，因为包含正被使用", idExistList);
         }
         return Result.success("批量通过id删除数据成功");
     }

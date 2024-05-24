@@ -34,6 +34,6 @@ public class ClientManagerController implements BaseController<IOauth2Registered
         if (isRegistered) {
             return Result.success("注册客户端成功");
         }
-        return Result.error("注册客户端失败");
+        return Result.failed("注册客户端失败");
     }
 }

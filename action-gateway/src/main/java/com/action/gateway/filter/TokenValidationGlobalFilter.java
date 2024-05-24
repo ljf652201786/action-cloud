@@ -4,7 +4,6 @@ import com.action.common.core.common.ResultCode;
 import com.action.common.core.handle.RedisCacheHandle;
 import com.action.gateway.util.WebFluxUtils;
 import com.nimbusds.jose.JWSObject;
-import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

@@ -1,16 +1,14 @@
 package com.action.file.service.Impl;
 
-import com.action.call.clients.RemoteAuthClients;
-import com.action.common.core.common.Result;
 import com.action.common.core.constants.StringPool;
 import com.action.common.enums.DelType;
 import com.action.common.file.entity.FileStruct;
 import com.action.common.file.properties.FileProperties;
 import com.action.common.file.utils.ActionFileUtils;
+import com.action.common.security.util.SecurityUtils;
 import com.action.file.entity.SysFile;
 import com.action.file.mapper.SysFileMapper;
 import com.action.file.service.ISysFileService;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,8 +22,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
@@ -40,8 +36,6 @@ public class ISysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> imp
     private SysFileMapper sysFileMapper;
     @Resource
     private FileProperties fileProperties;
-    @Resource
-    private RemoteAuthClients remoteAuthClients;
 
     @Override
     public List<String> upload(MultipartFile[] multipartFiles, Integer index) {
@@ -54,11 +48,7 @@ public class ISysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> imp
             if (CollectionUtils.isEmpty(resources) || resources.size() < index) {
                 return urlList;
             }
-            Result result = remoteAuthClients.getCurrentUserName();
-            if (!result.get("code").equals(HttpServletResponse.SC_OK)) {
-                return urlList;
-            }
-            String userName = result.get("data").toString();
+            String userName = SecurityUtils.getUserName();
             FileProperties.Resource resource = resources.get(index);
             String localPath = this.getDefaultPath(resource);
             String pathPattern = this.getDefaultPathPattern(resource);

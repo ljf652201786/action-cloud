@@ -1,6 +1,5 @@
 package com.action.auth.util;
 
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
@@ -11,10 +10,9 @@ import org.springframework.security.oauth2.server.authorization.OAuth2Authorizat
 import org.springframework.security.oauth2.server.authorization.authentication.OAuth2ClientAuthenticationToken;
 
 /**
- * Utility methods for the OAuth 2.0 {@link AuthenticationProvider}'s.
- *
- * @author Joe Grandja
- * @since 0.0.3
+ * @Description: Utility methods for the OAuth 2.0
+ * @Author: ljf  <lin652210786@163.com>
+ * @Date: 2024/5/22
  */
 public class OAuth2AuthenticationProviderUtils {
 

@@ -1,3 +1,4 @@
+/*
 package com.action.common.entity;
 
 import com.action.common.core.base.BaseSecurityUser;
@@ -7,11 +8,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Objects;
 
+*/
 /**
  * @Description: Security认证用户
  * @Author: ljf  <lin652210786@163.com>
  * @Date: 2024/03/30
- */
+ *//*
+
 public class SecurityAuthUser extends BaseSecurityUser {
     private String avatar;
     private String nickName;
@@ -79,3 +82,4 @@ public class SecurityAuthUser extends BaseSecurityUser {
         this.sex = sex;
     }
 }
+*/

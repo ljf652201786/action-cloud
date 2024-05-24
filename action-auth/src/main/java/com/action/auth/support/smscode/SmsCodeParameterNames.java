@@ -1,10 +1,9 @@
 package com.action.auth.support.smscode;
 
 /**
- * 短信验证码模式参数名称常量
- *
- * @author haoxr
- * @since 3.0.0
+ * @Description: 短信验证码模式参数名称常量
+ * @Author: ljf  <lin652210786@163.com>
+ * @Date: 2024/5/22
  */
 public final class SmsCodeParameterNames {
 

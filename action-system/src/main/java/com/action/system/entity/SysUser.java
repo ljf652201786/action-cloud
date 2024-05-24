@@ -1,8 +1,6 @@
 package com.action.system.entity;
 
 import com.action.common.base.BaseEntity;
-import com.action.common.mybatisplus.extend.annotation.SensitiveField;
-import com.action.common.mybatisplus.extend.enums.SensitiveTypeEnums;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;

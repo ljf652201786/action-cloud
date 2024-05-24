@@ -1,11 +1,9 @@
 package com.action.system.service;
 
-import com.action.common.entity.SecurityAuthUser;
+import com.action.call.vo.AuthUserInfoVo;
 import com.action.system.dto.SysUserExtend;
-import com.action.system.entity.SysScope;
 import com.action.system.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -45,12 +43,12 @@ public interface ISysUserService extends IService<SysUser> {
     Boolean modifyPass(String rawPassword, String newPassword);
 
     /**
-     * 根据id集合获取重置密码的用户列表
+     * 根据id集合重置用户密码
      *
      * @param ids 用户id集合
      * @return Boolean
      */
-    List<SysUser> getPesetPassOfUserListByIds(List<String> ids);
+    Boolean resetPassBatchByIds(List<String> ids);
 
     /**
      * 找回密码
@@ -74,7 +72,7 @@ public interface ISysUserService extends IService<SysUser> {
      * @param phone 手机号
      * @return SysUser
      */
-    SysUser findByPhone(String phone);
+    AuthUserInfoVo findByPhone(String phone);
 
     /**
      * 通过邮箱获取用户信息
@@ -82,7 +80,7 @@ public interface ISysUserService extends IService<SysUser> {
      * @param email 邮箱
      * @return SysUser
      */
-    SysUser findByEmail(String email);
+    AuthUserInfoVo findByEmail(String email);
 
     /**
      * 微信扫码获取用户名
@@ -98,7 +96,7 @@ public interface ISysUserService extends IService<SysUser> {
      * @param username 用户名
      * @return SecurityAuthUser
      */
-    SecurityAuthUser getUserByUserName(String username);
+    AuthUserInfoVo getUserByUserName(String username);
 
     /**
      * 保存用户扩展信息（包含菜单权限和角色）

@@ -11,9 +11,10 @@
     <packaging>jar</packaging>
 
     <name>action-common</name>
-    <url>http://maven.apache.org</url>
 
     <properties>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <mapstruct-processor.version>1.5.5.Final</mapstruct-processor.version>
         <fastjson.version>1.2.83</fastjson.version>
         <reflections.version>0.9.11</reflections.version>
         <guava.version>32.1.2-jre</guava.version>
@@ -44,7 +45,6 @@
         <dependency>
             <groupId>com.action</groupId>
             <artifactId>action-common-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -93,6 +93,18 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct-processor.version}</version>
         </dependency>
 
     </dependencies>

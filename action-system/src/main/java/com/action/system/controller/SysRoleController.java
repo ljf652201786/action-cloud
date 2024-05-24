@@ -8,7 +8,7 @@ import com.action.system.entity.SysRole;
 import com.action.system.entity.SysUserRole;
 import com.action.system.service.ISysRoleService;
 import com.action.system.service.ISysUserRoleService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("role")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysRoleController implements BaseController<ISysRoleService, SysRole> {
     private final ISysRoleService iSysRoleService;
     private final ISysUserRoleService iSysUserRoleService;
@@ -78,13 +78,13 @@ public class SysRoleController implements BaseController<ISysRoleService, SysRol
     public Result save(@RequestBody SysRole sysRole) {
         SysRole sr = iSysRoleService.getOne(this.getLambdaQueryWrapper().eq(SysRole::getRoleCode, sysRole.getRoleCode()));
         if (Objects.nonNull(sr)) {
-            return Result.error("角色编码已存在");
+            return Result.failed("角色编码已存在");
         }
         boolean isSave = iSysRoleService.save(sysRole);
         if (isSave) {
             return Result.success("保存数据成功");
         }
-        return Result.error("数据保存失败");
+        return Result.failed("数据保存失败");
     }
 
     /**
@@ -100,13 +100,13 @@ public class SysRoleController implements BaseController<ISysRoleService, SysRol
         SysRole oldRole = iSysRoleService.getById(sysRole.getId());
         SysRole sr = iSysRoleService.getOne(this.getLambdaQueryWrapper().eq(SysRole::getRoleCode, sysRole.getRoleCode()));
         if (!oldRole.getRoleCode().equals(sysRole.getRoleCode()) && Objects.nonNull(sr)) {
-            return Result.error("角色编码已存在");
+            return Result.failed("角色编码已存在");
         }
         boolean isUpdate = iSysRoleService.updateById(sysRole);
         if (isUpdate) {
             return Result.success("更新数据成功");
         }
-        return Result.error("更新数据失败");
+        return Result.failed("更新数据失败");
     }
 
     /**
@@ -133,7 +133,7 @@ public class SysRoleController implements BaseController<ISysRoleService, SysRol
             iSysRoleService.removeBatchByIds(idList);
         }
         if (idExistList.size() > 0) {
-            return Result.error("该角色删除失败，因为包含正被用户使用", idExistList);
+            return Result.failed("该角色删除失败，因为包含正被用户使用", idExistList);
         }
         return Result.success("批量通过id删除数据成功");
     }
@@ -151,7 +151,7 @@ public class SysRoleController implements BaseController<ISysRoleService, SysRol
     public Result setDefault(@RequestParam String id, @RequestParam boolean isDefault) {
         SysRole sysRole = iSysRoleService.getById(id);
         if (Objects.isNull(sysRole)) {
-            return Result.error("角色不存在");
+            return Result.failed("角色不存在");
         }
         sysRole.setDefaultRole(isDefault);
         iSysRoleService.updateById(sysRole);
@@ -170,7 +170,7 @@ public class SysRoleController implements BaseController<ISysRoleService, SysRol
     public Result disable(@PathVariable String id) {
         SysRole sysRole = iSysRoleService.getById(id);
         if (Objects.isNull(sysRole)) {
-            return Result.error("该角色不存在");
+            return Result.failed("该角色不存在");
         }
         sysRole.setStatus(UseType.DISABLED.getStatus());
         iSysRoleService.updateById(sysRole);
@@ -190,7 +190,7 @@ public class SysRoleController implements BaseController<ISysRoleService, SysRol
     public Result enable(@PathVariable String id) {
         SysRole sysRole = iSysRoleService.getById(id);
         if (Objects.isNull(sysRole)) {
-            return Result.error("该角色不存在");
+            return Result.failed("该角色不存在");
         }
         sysRole.setStatus(UseType.ENABLE.getStatus());
         iSysRoleService.updateById(sysRole);

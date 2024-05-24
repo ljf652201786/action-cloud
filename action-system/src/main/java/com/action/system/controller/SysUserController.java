@@ -1,18 +1,17 @@
 package com.action.system.controller;
 
+import com.action.call.vo.AuthUserInfoVo;
 import com.action.common.common.RedisSetConstants;
 import com.action.common.common.UserSetConstants;
 import com.action.common.core.common.Result;
 import com.action.common.core.service.RedisCacheServices;
-import com.action.common.entity.SecurityAuthUser;
 import com.action.common.enums.UseType;
 import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.dto.SysUserExtend;
 import com.action.system.entity.SysUser;
 import com.action.system.service.*;
-import lombok.AllArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
+import lombok.RequiredArgsConstructor;
 import org.springframework.util.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,7 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("user")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysUserController implements BaseController<ISysUserService, SysUser> {
     private final ISysUserService iSysUserService;
     private final RedisCacheServices redisCacheServices;
@@ -69,25 +68,25 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody SysUserExtend sysUserExtend) {
         if (StringUtils.isEmpty(sysUserExtend.getUsername()) || StringUtils.isEmpty(sysUserExtend.getEmail()) || StringUtils.isEmpty(sysUserExtend.getPhone())) {
-            return Result.error("缺少必需表单字段");
+            return Result.failed("缺少必需表单字段");
         }
 
         if (Objects.nonNull(iSysUserService.findByUsername(sysUserExtend.getUsername()))) {
-            return Result.error("该用户名已被注册");
+            return Result.failed("该用户名已被注册");
         }
 
         if (Objects.nonNull(iSysUserService.findByEmail(sysUserExtend.getEmail()))) {
-            return Result.error("该邮箱已被注册");
+            return Result.failed("该邮箱已被注册");
         }
 
         if (Objects.nonNull(iSysUserService.findByPhone(sysUserExtend.getEmail()))) {
-            return Result.error("该手机号已被注册");
+            return Result.failed("该手机号已被注册");
         }
 
         sysUserExtend.setAvatar(sysUserExtend.getAvatar() == null ? UserSetConstants.DEFAULT_AVATAR : sysUserExtend.getAvatar());
         boolean isSave = iSysUserService.save(sysUserExtend);
         if (!isSave) {
-            return Result.error("添加用户失败");
+            return Result.failed("添加用户失败");
         }
         iSysUserService.saveUserExtendInfo(sysUserExtend);
         return Result.success("添加用户成功");
@@ -105,14 +104,14 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
     public Result update(@RequestBody SysUserExtend sysUserExtend) {
         SysUser oldUser = iSysUserService.getById(sysUserExtend);
         if (Objects.isNull(oldUser) || oldUser.getUsername().equalsIgnoreCase(sysUserExtend.getUsername())) {
-            return Result.error("该用户不存在");
+            return Result.failed("该用户不存在");
         }
         if (Objects.nonNull(iSysUserService.findByPhone(sysUserExtend.getPhone())) && !StringUtils.isEmpty(oldUser.getPhone()) && !oldUser.getPhone().equalsIgnoreCase(sysUserExtend.getPhone())) {
-            return Result.error("该手机号已绑定其他账户");
+            return Result.failed("该手机号已绑定其他账户");
         }
         oldUser.setPhone(sysUserExtend.getPhone());
         if (Objects.nonNull(iSysUserService.findByEmail(sysUserExtend.getEmail())) && !StringUtils.isEmpty(oldUser.getEmail()) && !oldUser.getEmail().equalsIgnoreCase(sysUserExtend.getEmail())) {
-            return Result.error("该邮箱已绑定其他账户");
+            return Result.failed("该邮箱已绑定其他账户");
         }
         oldUser.setEmail(sysUserExtend.getEmail());
         oldUser.setNickName(sysUserExtend.getNickName());
@@ -120,7 +119,7 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
         oldUser.setSex(sysUserExtend.getSex());
         Boolean isUpdate = iSysUserService.updateById(oldUser);
         if (!isUpdate) {
-            return Result.error("用户更新失败");
+            return Result.failed("用户更新失败");
         }
         iSysUserService.updateUserExtendInfo(oldUser, sysUserExtend);
         return Result.success("用户信息修改成功");
@@ -139,34 +138,34 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
         if (StringUtils.isEmpty(sysUser.getUsername()) || StringUtils.isEmpty(sysUser.getPassword())
                 || StringUtils.isEmpty(sysUser.getEmail()) || StringUtils.isEmpty(sysUser.getPhone())
                 || StringUtils.isEmpty(sysUser.getCode())) {
-            return Result.error("缺少必需表单字段");
+            return Result.failed("缺少必需表单字段");
         }
 
         if (Objects.nonNull(iSysUserService.findByUsername(sysUser.getUsername()))) {
-            return Result.error("该用户名已被注册");
+            return Result.failed("该用户名已被注册");
         }
 
         if (Objects.nonNull(iSysUserService.findByEmail(sysUser.getEmail()))) {
-            return Result.error("该邮箱已被注册");
+            return Result.failed("该邮箱已被注册");
         }
 
         if (Objects.nonNull(iSysUserService.findByPhone(sysUser.getEmail()))) {
-            return Result.error("该手机号已被注册");
+            return Result.failed("该手机号已被注册");
         }
 
         String email_key = RedisSetConstants.AUTH_EMAIL + sysUser.getEmail();
         //获取邮箱验证码
         Object o = redisCacheServices.get(email_key);
         if (Objects.isNull(o)) {
-            return Result.error("验证码失效");
+            return Result.failed("验证码失效");
         }
         if (!StringUtils.equalsIgnoreCase(o.toString(), sysUser.getCode())) {
-            return Result.error("验证码错误！");
+            return Result.failed("验证码错误！");
         }
         Boolean isRegist = iSysUserService.regist(sysUser);
         if (!isRegist) {
             redisCacheServices.remove(email_key);
-            return Result.error("注册失败");
+            return Result.failed("注册失败");
         }
         iSysUserService.setUserDefaultRole(sysUser);
         return Result.success("注册成功", sysUser.getId());
@@ -184,7 +183,7 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
     public Result editInfo(@RequestBody SysUser sysUser) {
         Boolean isEdit = iSysUserService.editInfo(sysUser);
         if (!isEdit) {
-            return Result.error("修改失败");
+            return Result.failed("修改失败");
         }
         return Result.success("修改成功");
     }
@@ -201,18 +200,11 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
     public Result disable(@PathVariable String id) {
         SysUser sysUser = iSysUserService.getById(id);
         if (Objects.isNull(sysUser)) {
-            return Result.error("该用户不存在");
+            return Result.failed("该用户不存在");
         }
         sysUser.setStatus(UseType.DISABLED.getStatus());
         iSysUserService.updateById(sysUser);
         return Result.success("禁用成功");
-    }
-
-    @PreAuthorize("@ss.hasPerm('sys:user:delete')")
-    @RequestMapping(value = "e", method = RequestMethod.GET)
-    public Result ese(){
-        System.out.println("23424");
-        return Result.success();
     }
 
     /**
@@ -227,7 +219,7 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
     public Result enable(@PathVariable String id) {
         SysUser sysUser = iSysUserService.getById(id);
         if (Objects.isNull(sysUser)) {
-            return Result.error("该用户不存在");
+            return Result.failed("该用户不存在");
         }
         sysUser.setStatus(UseType.ENABLE.getStatus());
         iSysUserService.updateById(sysUser);
@@ -249,7 +241,7 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
         if (isModified) {
             return Result.success("修改密码成功");
         }
-        return Result.error("修改密码失败");
+        return Result.failed("修改密码失败");
     }
 
     /**
@@ -262,14 +254,11 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
      */
     @RequestMapping(value = "resetPass", method = RequestMethod.PUT)
     public Result resetPass(@RequestParam("ids") List<String> ids) {
-        List<SysUser> UserLists = iSysUserService.getPesetPassOfUserListByIds(ids);
-        if (!CollectionUtils.isEmpty(UserLists)) {
-            boolean isReset = iSysUserService.updateBatchById(UserLists);
-            if (isReset) {
-                return Result.success("重置密码成功");
-            }
+        boolean isReset = iSysUserService.resetPassBatchByIds(ids);
+        if (isReset) {
+            return Result.success("重置密码成功");
         }
-        return Result.error("重置密码失败");
+        return Result.failed("重置密码失败");
     }
 
     /**
@@ -283,27 +272,27 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
     @RequestMapping(value = "retrievePassByEmail", method = RequestMethod.GET)
     public Result retrievePassByEmail(@RequestBody SysUserExtend sysUser) {
         if (StringUtils.isBlank(sysUser.getPassword()) || StringUtils.isBlank(sysUser.getEmail()) || StringUtils.isBlank(sysUser.getCode())) {
-            return Result.error("缺少必需表单字段");
+            return Result.failed("缺少必需表单字段");
         }
         String email_key = RedisSetConstants.AUTH_EMAIL + sysUser.getEmail();
         //获取邮箱验证码
         Object o = redisCacheServices.get(email_key);
         if (Objects.isNull(o)) {
-            return Result.error("验证码失效");
+            return Result.failed("验证码失效");
         }
         if (!StringUtils.equalsIgnoreCase(o.toString(), sysUser.getCode())) {
-            return Result.error("验证码错误！");
+            return Result.failed("验证码错误！");
         }
 
         SysUser user = iSysUserService.getOne(this.getLambdaQueryWrapper().eq(SysUser::getEmail, sysUser.getEmail()));
         if (Objects.isNull(user)) {
-            return Result.error("该邮箱还未注册");
+            return Result.failed("该邮箱还未注册");
         }
         Boolean isRetrieve = iSysUserService.retrievePass(user);
         if (isRetrieve) {
             return Result.success("找回密码成功", user.getUsername());
         }
-        return Result.error("找回密码失败");
+        return Result.failed("找回密码失败");
     }
 
     /**
@@ -316,11 +305,11 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
      */
     @RequestMapping(value = "getUserByPhone", method = RequestMethod.GET)
     public Result getUserByPhone(@RequestParam("phone") String phone) {
-        SysUser sysUser = iSysUserService.findByPhone(phone);
-        if (Objects.isNull(sysUser)) {
-            return Result.error("该手机号未注册");
+        AuthUserInfoVo authUserInfoVo = iSysUserService.findByPhone(phone);
+        if (Objects.isNull(authUserInfoVo)) {
+            return Result.failed("该手机号未注册");
         }
-        return Result.success("通过手机号获取用户信息成功", sysUser);
+        return Result.success("通过手机号获取用户信息成功", authUserInfoVo);
     }
 
     /**
@@ -333,11 +322,11 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
      */
     @RequestMapping(value = "getUserByEmail", method = RequestMethod.GET)
     public Result getUserByEmail(@RequestParam("email") String email) {
-        SysUser sysUser = iSysUserService.findByEmail(email);
-        if (Objects.isNull(sysUser)) {
-            return Result.error("该手邮箱未注册");
+        AuthUserInfoVo authUserInfoVo = iSysUserService.findByEmail(email);
+        if (Objects.isNull(authUserInfoVo)) {
+            return Result.failed("该手邮箱未注册");
         }
-        return Result.success("通过邮箱获取用户信息成功", sysUser);
+        return Result.success("通过邮箱获取用户信息成功", authUserInfoVo);
     }
 
     /**
@@ -352,7 +341,7 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
     public Result getUserNameByWeChatCode(@RequestParam("code") String code) {
         String username = iSysUserService.getUserNameByWeChatCode(code);
         if (StringUtils.isEmpty(username)) {
-            return Result.error("无效扫码");
+            return Result.failed("无效扫码");
         }
         return Result.success("扫码获取用户名成功", username);
     }
@@ -366,12 +355,12 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "getUserByUserName", method = RequestMethod.GET)
-    public Result getUserByUserName(@RequestParam("username") String username) {
-        SecurityAuthUser securityAuthUser = iSysUserService.getUserByUserName(username);
-        if (Objects.isNull(securityAuthUser)) {
-            return Result.error("获取用户信息失败");
+    public Result<AuthUserInfoVo> getUserByUserName(@RequestParam("username") String username) {
+        AuthUserInfoVo authUserInfoVo = iSysUserService.getUserByUserName(username);
+        if (Objects.isNull(authUserInfoVo)) {
+            return Result.failed("获取用户信息失败");
         }
-        return Result.success("获取用户信息成功", securityAuthUser);
+        return Result.success("获取用户信息成功", authUserInfoVo);
     }
 
 }

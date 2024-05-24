@@ -6,10 +6,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * 密码编码器(修改、重置密码使用)
- *
- * @author haoxr
- * @since 0.0.1
+ * @Description: 密码编码器(修改 、 重置密码使用)
+ * @Author: ljf  <lin652210786@163.com>
+ * @Date: 2024/5/23
  */
 @Configuration
 public class PasswordEncoderConfig {

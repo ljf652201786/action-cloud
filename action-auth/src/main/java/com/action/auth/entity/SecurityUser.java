@@ -49,7 +49,7 @@ public class SecurityUser extends BaseSecurityUser implements UserDetails, Crede
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorityList = Collections.EMPTY_LIST;
+        List<GrantedAuthority> authorityList = new ArrayList<>();
         List<? extends BaseSecurityMenu> menuScopeList = this.getMenuScopeList();
         // 请求权限
         if (!CollectionUtils.isEmpty(menuScopeList)) {

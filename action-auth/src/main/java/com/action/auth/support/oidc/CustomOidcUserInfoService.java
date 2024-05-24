@@ -1,14 +1,11 @@
 package com.action.auth.support.oidc;
 
 import com.action.call.clients.RemoteSystemClients;
-import com.action.common.core.common.Result;
-import com.action.common.core.common.ResultCode;
-import com.action.common.entity.SecurityAuthUser;
-import jakarta.servlet.http.HttpServletResponse;
+import com.action.call.vo.AuthUserInfoVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.Map;
 
@@ -26,36 +23,26 @@ public class CustomOidcUserInfoService {
 
     public CustomOidcUserInfo loadUserByUsername(String username) {
         try {
-            Result result = remoteSystemClients.getUserByUserName(username);
-            if (!result.get("code").equals(HttpServletResponse.SC_OK)) {
-                throw new UsernameNotFoundException(ResultCode.USER_NOT_EXIST.getMsg());
-            }
-            SecurityAuthUser securityAuthUser = new SecurityAuthUser(result.get("data"));
-            return new CustomOidcUserInfo(createUser(securityAuthUser));
+            AuthUserInfoVo authUserInfoVo = remoteSystemClients.getUserByUserName(username);
+
+            Assert.isTrue(authUserInfoVo != null, "用户不存在");
+
+            return new CustomOidcUserInfo(createUser(authUserInfoVo));
         } catch (Exception e) {
             log.error("获取用户信息失败", e);
             return null;
         }
     }
 
-    private Map<String, Object> createUser(SecurityAuthUser securityAuthUser) {
+    private Map<String, Object> createUser(AuthUserInfoVo authUserInfoVo) {
         return CustomOidcUserInfo.customBuilder()
-                .username(securityAuthUser.getUsername())
-                .nickname(securityAuthUser.getNickName())
-                .status(securityAuthUser.getStatus())
-                .email(securityAuthUser.getEmail())
-                .profile(securityAuthUser.getAvatar())
+                .username(authUserInfoVo.getUsername())
+                .nickname(authUserInfoVo.getNickName())
+                .status(authUserInfoVo.getStatus())
+                .email(authUserInfoVo.getEmail())
+                .profile(authUserInfoVo.getAvatar())
                 .build()
                 .getClaims();
     }
-
-    /*private UserAuthInfo getUserAuthInfo(String username) {
-        UserAuthInfo userAuthInfo = new UserAuthInfo();
-        userAuthInfo.setUsername("zhangsan");
-        userAuthInfo.setNickname("张三");
-        userAuthInfo.setMobile("13860321661");
-        userAuthInfo.setEmail("6565@qq.com");
-        return userAuthInfo;
-    }*/
 
 }

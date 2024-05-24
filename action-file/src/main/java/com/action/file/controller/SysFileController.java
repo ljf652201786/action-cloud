@@ -6,7 +6,7 @@ import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.file.entity.SysFile;
 import com.action.file.service.ISysFileService;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +22,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("file")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysFileController implements BaseController<ISysFileService, SysFile> {
     private final ISysFileService iSysFileService;
 
@@ -39,19 +39,19 @@ public class SysFileController implements BaseController<ISysFileService, SysFil
     @RequestMapping(value = "pseudoDeleteByIds", method = RequestMethod.PUT)
     public Result pseudoDeleteByIds(@RequestParam("ids") List<String> ids) {
         boolean isUpdateBatchById = iSysFileService.pseudoDeletionBatchByIds(ids);
-        return isUpdateBatchById ? Result.success("Batch deletion of data successful！") : Result.error("Batch deletion of data failed！");
+        return isUpdateBatchById ? Result.success("Batch deletion of data successful！") : Result.failed("Batch deletion of data failed！");
     }
 
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
         boolean isUpdateBatchById = iSysFileService.removeBatchFilesByIds(ids);
-        return isUpdateBatchById ? Result.success("Batch deletion of data successful！") : Result.error("Batch deletion of data failed！");
+        return isUpdateBatchById ? Result.success("Batch deletion of data successful！") : Result.failed("Batch deletion of data failed！");
     }
 
     @RequestMapping(value = "recovery", method = RequestMethod.PUT)
     public Result recovery(@RequestParam("ids") List<String> ids) {
         boolean isUpdateBatchById = iSysFileService.recoveryBaseFilesByIds(ids);
-        return isUpdateBatchById ? Result.success("Batch file recovery successful！") : Result.error("Batch file recovery failed！");
+        return isUpdateBatchById ? Result.success("Batch file recovery successful！") : Result.failed("Batch file recovery failed！");
     }
 
     @RequestMapping(value = "upload", method = RequestMethod.POST)

@@ -28,10 +28,9 @@ import java.security.Principal;
 import java.util.Map;
 
 /**
- * 短信验证码认证授权提供者
- *
- * @author haoxr
- * @since 3.0.0
+ * @Description: 短信验证码认证授权提供者
+ * @Author: ljf  <lin652210786@163.com>
+ * @Date: 2024/5/22
  */
 @Slf4j
 public class SmsCodeAuthenticationProvider implements AuthenticationProvider {

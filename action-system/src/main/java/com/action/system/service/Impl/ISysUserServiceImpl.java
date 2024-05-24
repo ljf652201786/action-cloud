@@ -1,22 +1,20 @@
 package com.action.system.service.Impl;
 
-import com.action.call.clients.RemoteAuthClients;
+import com.action.call.vo.AuthUserInfoVo;
 import com.action.common.common.UserSetConstants;
 import com.action.common.core.base.BaseSecurityMenu;
-import com.action.common.core.common.Result;
-import com.action.common.entity.SecurityAuthUser;
 import com.action.common.enums.UseType;
 import com.action.common.mybatisplus.extend.filter.datapermission.DataRowFilterStruct;
+import com.action.common.security.util.SecurityUtils;
 import com.action.system.dto.SysUserExtend;
 import com.action.system.entity.*;
 import com.action.system.mapper.*;
 import com.action.system.service.*;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -46,14 +44,15 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
     @Resource
     private ISysDataService iSysDataService;
     @Resource
-    private RemoteAuthClients authClients;
+    private PasswordEncoder passwordEncoder;
     @Resource
     private ICacheService iCacheService;
+    @Resource
+    private UserConverter userConverter;
 
     @Override
     public Boolean regist(SysUserExtend sysUser) {
-        Result result = authClients.generatePwd(sysUser.getPassword());
-        String enablePwd = result.get("data").toString();
+        String enablePwd = passwordEncoder.encode(sysUser.getPassword());
         if (StringUtils.isEmpty(enablePwd)) {
             return false;
         }
@@ -87,38 +86,24 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
 
     @Override
     public Boolean modifyPass(String rawPassword, String newPassword) {
-        Result result = authClients.pwdMatches(rawPassword);
-        if (result.get("code").equals(HttpServletResponse.SC_INTERNAL_SERVER_ERROR)) {
-            return false;
-        }
-        String userId = result.get("data").toString();
-        result = authClients.generatePwd(newPassword);
-        String enablePwd = result.get("data").toString();
-        SysUser sysUser = new SysUser();
-        sysUser.setId(userId);
-        sysUser.setPassword(enablePwd);
-        return SqlHelper.retBool(sysUserMapper.updateById(sysUser));
+        boolean matches = passwordEncoder.matches(rawPassword, SecurityUtils.getPassword());
+        String enablePwd = passwordEncoder.encode(newPassword);
+        String userId = SecurityUtils.getUserId();
+        return SqlHelper.retBool(sysUserMapper.update(Wrappers.<SysUser>lambdaUpdate().set(matches, SysUser::getPassword, enablePwd).eq(SysUser::getId, userId)));
     }
 
     @Override
-    public List<SysUser> getPesetPassOfUserListByIds(List<String> ids) {
-        Result result = authClients.getDefaultPwd();
-        String defaultPwd = result.get("data").toString();
-        if (CollectionUtils.isEmpty(ids)) {
-            return null;
+    public Boolean resetPassBatchByIds(List<String> ids) {
+        if (!CollectionUtils.isEmpty(ids)) {
+            return false;
         }
-        List<SysUser> collect = ids.stream().map(id -> {
-            SysUser sysUser = sysUserMapper.selectById(id);
-            sysUser.setPassword(defaultPwd);
-            return sysUser;
-        }).collect(Collectors.toList());
-        return collect;
+        String defaultPwd = passwordEncoder.encode(UserSetConstants.DEFAULT_PASSWORD);
+        return SqlHelper.retBool(sysUserMapper.update(Wrappers.<SysUser>lambdaUpdate().set(SysUser::getPassword, defaultPwd).in(SysUser::getId, ids)));
     }
 
     @Override
     public Boolean retrievePass(SysUser sysUser) {
-        Result result = authClients.generatePwd(sysUser.getPassword());
-        String enablePwd = result.get("data").toString();
+        String enablePwd = passwordEncoder.encode(sysUser.getPassword());
         if (StringUtils.isEmpty(enablePwd)) {
             return false;
         }
@@ -132,13 +117,15 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
     }
 
     @Override
-    public SysUser findByPhone(String phone) {
-        return sysUserMapper.selectOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, phone));
+    public AuthUserInfoVo findByPhone(String phone) {
+        SysUser sysUser = sysUserMapper.selectOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, phone));
+        return userConverter.sysUserToAuthUserVo(sysUser);
     }
 
     @Override
-    public SysUser findByEmail(String email) {
-        return sysUserMapper.selectOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getEmail, email));
+    public AuthUserInfoVo findByEmail(String email) {
+        SysUser sysUser = sysUserMapper.selectOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getEmail, email));
+        return userConverter.sysUserToAuthUserVo(sysUser);
     }
 
     @Override
@@ -147,26 +134,25 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
     }
 
     @Override
-    public SecurityAuthUser getUserByUserName(String username) {
-        SecurityAuthUser securityAuthUser;
-        SysUser cacheUser = iCacheService.getUserBasisCache(username);
-        if (Objects.nonNull(cacheUser)) {
-            securityAuthUser = new SecurityAuthUser(cacheUser);
-        } else {
-            SysUser sysUser = this.findByUsername(username);
+    public AuthUserInfoVo getUserByUserName(String username) {
+        AuthUserInfoVo authUserInfoVo;
+        SysUser sysUser = iCacheService.getUserBasisCache(username);
+        if (Objects.isNull(sysUser)) {
+            sysUser = this.findByUsername(username);
             if (Objects.isNull(sysUser)) {
                 return null;
             }
-            securityAuthUser = new SecurityAuthUser(sysUser);
             iCacheService.setUserBasisCache(username, sysUser);
         }
+        authUserInfoVo = userConverter.sysUserToAuthUserVo(sysUser);
+
         Set<String> groupIdSet = new HashSet<String>();
         Set<String> postIdSet = new HashSet<String>();
         Set<String> roleIdSet = new HashSet<String>();
         List<BaseSecurityMenu> cacheMenuPerm = iCacheService.getUserMenupermCache(username);
         if (Objects.nonNull(cacheMenuPerm)) {
-            securityAuthUser.setMenuScopeList(cacheMenuPerm);
-            return securityAuthUser;
+            authUserInfoVo.setMenuScopeList(cacheMenuPerm);
+            return authUserInfoVo;
         } else {
             //获取用户所拥有的用户组信息
             Set<String> cacheGroupIdSet = iCacheService.getUserGroupCache(username);
@@ -174,7 +160,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
                 groupIdSet = cacheGroupIdSet;
             } else {
                 //获取用户组(已激活的)
-                List<SysUserGroup> sysUserGroupList = iSysUserGroupService.getSysUserGroupByUserId(securityAuthUser.getId());
+                List<SysUserGroup> sysUserGroupList = iSysUserGroupService.getSysUserGroupByUserId(authUserInfoVo.getId());
                 if (!CollectionUtils.isEmpty(sysUserGroupList)) {
                     groupIdSet = sysUserGroupList.stream().map(sysUserGroup -> sysUserGroup.getGroupId()).collect(Collectors.toSet());
                 }
@@ -186,7 +172,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
                 postIdSet = cachePostIdSet;
             } else {
                 //获取用户岗位(已激活的)
-                List<SysScope> sysScopeList = iSysScopeService.getSysScopeByUserId(securityAuthUser.getId());
+                List<SysScope> sysScopeList = iSysScopeService.getSysScopeByUserId(authUserInfoVo.getId());
                 if (!CollectionUtils.isEmpty(sysScopeList)) {
                     postIdSet = sysScopeList.stream().map(sysScope -> sysScope.getPostId()).collect(Collectors.toSet());
                 }
@@ -198,7 +184,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
                 roleIdSet = cacheRoleIdSet;
             } else {
                 //获取用户角色(已激活的)
-                List<SysUserRole> sysUserRoleList = iSysUserRoleService.getSysUserRoleByUserId(securityAuthUser.getId());
+                List<SysUserRole> sysUserRoleList = iSysUserRoleService.getSysUserRoleByUserId(authUserInfoVo.getId());
                 if (!CollectionUtils.isEmpty(sysUserRoleList)) {
                     roleIdSet = sysUserRoleList.stream().map(sysUserRole -> sysUserRole.getId()).collect(Collectors.toSet());
                 }
@@ -206,7 +192,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
             }
             //获取用户菜单权限
             List<BaseSecurityMenu> baseSecurityMenuSet = iSysMenuLimitService.getBaseSecurityMenuByScope(groupIdSet, postIdSet, roleIdSet);
-            securityAuthUser.setMenuScopeList(baseSecurityMenuSet);
+            authUserInfoVo.setMenuScopeList(baseSecurityMenuSet);
             iCacheService.setUserMenupermCache(username, baseSecurityMenuSet);
         }
         //异步获取用户数据权限
@@ -220,7 +206,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
             userDataPermColumnCache = iSysDataService.getUserDataColumnPerm(groupIdSet, postIdSet, roleIdSet);
             iCacheService.setUserDataPermColumnCache(username, userDataPermColumnCache);
         }
-        return securityAuthUser;
+        return authUserInfoVo;
     }
 
     @Override

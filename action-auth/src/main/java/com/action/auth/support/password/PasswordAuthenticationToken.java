@@ -12,10 +12,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * 密码授权模式身份验证令牌(包含用户名和密码等)
- *
- * @author ljf  <lin652210786@163.com>
- * @since 3.0.0
+ * @Description: 密码授权模式身份验证令牌(包含用户名和密码等)
+ * @Author: ljf  <lin652210786@163.com>
+ * @Date: 2024/5/22
  */
 public class PasswordAuthenticationToken extends OAuth2AuthorizationGrantAuthenticationToken {
 

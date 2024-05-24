@@ -6,7 +6,7 @@ import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.entity.*;
 import com.action.system.service.ISysLimitObjService;
 import com.action.system.service.ISysRuleService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("limitObj")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysLimitObjController implements BaseController<ISysLimitObjService, SysLimitObj> {
     private final ISysLimitObjService iSysLimitObjService;
     private final ISysRuleService iSysRuleService;
@@ -63,13 +63,13 @@ public class SysLimitObjController implements BaseController<ISysLimitObjService
     public Result save(@RequestBody SysLimitObj sysLimitObj) {
         SysLimitObj slo = iSysLimitObjService.getOne(this.getLambdaQueryWrapper().eq(SysLimitObj::getLimitObj, sysLimitObj.getLimitObj()));
         if (Objects.nonNull(slo)) {
-            return Result.error("权限标识已存在");
+            return Result.failed("权限标识已存在");
         }
         boolean isSave = iSysLimitObjService.save(sysLimitObj);
         if (isSave) {
             return Result.success("保存数据成功");
         }
-        return Result.error("数据保存失败");
+        return Result.failed("数据保存失败");
     }
 
     /**
@@ -85,13 +85,13 @@ public class SysLimitObjController implements BaseController<ISysLimitObjService
         SysLimitObj oldLimitObj = iSysLimitObjService.getById(sysLimitObj.getId());
         SysLimitObj slo = iSysLimitObjService.getOne(this.getLambdaQueryWrapper().eq(SysLimitObj::getLimitObj, sysLimitObj.getLimitObj()));
         if (!oldLimitObj.getLimitObj().equals(sysLimitObj.getLimitObj()) && Objects.nonNull(slo)) {
-            return Result.error("权限标识已使用");
+            return Result.failed("权限标识已使用");
         }
         boolean isUpdate = iSysLimitObjService.updateById(sysLimitObj);
         if (isUpdate) {
             return Result.success("更新数据成功");
         }
-        return Result.error("更新数据失败");
+        return Result.failed("更新数据失败");
     }
 
     /**
@@ -118,7 +118,7 @@ public class SysLimitObjController implements BaseController<ISysLimitObjService
             iSysLimitObjService.removeBatchByIds(idList);
         }
         if (idExistList.size() > 0) {
-            return Result.error("删除失败，因为包含正被用户使用", idExistList);
+            return Result.failed("删除失败，因为包含正被用户使用", idExistList);
         }
         return Result.success("批量通过id删除数据成功");
     }

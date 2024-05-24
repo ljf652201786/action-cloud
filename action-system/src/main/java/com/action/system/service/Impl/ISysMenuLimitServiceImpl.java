@@ -27,8 +27,8 @@ public class ISysMenuLimitServiceImpl extends ServiceImpl<SysMenuLimitMapper, Sy
     private SysMenuLimitMapper sysMenuLimitMapper;
 
     @Override
-    public Set<SysMenu> getSysMenuByScope(Set<String> deptIdSet, Set<String> postIdSet, Set<String> roleIdSet) {
-        return sysMenuLimitMapper.getSysMenuByScope(deptIdSet, postIdSet, roleIdSet);
+    public Set<SysMenu> getSysMenuByScope(Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet) {
+        return sysMenuLimitMapper.getSysMenuByScope(groupIdSet, postIdSet, roleIdSet);
     }
 
     @Override

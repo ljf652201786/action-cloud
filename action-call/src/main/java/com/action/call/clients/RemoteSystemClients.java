@@ -1,6 +1,8 @@
 package com.action.call.clients;
 
+import com.action.call.config.FeignDecoderConfig;
 import com.action.call.factory.RemoteSystemClientsFallbackFactory;
+import com.action.call.vo.AuthUserInfoVo;
 import com.action.call.vo.LogLoginVo;
 import com.action.call.vo.LogRequestVo;
 import com.action.call.vo.LogSMSVo;
@@ -20,28 +22,28 @@ import java.util.Set;
  * @Author: ljf  <lin652210786@163.com>
  * @Date: 2024/04/02
  */
-@FeignClient(contextId = "systemClients", value = ClientsCirectoryTable.SYSTEM_SERVICE, fallbackFactory = RemoteSystemClientsFallbackFactory.class)
+@FeignClient(contextId = "systemClients", value = ClientsCirectoryTable.SYSTEM_SERVICE, fallbackFactory = RemoteSystemClientsFallbackFactory.class, configuration = {FeignDecoderConfig.class})
 public interface RemoteSystemClients {
 
     @LoadBalanced  //启用负载均衡
     @RequestMapping(value = "user/getUserByPhone", method = RequestMethod.GET)
-    Result getUserByPhone(@RequestParam("phone") String phone);
+    AuthUserInfoVo getUserByPhone(@RequestParam("phone") String phone);
 
     @LoadBalanced  //启用负载均衡
     @RequestMapping(value = "user/getUserByOpenId", method = RequestMethod.GET)
-    Result getUserByOpenId(@RequestParam("openid") String openid);
+    AuthUserInfoVo getUserByOpenId(@RequestParam("openid") String openid);
 
     @LoadBalanced
     @RequestMapping(value = "user/getUserByEmail", method = RequestMethod.GET)
-    Result getUserByEmail(@RequestParam("email") String email);
+    AuthUserInfoVo getUserByEmail(@RequestParam("email") String email);
+
+    @LoadBalanced
+    @RequestMapping(value = "user/getUserByUserName", method = RequestMethod.GET)
+    AuthUserInfoVo getUserByUserName(@RequestParam("username") String username);
 
     @LoadBalanced
     @RequestMapping(value = "user/getUserNameByWeChatCode", method = RequestMethod.GET)
     Result getUserNameByWeChatCode(@RequestParam("code") String code);
-
-    @LoadBalanced
-    @RequestMapping(value = "user/getUserByUserName", method = RequestMethod.GET)
-    Result getUserByUserName(@RequestParam("username") String username);
 
     @LoadBalanced
     @RequestMapping(value = "menu/getSysPermission", method = RequestMethod.GET)

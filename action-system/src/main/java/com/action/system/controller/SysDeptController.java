@@ -6,7 +6,7 @@ import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.entity.*;
 import com.action.system.service.*;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("dept")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysDeptController implements BaseController<ISysDeptService, SysDept> {
     private final ISysDeptService iSysDeptService;
     private final ISysScopeService iSysScopeService;
@@ -50,13 +50,13 @@ public class SysDeptController implements BaseController<ISysDeptService, SysDep
     public Result save(@RequestBody SysDept sysDept) {
         SysDept sd = iSysDeptService.getOne(this.getLambdaQueryWrapper().eq(SysDept::getDeptCode, sysDept.getDeptCode()));
         if (Objects.nonNull(sd)) {
-            return Result.error("部门编码已存在");
+            return Result.failed("部门编码已存在");
         }
         boolean isSave = iSysDeptService.save(sysDept);
         if (isSave) {
             return Result.success("保存数据成功");
         }
-        return Result.error("数据保存失败");
+        return Result.failed("数据保存失败");
     }
 
     /**
@@ -72,13 +72,13 @@ public class SysDeptController implements BaseController<ISysDeptService, SysDep
         SysDept oldDept = iSysDeptService.getById(sysDept.getId());
         SysDept sd = iSysDeptService.getOne(this.getLambdaQueryWrapper().eq(SysDept::getDeptCode, sysDept.getDeptCode()));
         if (!oldDept.getDeptCode().equals(sysDept.getDeptCode()) && Objects.nonNull(sd)) {
-            return Result.error("部门编码已存在");
+            return Result.failed("部门编码已存在");
         }
         boolean isUpdate = iSysDeptService.updateById(sysDept);
         if (isUpdate) {
             return Result.success("更新数据成功");
         }
-        return Result.error("更新数据失败");
+        return Result.failed("更新数据失败");
     }
 
     /**
@@ -105,7 +105,7 @@ public class SysDeptController implements BaseController<ISysDeptService, SysDep
             iSysDeptService.removeBatchByIds(idList);
         }
         if (idExistList.size() > 0) {
-            return Result.error("该部门删除失败，因为包含正被使用", idExistList);
+            return Result.failed("该部门删除失败，因为包含正被使用", idExistList);
         }
         return Result.success("批量通过id删除数据成功");
     }
@@ -122,7 +122,7 @@ public class SysDeptController implements BaseController<ISysDeptService, SysDep
     public Result disable(@PathVariable String id) {
         SysDept sysDept = iSysDeptService.getById(id);
         if (Objects.isNull(sysDept)) {
-            return Result.error("该部门不存在");
+            return Result.failed("该部门不存在");
         }
         sysDept.setStatus(UseType.DISABLED.getStatus());
         iSysDeptService.updateById(sysDept);
@@ -143,7 +143,7 @@ public class SysDeptController implements BaseController<ISysDeptService, SysDep
     public Result enable(@PathVariable String id) {
         SysDept sysDept = iSysDeptService.getById(id);
         if (Objects.isNull(sysDept)) {
-            return Result.error("该部门不存在");
+            return Result.failed("该部门不存在");
         }
         sysDept.setStatus(UseType.ENABLE.getStatus());
         iSysDeptService.updateById(sysDept);

@@ -17,13 +17,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 验证码模式参数解析器
- * <p>
+ * @Description: 验证码模式参数解析器
  * 解析请求参数中的用户名和密码，并构建相应的身份验证(Authentication)对象
- *
- * @author haoxr
  * @see org.springframework.security.oauth2.server.authorization.web.authentication.OAuth2AuthorizationCodeAuthenticationConverter
- * @since 3.0.0
+ * @Author: ljf  <lin652210786@163.com>
+ * @Date: 2024/5/22
  */
 public class CaptchaAuthenticationConverter implements AuthenticationConverter {
 

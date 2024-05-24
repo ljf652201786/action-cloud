@@ -7,7 +7,7 @@ import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.entity.SysPost;
 import com.action.system.service.ISysPostService;
 import com.action.system.service.ISysScopeService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 @RestController
 @RequestMapping("post")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SysPostController implements BaseController<ISysPostService, SysPost> {
     private final ISysPostService iSysPostService;
     private final ISysScopeService iSysScopeService;
@@ -51,13 +51,13 @@ public class SysPostController implements BaseController<ISysPostService, SysPos
     public Result save(@RequestBody SysPost sysPost) {
         SysPost sp = iSysPostService.getOne(this.getLambdaQueryWrapper().eq(SysPost::getPostCode, sysPost.getPostCode()));
         if (Objects.nonNull(sp)) {
-            return Result.error("岗位编码已存在");
+            return Result.failed("岗位编码已存在");
         }
         boolean isSave = iSysPostService.save(sysPost);
         if (isSave) {
             return Result.success("保存数据成功");
         }
-        return Result.error("保存数据失败");
+        return Result.failed("保存数据失败");
     }
 
     /**
@@ -73,13 +73,13 @@ public class SysPostController implements BaseController<ISysPostService, SysPos
         SysPost oldPost = iSysPostService.getById(sysPost.getId());
         SysPost sp = iSysPostService.getOne(this.getLambdaQueryWrapper().eq(SysPost::getPostCode, sysPost.getPostCode()));
         if (!oldPost.getPostCode().equals(sysPost.getPostCode()) && Objects.nonNull(sp)) {
-            return Result.error("岗位编码已存在");
+            return Result.failed("岗位编码已存在");
         }
         boolean isUpdate = iSysPostService.updateById(sysPost);
         if (isUpdate) {
             return Result.success("更新数据成功");
         }
-        return Result.error("更新数据失败");
+        return Result.failed("更新数据失败");
     }
 
     /**
@@ -106,7 +106,7 @@ public class SysPostController implements BaseController<ISysPostService, SysPos
             iSysPostService.removeBatchByIds(idList);
         }
         if (idExistList.size() > 0) {
-            return Result.error("该岗位删除失败，因为包含正被用户使用", idExistList);
+            return Result.failed("该岗位删除失败，因为包含正被用户使用", idExistList);
         }
         return Result.success("批量通过id删除数据成功");
     }
@@ -123,7 +123,7 @@ public class SysPostController implements BaseController<ISysPostService, SysPos
     public Result disable(@PathVariable String id) {
         SysPost sysPost = iSysPostService.getById(id);
         if (Objects.isNull(sysPost)) {
-            return Result.error("该部门不存在");
+            return Result.failed("该部门不存在");
         }
         sysPost.setStatus(UseType.DISABLED.getStatus());
         iSysPostService.updateById(sysPost);
@@ -143,7 +143,7 @@ public class SysPostController implements BaseController<ISysPostService, SysPos
     public Result enable(@PathVariable String id) {
         SysPost sysPost = iSysPostService.getById(id);
         if (Objects.isNull(sysPost)) {
-            return Result.error("该部门不存在");
+            return Result.failed("该部门不存在");
         }
         sysPost.setStatus(UseType.ENABLE.getStatus());
         iSysPostService.updateById(sysPost);
