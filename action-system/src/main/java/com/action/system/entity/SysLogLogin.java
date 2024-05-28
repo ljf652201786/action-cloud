@@ -48,23 +48,4 @@ public class SysLogLogin {
     private String osGroup;
     @TableField("os_manufacturer")
     private String osManufacturer;
-
-    public SysLogLogin buildSysLogLogin(LogLoginVo logLoginVo) {
-        this.username = logLoginVo.getUsername();
-        this.ipAddress = logLoginVo.getIpAddress();
-        this.status = logLoginVo.getStatus();
-        this.msg = logLoginVo.getMsg();
-        this.requestTime = logLoginVo.getRequestTime();
-        this.browserName = logLoginVo.getBrowserName();
-        this.browserType = logLoginVo.getBrowserType();
-        this.browserGroup = logLoginVo.getBrowserGroup();
-        this.browserManufacturer = logLoginVo.getBrowserManufacturer();
-        this.browserRenderingengine = logLoginVo.getBrowserRenderingengine();
-        this.browserVersion = logLoginVo.getBrowserVersion();
-        this.osName = logLoginVo.getOsName();
-        this.osType = logLoginVo.getOsType();
-        this.osGroup = logLoginVo.getOsGroup();
-        this.osManufacturer = logLoginVo.getOsManufacturer();
-        return this;
-    }
 }

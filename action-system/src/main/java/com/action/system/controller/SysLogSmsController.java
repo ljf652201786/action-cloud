@@ -1,52 +1,52 @@
 package com.action.system.controller;
 
+import com.action.call.vo.LogSMSVo;
 import com.action.common.core.common.Result;
 import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
-import com.action.system.converter.LogLoginConverter;
-import com.action.system.entity.SysLogLogin;
-import com.action.system.service.ISysLogLoginService;
-import com.action.call.vo.LogLoginVo;
+import com.action.system.entity.SysLogSms;
+import com.action.system.service.ISysLogSmsService;
+import com.action.system.converter.LogSmsConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 /**
- * @Description: 登录日志管理
+ * @Description: 请求短信日志管理
  * @Author: ljf  <lin652210786@163.com>
  * @Date: 2024/04/14
  */
 @RestController
-@RequestMapping("logLogin")
+@RequestMapping("logSms")
 @RequiredArgsConstructor
-public class SysLogLoginController implements BaseController<ISysLogLoginService, SysLogLogin> {
-    private final ISysLogLoginService iSysLogLoginService;
+public class SysLogSmsController implements BaseController<ISysLogSmsService, SysLogSms> {
+    private final ISysLogSmsService iSysLogSmsService;
 
     /**
      * @param query 查询对象
-     * @Description: 字典列表
+     * @Description: 短信日志列表
      * @return: Result 结果集
      * @throws:
      * @Author: ljf  <lin652210786@163.com>
      * @Date: 2024/4/14
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result getDictList(SysLogLogin sysLogLogin, BaseQuery query) {
-        return this.page(iSysLogLoginService, sysLogLogin, query);
+    public Result getDictList(SysLogSms sysLogSms, BaseQuery query) {
+        return this.page(iSysLogSmsService, sysLogSms, query);
     }
 
     /**
-     * @param logLoginVo 登录日志对象
-     * @Description: 保存登录日志
+     * @param logSMSVo 请求短信日志对象
+     * @Description: 保存请求日志
      * @return: Result 结果集
      * @throws:
      * @Author: ljf  <lin652210786@163.com>
      * @Date: 2024/4/14
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    public Result save(@RequestBody LogLoginVo logLoginVo) {
-        boolean isSave = iSysLogLoginService.save(LogLoginConverter.INSTANCE.logLoginVoToSysLogLogin(logLoginVo));
+    public Result save(@RequestBody LogSMSVo logSMSVo) {
+        boolean isSave = iSysLogSmsService.save(LogSmsConverter.INSTANCE.logSMSVoToSysLogSms(logSMSVo));
         if (isSave) {
             return Result.success("保存数据成功");
         }
@@ -54,8 +54,8 @@ public class SysLogLoginController implements BaseController<ISysLogLoginService
     }
 
     /**
-     * @param ids 登录日志id集合
-     * @Description: 批量删除登录日志
+     * @param ids 请求日志id集合
+     * @Description: 批量删除短信日志
      * @return: Result 结果集
      * @throws:
      * @Author: ljf  <lin652210786@163.com>
@@ -63,7 +63,7 @@ public class SysLogLoginController implements BaseController<ISysLogLoginService
      */
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
-        boolean isRemove = iSysLogLoginService.removeBatchByIds(ids);
+        boolean isRemove = iSysLogSmsService.removeBatchByIds(ids);
         if (isRemove) {
             return Result.success("批量通过id删除数据成功");
         }

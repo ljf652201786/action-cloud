@@ -86,22 +86,4 @@ public class ISysDataServiceImpl extends ServiceImpl<SysDataMapper, SysData> imp
             }
         });
     }
-
-    public static void main(String[] args) {
-        Set<SysDataColumnLimit> sysDataColumnLimits = new HashSet<>();
-        sysDataColumnLimits.add(new SysDataColumnLimit("1", "2", "2", "2", "2"));
-        sysDataColumnLimits.add(new SysDataColumnLimit("1", "3", "2", "2", "2"));
-        sysDataColumnLimits.add(new SysDataColumnLimit("2", "4", "2", "2", "2"));
-        sysDataColumnLimits.add(new SysDataColumnLimit("3", "5", "2", "2", "2"));
-        sysDataColumnLimits.add(new SysDataColumnLimit("3", "6", "2", "2", "2"));
-//        Map<String, List<SysDataColumnLimit>> collect = sysDataColumnLimits.stream().map(ss->{
-//            return new DataColumnFilterStruct();
-//        }).collect(Collectors.groupingBy(SysDataColumnLimit::getDataId));
-        Map<String, Set<String>> collect = sysDataColumnLimits.stream().collect(
-                Collectors.groupingBy(po -> po.getDataId(),
-                        Collectors.mapping(po -> po.getType(), Collectors.toSet())
-                )
-        );
-        System.out.println(collect);
-    }
 }

@@ -1,0 +1,55 @@
+version: "3.8"
+
+
+networks:
+  blog_net:
+
+services:
+
+  gateway: # 网关
+    container_name: gateway
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - "10010:10010"
+    networks:
+      - blog_net
+
+  system:
+    container_name: system
+    build:
+      context: ./system
+      dockerfile: Dockerfile
+    image: system:latest
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /etc/localtime:/etc/localtime:ro  #配置与宿主机时钟一致
+      - /etc/timezone/timezone:/etc/timezone:ro #配置与宿主机时钟一致
+    ports:
+      - 7001:7001
+    depends_on:
+      - nacos
+    networks:
+      - jg_network
+    restart: always
+
+  business:
+    container_name: business
+    build:
+      context: ./business
+      dockerfile: Dockerfile
+    image: business:latest
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - /etc/localtime:/etc/localtime:ro  #配置与宿主机时钟一致
+      - /etc/timezone/timezone:/etc/timezone:ro #配置与宿主机时钟一致
+    ports:
+      - 7002:7002
+    depends_on:
+      - nacos
+    networks:
+      - jg_network
+    restart: always

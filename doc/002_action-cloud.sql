@@ -11,9 +11,8 @@
  Target Server Version : 50725
  File Encoding         : 65001
 
- Date: 15/05/2024 15:56:58
+ Date: 24/05/2024 11:12:40
 */
-use action-cloud;
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
@@ -371,6 +370,21 @@ INSERT INTO `sys_log_request` VALUES (1, '操作日志', 9, 1, 'admin', 'com.pla
 INSERT INTO `sys_log_request` VALUES (2, '角色管理', 2, 1, 'admin', 'com.platform.system.controller.SysRoleController.edit()', 'PUT', '/role', '127.0.0.1', NULL, 0x7B22666C6167223A66616C73652C22726F6C654964223A312C2261646D696E223A747275652C2272656D61726B223A22E8B685E7BAA7E7AEA1E79086E59198222C226461746153636F7065223A2231222C2264656C466C6167223A2230222C22706172616D73223A7B7D2C22726F6C65536F7274223A2231222C2264657074436865636B5374726963746C79223A747275652C2263726561746554696D65223A313532313137313138303030302C226D656E75436865636B5374726963746C79223A747275652C22726F6C654B6579223A2261646D696E222C22726F6C654E616D65223A22E8B685E7BAA7E7AEA1E79086E59198222C226D656E75496473223A5B312C3130302C313030312C313030322C313030332C313030342C313030352C313030362C313030372C3130312C313030382C313030392C313031302C313031312C313031322C3130322C313031332C313031342C313031352C313031362C3130332C313031372C313031382C313031392C313032302C3130342C313032312C313032322C313032332C313032342C313032352C3130352C313032362C313032372C313032382C313032392C313033302C3130362C313033312C313033322C313033332C313033342C313033352C3130372C313034312C313034322C313034332C313034342C3130382C3530302C313034352C313034362C313034372C3530312C313034382C313034392C313035302C322C3130392C313035312C313035322C313035332C3131302C313035342C313035352C313035362C313035372C313035382C313035392C3131312C3131322C3131332C332C3131342C3131352C313036302C313036312C313036332C313036322C313036342C313036352C3131362C323030302C323030312C323030322C323030332C323030342C323030355D2C22737461747573223A2230227D, '2021-02-26 10:03:37', 0x6E756C6C, '0', 0xE4B88DE58581E8AEB8E6938DE4BD9CE8B685E7BAA7E7AEA1E79086E59198E8A792E889B2);
 
 -- ----------------------------
+-- Table structure for sys_log_sms
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_log_sms`;
+CREATE TABLE `sys_log_sms`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户账号',
+  `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '手机号',
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '发送状态',
+  `msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '内容信息',
+  `request_time` datetime(0) NULL DEFAULT NULL COMMENT '请求时间',
+  `expire_time` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '有效期（秒）',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '短信日志表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for sys_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_menu`;
@@ -516,7 +530,7 @@ INSERT INTO `sys_menu` VALUES (1681549037645479937, 1681514181238603778, 'xml修
 INSERT INTO `sys_menu` VALUES (1681549108466302978, 1681514181238603778, 'xml删除', 'F', '', 'system:mapper:remove', '', '', '', 1, '', 1, 3, '0', '0', '', '', NULL, '', NULL);
 INSERT INTO `sys_menu` VALUES (1681549180574777346, 1681514181238603778, 'xml导出', 'F', '', 'system:mapper:export', '', '', '', 1, '', 1, 4, '0', '0', '', '', NULL, '', NULL);
 INSERT INTO `sys_menu` VALUES (1683761702220517377, 0, '代码流程设计', 'M', 'ph:code-fill', 'code', 'code-flow', '/code-flow', '/code-flow', 1, '', 1, 4, '0', '0', '低代码流程设计', '', NULL, '', NULL);
-INSERT INTO `sys_menu` VALUES (1683762378296184833, 1683761702220517377, '项目模板', 'C', 'tabler:template', 'code:template:list', 'code-flow-project-template', '/code-flow/project-template', '/code-flow/project-template', 1, '', 1, 0, '0', '0', '', '', NULL, '', NULL);
+INSERT INTO `sys_menu` VALUES (1683762378296184833, 1683761702220517377, '项目模板', 'C', 'tabler:template', 'sys:common:ese', 'code-flow-project-template', '/common/e', '/code-flow/project-template', 1, '', 1, 0, '0', '1', '', '', NULL, '', NULL);
 
 -- ----------------------------
 -- Table structure for sys_menu_limit
@@ -529,7 +543,12 @@ CREATE TABLE `sys_menu_limit`  (
   `menu_id` bigint(20) NOT NULL COMMENT '菜单ID',
   `status` char(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态 1  启用 0 禁用',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '功能权限表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '功能权限表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_menu_limit
+-- ----------------------------
+INSERT INTO `sys_menu_limit` VALUES (1, '2', 2, 1683762378296184833, '1');
 
 -- ----------------------------
 -- Table structure for sys_menu_rule
@@ -626,7 +645,12 @@ CREATE TABLE `sys_scope`  (
   `dept_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '部门状态（1正常 0停用）',
   `post_status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '岗位状态（1正常 0停用）',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '范围表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '范围表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_scope
+-- ----------------------------
+INSERT INTO `sys_scope` VALUES (1, 1770275787111649281, '108', 2, '1', '1');
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -653,9 +677,9 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, '/api/file/2023/05/31/3989b38e-c10f-415f-9dce-9b12ebf47cf4.png', 'admin', '张三', '2889b4ce36d64937c1489ed9ba3ca80112aa62c0', 'ry@163.com', '15888888888', '1', '1', '12', '2018-03-16 11:33:00', 'ry', '2021-06-25 10:53:14', '管理员');
-INSERT INTO `sys_user` VALUES (1769929093765304322, '', 'user3', '张三3', '$2a$10$b02AzHxH3KLzk0NMwTFWv.qBIo3.g8.kyXY9uJjXhdE9OND1IgbRe', '', '', '0', '0', '', NULL, '', NULL, NULL);
-INSERT INTO `sys_user` VALUES (1770275787111649281, '', 'wangwu', '王五', '{bcrypt}$2a$10$vXmtX1s5VFFPHf2ZqcHM7euv5P3NUfG/qh9d.tbBVXx3tXFG3U1am', '', '', '1', '0', '', NULL, '', NULL, NULL);
+INSERT INTO `sys_user` VALUES (1, '/api/file/2023/05/31/3989b38e-c10f-415f-9dce-9b12ebf47cf4.png', 'admin', '张三', '{bcrypt}$2a$10$vXmtX1s5VFFPHf2ZqcHM7euv5P3NUfG/qh9d.tbBVXx3tXFG3U1am', 'ry@163.com', '15888888888', '1', '1', '12', '2018-03-16 11:33:00', 'ry', '2021-06-25 10:53:14', '管理员');
+INSERT INTO `sys_user` VALUES (1769929093765304322, '', 'user3', '张三3', '{bcrypt}$2a$10$vXmtX1s5VFFPHf2ZqcHM7euv5P3NUfG/qh9d.tbBVXx3tXFG3U1am', '', '', '0', '0', '', NULL, '', NULL, NULL);
+INSERT INTO `sys_user` VALUES (1770275787111649281, '', 'wangwu', '王五', '{bcrypt}$2a$10$vXmtX1s5VFFPHf2ZqcHM7euv5P3NUfG/qh9d.tbBVXx3tXFG3U1am', '', '', '1', '1', '', NULL, '', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_group
@@ -679,6 +703,11 @@ CREATE TABLE `sys_user_role`  (
   `role_id` bigint(20) NOT NULL COMMENT '角色ID',
   `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '状态 1  启用 0 禁用',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户和角色关联表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户和角色关联表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_user_role
+-- ----------------------------
+INSERT INTO `sys_user_role` VALUES (1, 1770275787111649281, 2, '1');
 
 SET FOREIGN_KEY_CHECKS = 1;

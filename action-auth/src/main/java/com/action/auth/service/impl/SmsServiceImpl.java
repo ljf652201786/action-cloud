@@ -51,7 +51,7 @@ public class SmsServiceImpl implements ISmsService {
             // 将验证码存入redis，有效期5分钟
             redisCacheHandle.set(RedisConstants.REGISTER_SMS_CODE_PREFIX + phone, code, expireTime);
         }
-        LogSMSVo logSMSVo = new LogSMSVo(phone, templateParams, result, new Date(), expireTime);
+        LogSMSVo logSMSVo = new LogSMSVo(phone, templateParams, result, new Date(), String.valueOf(expireTime));
         remoteSystemClients.save(logSMSVo);
         return result;
     }

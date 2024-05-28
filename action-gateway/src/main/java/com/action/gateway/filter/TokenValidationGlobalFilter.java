@@ -20,10 +20,9 @@ import reactor.core.publisher.Mono;
 import java.text.ParseException;
 
 /**
- * Token 验证全局过滤器
- *
- * @author Ray Hao
- * @since 3.1.0
+ * @Description: Token 验证全局过滤器
+ * @Author: ljf  <lin652210786@163.com>
+ * @Date: 2024/5/28
  */
 @Component
 @RequiredArgsConstructor

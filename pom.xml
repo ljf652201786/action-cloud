@@ -46,6 +46,7 @@
         <!-- common依赖 -->
         <action-common-sms.version>1.0-SNAPSHOT</action-common-sms.version>
         <action-common-mybatisplus-extend.version>1.0-SNAPSHOT</action-common-mybatisplus-extend.version>
+        <action-common-biz.version>1.0-SNAPSHOT</action-common-biz.version>
         <action-common-security.version>1.0-SNAPSHOT</action-common-security.version>
         <action-common-file.version>1.0-SNAPSHOT</action-common-file.version>
     </properties>
@@ -113,6 +114,12 @@
                 <groupId>com.action</groupId>
                 <artifactId>action-common-mybatisplus-extend</artifactId>
                 <version>${action-common-mybatisplus-extend.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.action</groupId>
+                <artifactId>action-common-biz</artifactId>
+                <version>${action-common-biz.version}</version>
             </dependency>
 
             <dependency>
@@ -226,4 +233,22 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>ys-maven-group</id>
+            <name>Nexus yusui</name>
+            <url>http://192.168.1.45:8088/repository/ys-maven-group/</url>
+        </repository>
+    </repositories>
 </project>

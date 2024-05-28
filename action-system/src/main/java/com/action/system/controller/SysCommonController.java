@@ -1,5 +1,6 @@
 package com.action.system.controller;
 
+import com.action.common.biz.exception.BizException;
 import com.action.common.core.common.Result;
 import com.action.common.core.service.MailService;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 
 /**
@@ -37,8 +39,7 @@ public class SysCommonController {
 
     @PreAuthorize("@ss.hasPerm('sys:common:ese')")
     @RequestMapping(value = "e", method = RequestMethod.GET)
-    public Result ese(){
-        System.out.println("23424");
-        return Result.success();
+    public Result ese() {
+        throw new BizException("234243");
     }
 }

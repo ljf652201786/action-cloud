@@ -45,22 +45,4 @@ public class SysLogRequest {
     private String login_status;
     @TableField("exception_msg")
     private String exception_msg;
-
-    public SysLogRequest buildSysLogRequest(LogRequestVo logRequestVo) {
-        this.model_name = logRequestVo.getModel_name();
-        this.business_type = logRequestVo.getBusiness_type();
-        this.operator_type = logRequestVo.getOperator_type();
-        this.operator_user = logRequestVo.getOperator_user();
-        this.method_name = logRequestVo.getMethod_name();
-        this.request_method = logRequestVo.getRequest_method();
-        this.request_url = logRequestVo.getRequest_url();
-        this.request_ip = logRequestVo.getRequest_ip();
-        this.request_location = logRequestVo.getRequest_location();
-        this.request_param = logRequestVo.getRequest_param();
-        this.request_time = logRequestVo.getRequest_time();
-        this.response_param = logRequestVo.getResponse_param();
-        this.login_status = logRequestVo.getLogin_status();
-        this.exception_msg = logRequestVo.getException_msg();
-        return this;
-    }
 }

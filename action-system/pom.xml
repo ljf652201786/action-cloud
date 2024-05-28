@@ -12,14 +12,12 @@
 
     <name>action-system</name>
 
-
     <properties>
-        <mybatis-plus-boot-starter.version>3.5.5</mybatis-plus-boot-starter.version>
-        <mybatis-spring.version>3.0.3</mybatis-spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
+        <!-- Spring依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -36,6 +34,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- 服务依赖 -->
+        <dependency>
             <groupId>com.action</groupId>
             <artifactId>action-common</artifactId>
         </dependency>
@@ -45,6 +49,7 @@
             <artifactId>action-call</artifactId>
         </dependency>
 
+        <!-- common依赖 -->
         <dependency>
             <groupId>com.action</groupId>
             <artifactId>action-common-security</artifactId>
@@ -52,9 +57,15 @@
 
         <dependency>
             <groupId>com.action</groupId>
+            <artifactId>action-common-biz</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.action</groupId>
             <artifactId>action-common-mybatisplus-extend</artifactId>
         </dependency>
 
+        <!-- 第三方依赖 -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -81,4 +92,53 @@
             </exclusions>
         </dependency>
     </dependencies>
+
+    <!-- <build>
+         <plugins>
+             <plugin>
+                 <groupId>org.springframework.boot</groupId>
+                 <artifactId>spring-boot-maven-plugin</artifactId>
+             </plugin>
+             <plugin>&lt;!&ndash;制作docker镜像的maven插件&ndash;&gt;
+                 <groupId>com.spotify</groupId>
+                 <artifactId>docker-maven-plugin</artifactId>
+                 <version>1.2.2</version>
+                 <executions>
+                     <execution>
+                         <id>build-image</id>
+                         <phase>package</phase>
+                         <goals>
+                             <goal>build</goal>
+                         </goals>
+                     </execution>
+                 </executions>
+                 <configuration>
+                     <imageName>${project.artifactId}</imageName>&lt;!&ndash;镜像名,注意:这里的镜像名一定要小写，如果你的应用名字是大写会报错的&ndash;&gt;
+                     <imageTags>
+                         <imageTag>latest</imageTag>
+                     </imageTags>
+                     <dockerDirectory>${project.basedir}</dockerDirectory>&lt;!&ndash;Dockerfile所在的目录&ndash;&gt;
+                     <dockerHost>http://192.168.1.42:2375</dockerHost>&lt;!&ndash;docker所在的宿主机地址,或者填写http://yourip:2375&ndash;&gt;
+                     <resources>
+                         <resource>&lt;!&ndash;这里配置的就是打包后jar所在的位置&ndash;&gt;
+                             <targetPath>/</targetPath>
+                             <directory>${project.build.directory}</directory>&lt;!&ndash;构建的class文件路径 一般是target&ndash;&gt;
+                             <include>${project.build.finalName}-${project.version}.jar</include>
+                         </resource>
+                     </resources>
+                 </configuration>
+             </plugin>
+         </plugins>
+     </build>-->
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

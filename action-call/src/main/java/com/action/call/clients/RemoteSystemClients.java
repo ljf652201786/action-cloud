@@ -6,7 +6,6 @@ import com.action.call.vo.AuthUserInfoVo;
 import com.action.call.vo.LogLoginVo;
 import com.action.call.vo.LogRequestVo;
 import com.action.call.vo.LogSMSVo;
-import com.action.common.core.base.BaseSecurityMenu;
 import com.action.common.core.common.Result;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Set;
 
 /**
  * @Description:
@@ -44,10 +41,6 @@ public interface RemoteSystemClients {
     @LoadBalanced
     @RequestMapping(value = "user/getUserNameByWeChatCode", method = RequestMethod.GET)
     Result getUserNameByWeChatCode(@RequestParam("code") String code);
-
-    @LoadBalanced
-    @RequestMapping(value = "menu/getSysPermission", method = RequestMethod.GET)
-    Result getSysPermission();
 
     @LoadBalanced
     @RequestMapping(value = "logRequest/save", method = RequestMethod.POST)

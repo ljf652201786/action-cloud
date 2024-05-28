@@ -14,5 +14,5 @@ public class LogSMSVo {
     private String msg;
     private boolean status;
     private Date requestTime;
-    private Long expireTime;
+    private String expireTime;
 }

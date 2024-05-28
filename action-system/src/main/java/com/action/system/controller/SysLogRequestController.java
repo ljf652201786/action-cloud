@@ -3,6 +3,7 @@ package com.action.system.controller;
 import com.action.common.core.common.Result;
 import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
+import com.action.system.converter.LogRequestConverter;
 import com.action.system.entity.SysLogRequest;
 import com.action.system.service.ISysLogRequestService;
 import com.action.call.vo.LogRequestVo;
@@ -24,7 +25,7 @@ public class SysLogRequestController implements BaseController<ISysLogRequestSer
 
     /**
      * @param query 查询对象
-     * @Description: 字典列表
+     * @Description: 请求日志列表
      * @return: Result 结果集
      * @throws:
      * @Author: ljf  <lin652210786@163.com>
@@ -45,7 +46,7 @@ public class SysLogRequestController implements BaseController<ISysLogRequestSer
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody LogRequestVo logRequestVo) {
-        boolean isSave = iSysLogRequestService.save(new SysLogRequest().buildSysLogRequest(logRequestVo));
+        boolean isSave = iSysLogRequestService.save(LogRequestConverter.INSTANCE.logRequestVoToSysLogRequest(logRequestVo));
         if (isSave) {
             return Result.success("保存数据成功");
         }
