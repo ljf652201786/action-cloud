@@ -21,7 +21,7 @@ CMD java \
     -jar /app.jar
 
 # 声明容器提供服务端口
-EXPOSE 8887
+EXPOSE 6666
 
 
 
