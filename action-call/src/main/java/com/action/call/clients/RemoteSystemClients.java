@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
- * @Description:
+ * @Description: system远程服务
  * @Author: ljf  <lin652210786@163.com>
  * @Date: 2024/04/02
  */

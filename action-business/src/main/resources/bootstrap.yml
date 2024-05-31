@@ -1,20 +1,5 @@
-server:
-  port: 8887
 spring:
   application:
-    name: action-business
+    name: action-test
   profiles:
-    # 环境配置
     active: dev
-  cloud:
-    nacos:
-      server-addr: 127.0.0.1:8848
-      username: nacos
-      password: nacos
-      config:
-        file-extension: yaml
-        shared-configs[0]:
-          data-id: action-common.yaml
-          refresh: true
-
-
