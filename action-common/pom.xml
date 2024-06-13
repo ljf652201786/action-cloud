@@ -48,11 +48,6 @@
             <artifactId>action-common-core</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.action</groupId>
-            <artifactId>action-common-file</artifactId>
-        </dependency>
-
         <!-- 第三方依赖 -->
         <dependency>
             <groupId>com.alibaba</groupId>

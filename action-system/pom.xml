@@ -62,7 +62,18 @@
 
         <dependency>
             <groupId>com.action</groupId>
+            <artifactId>action-common-file</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.action</groupId>
             <artifactId>action-common-mybatisplus-extend</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.action</groupId>
+            <artifactId>action-common-media</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <!-- 第三方依赖 -->

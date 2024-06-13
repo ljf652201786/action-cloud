@@ -4,9 +4,9 @@
 | 名称                               | 版本                 |
 |----------------------------------|--------------------|
 | **JDK**                          | **17**             |
-| **spring.cloud.alibaba.version** | **2022.0.0.0-RC2** |
-| **spring.cloud.version**         | **2022.0.3**       |
-| **spring.boot.version**          | **3.1.0**          |
+| **spring.cloud.alibaba.version** | **2023.0.0.0-RC1** |
+| **spring.cloud.version**         | **2023.0.0**       |
+| **spring.boot.version**          | **3.2.3**          |
 
 
 

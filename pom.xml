@@ -43,7 +43,7 @@
         <aliyun.java.sdk.dysmsapi.version>2.2.1</aliyun.java.sdk.dysmsapi.version>
         <!-- 附加依赖 -->
         <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
-        <!-- common依赖 -->
+        <!-- common依赖包 -->
         <action-common-sms.version>1.0-SNAPSHOT</action-common-sms.version>
         <action-common-mybatisplus-extend.version>1.0-SNAPSHOT</action-common-mybatisplus-extend.version>
         <action-common-biz.version>1.0-SNAPSHOT</action-common-biz.version>
