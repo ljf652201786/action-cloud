@@ -1,7 +1,7 @@
 package com.action.system.enums;
 
 public enum MenuType {
-    LIST("L"),//目录
+    LIST("C"),//目录
     MENU("M"),//菜单
     BUTTON("B");//按钮
     private String type;

@@ -5,12 +5,10 @@ import com.action.system.entity.SysScope;
 import com.action.system.mapper.SysScopeMapper;
 import com.action.system.service.ICacheService;
 import com.action.system.service.ISysScopeService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -25,11 +23,10 @@ import java.util.stream.Collectors;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> implements ISysScopeService {
-    @Resource
-    private SysScopeMapper sysScopeMapper;
-    @Resource
-    private ICacheService iCacheService;
+    private final SysScopeMapper sysScopeMapper;
+    private final ICacheService iCacheService;
 
     public List<SysScope> getSysScopeByUserId(String userId) {
         return sysScopeMapper.selectList(Wrappers.<SysScope>lambdaQuery().eq(SysScope::getUserId, userId).eq(SysScope::getDeptStatus, UseType.ENABLE.getStatus()).eq(SysScope::getPostStatus, UseType.ENABLE.getStatus()));

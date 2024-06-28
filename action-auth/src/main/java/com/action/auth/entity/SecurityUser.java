@@ -28,27 +28,27 @@ import java.util.stream.Collectors;
  * @Date: 2024/03/25
  */
 public class SecurityUser extends BaseSecurityUser implements UserDetails, CredentialsContainer {
+    private Collection<GrantedAuthority> authorities;
 
     public SecurityUser() {
     }
 
-    public <T extends BaseSecurityUser> SecurityUser(List<? extends BaseSecurityMenu> menuScopeList, String userId, String username, String password, String status) {
-        super(menuScopeList, userId, username, password, status);
+    public SecurityUser(String userId, String username, String password, String status, List<? extends GrantedAuthority> authorities) {
+        super(userId, username, password, status, null);
+        this.authorities = Collections.unmodifiableList(authorities);
     }
 
     public <T extends BaseSecurityUser> SecurityUser(T user) {
-        super(user.getMenuScopeList(), user.getId(), user.getUsername(), user.getPassword(), user.getStatus());
-    }
-
-    public static String buildPer(BaseSecurityMenu menu) {
-        if (Objects.nonNull(menu) && StringUtils.isNotEmpty(menu.getPath()) && StringUtils.isNotEmpty(menu.getPerms())) {
-            return menu.getPath() + StringPool.LEFT_SQ_BRACKET + menu.getPerms() + StringPool.RIGHT_SQ_BRACKET;
-        }
-        return null;
+        super(user.getId(), user.getUsername(), user.getPassword(), user.getStatus(), user.getMenuScopeList());
+        this.authorities = buildAuthority();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    private List<GrantedAuthority> buildAuthority() {
         List<GrantedAuthority> authorityList = new ArrayList<>();
         List<? extends BaseSecurityMenu> menuScopeList = this.getMenuScopeList();
         // 请求权限
@@ -60,7 +60,6 @@ public class SecurityUser extends BaseSecurityUser implements UserDetails, Crede
                     }).collect(Collectors.toList());
             authorityList.addAll(menuCollect);
         }
-
         // 添加角色
         /*Set<? extends BaseSecurityRole> roleScopeList = this.getRoleScopeList();
         if (!Collections.isEmpty(roleScopeList)) {
@@ -70,6 +69,13 @@ public class SecurityUser extends BaseSecurityUser implements UserDetails, Crede
             authorityList.addAll(roleCollect);
         }*/
         return authorityList;
+    }
+
+    public static String buildPer(BaseSecurityMenu menu) {
+        if (Objects.nonNull(menu) && StringUtils.isNotEmpty(menu.getPath()) && StringUtils.isNotEmpty(menu.getPerms())) {
+            return menu.getPath() + StringPool.LEFT_SQ_BRACKET + menu.getPerms() + StringPool.RIGHT_SQ_BRACKET;
+        }
+        return null;
     }
 
     @Override

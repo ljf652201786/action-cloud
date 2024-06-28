@@ -4,7 +4,7 @@ import com.action.system.entity.SysLogLogin;
 import com.action.system.mapper.SysLogLoginMapper;
 import com.action.system.service.ISysLogLoginService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysLogLoginServiceImpl extends ServiceImpl<SysLogLoginMapper, SysLogLogin> implements ISysLogLoginService {
-    @Resource
-    private SysLogLoginMapper sysLogLoginMapper;
+    private final SysLogLoginMapper sysLogLoginMapper;
 }

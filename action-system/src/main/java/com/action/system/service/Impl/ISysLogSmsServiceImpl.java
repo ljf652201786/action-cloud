@@ -4,7 +4,7 @@ import com.action.system.entity.SysLogSms;
 import com.action.system.mapper.SysLogSmsMapper;
 import com.action.system.service.ISysLogSmsService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysLogSmsServiceImpl extends ServiceImpl<SysLogSmsMapper, SysLogSms> implements ISysLogSmsService {
-    @Resource
-    private SysLogSmsMapper sysLogSmsMapper;
+    private final SysLogSmsMapper sysLogSmsMapper;
 }

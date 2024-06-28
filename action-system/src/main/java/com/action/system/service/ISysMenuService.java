@@ -9,6 +9,10 @@ import java.util.Set;
 
 
 public interface ISysMenuService extends IService<SysMenu> {
+
+    List<SysMenu> listRoutes();
+
     List<SysMenu> buildMenuTreeSelect();
+
     Set<? extends BaseSecurityMenu> getSysPermission();
 }

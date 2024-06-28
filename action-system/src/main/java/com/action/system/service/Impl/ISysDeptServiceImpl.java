@@ -10,7 +10,7 @@ import com.action.system.service.ISysDeptService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -24,11 +24,10 @@ import java.util.stream.Collectors;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> implements ISysDeptService {
-    @Resource
-    private SysDeptMapper sysDeptMapper;
-    @Resource
-    private SysPostMapper sysPostMapper;
+    private final SysDeptMapper sysDeptMapper;
+    private final SysPostMapper sysPostMapper;
 
     @Override
     public List<SysDept> buildDeptTreeSelect(SysDept sysDept) {

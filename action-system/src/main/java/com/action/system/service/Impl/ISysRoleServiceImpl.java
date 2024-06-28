@@ -1,14 +1,10 @@
 package com.action.system.service.Impl;
 
 import com.action.system.entity.SysRole;
-import com.action.system.entity.SysUser;
 import com.action.system.mapper.SysRoleMapper;
-import com.action.system.mapper.SysUserMapper;
 import com.action.system.service.ISysRoleService;
-import com.action.system.service.ISysUserService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,8 +13,8 @@ import org.springframework.stereotype.Service;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements ISysRoleService {
-    @Resource
-    private SysRoleMapper sysRoleMapper;
+    private final SysRoleMapper sysRoleMapper;
 
 }

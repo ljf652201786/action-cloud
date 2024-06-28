@@ -4,7 +4,7 @@ import com.action.system.entity.SysLimitObj;
 import com.action.system.mapper.SysLimitObjMapper;
 import com.action.system.service.ISysLimitObjService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysLimitObjServiceImpl extends ServiceImpl<SysLimitObjMapper, SysLimitObj> implements ISysLimitObjService {
-    @Resource
-    private SysLimitObjMapper sysLimitObjMapper;
+    private final SysLimitObjMapper sysLimitObjMapper;
 
 }

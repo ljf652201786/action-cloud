@@ -23,6 +23,12 @@ public class SysMenuController implements BaseController<ISysMenuService, SysMen
     private final ISysMenuService iSysMenuService;
     private final ISysMenuLimitService iSysMenuLimitService;
 
+    @RequestMapping(value = "routes", method = RequestMethod.GET)
+    public Result listRoutes() {
+        List<SysMenu> routeList = iSysMenuService.listRoutes();
+        return Result.success(routeList);
+    }
+
     /**
      * @Description: 获取菜单详情
      * @return: Result 结果集

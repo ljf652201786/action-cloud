@@ -14,7 +14,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ConfigurationProperties(prefix = "security-auth")
+@ConfigurationProperties(prefix = "security-manage")
 @Configuration(proxyBeanMethods = false)
 @EnableWebFluxSecurity
 public class GateWaySecurityConfig {

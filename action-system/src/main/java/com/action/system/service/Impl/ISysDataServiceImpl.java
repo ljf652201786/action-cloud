@@ -5,16 +5,15 @@ import com.action.common.mybatisplus.extend.filter.datapermission.DataRowFilterS
 import com.action.system.entity.SysData;
 import com.action.system.entity.SysDataColumnLimit;
 import com.action.system.entity.SysDataRowLimit;
-import com.action.system.entity.SysScope;
 import com.action.system.enums.NodeType;
 import com.action.system.mapper.SysDataMapper;
 import com.action.system.service.ISysDataColumnLimitService;
 import com.action.system.service.ISysDataRowLimitService;
 import com.action.system.service.ISysDataService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -27,13 +26,11 @@ import java.util.stream.Collectors;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysDataServiceImpl extends ServiceImpl<SysDataMapper, SysData> implements ISysDataService {
-    @Resource
-    private SysDataMapper sysDataMapper;
-    @Resource
-    private ISysDataRowLimitService iSysDataRowLimitService;
-    @Resource
-    private ISysDataColumnLimitService iSysDataColumnLimitService;
+    private final SysDataMapper sysDataMapper;
+    private final ISysDataRowLimitService iSysDataRowLimitService;
+    private final ISysDataColumnLimitService iSysDataColumnLimitService;
 
     @Override
     public List<SysData> buildDataTreeSelect() {
@@ -67,11 +64,13 @@ public class ISysDataServiceImpl extends ServiceImpl<SysDataMapper, SysData> imp
         Set<SysDataColumnLimit> userDataColumnPermSet = iSysDataColumnLimitService.getUserDataColumnPerm(groupIdSet, postIdSet, roleIdSet);
         Map<String, Set<String>> dataColumnFilterMap = new HashMap<>();
         if (!CollectionUtils.isEmpty(userDataColumnPermSet)) {
-            dataColumnFilterMap = userDataColumnPermSet.stream().collect(
-                    Collectors.groupingBy(po -> po.getDataId(),
-                            Collectors.mapping(po -> po.getType(), Collectors.toSet())
-                    )
-            );
+            dataColumnFilterMap = userDataColumnPermSet.stream()
+                    .filter(sysDataColumnLimit -> StringUtils.isNotEmpty(sysDataColumnLimit.getTableName()) || StringUtils.isNotEmpty(sysDataColumnLimit.getLimitField()))
+                    .collect(
+                            Collectors.groupingBy(po -> po.getTableName(),
+                                    Collectors.mapping(po -> po.getLimitField(), Collectors.toSet())
+                            )
+                    );
         }
         return dataColumnFilterMap;
     }

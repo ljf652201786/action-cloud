@@ -4,7 +4,7 @@ import com.action.system.entity.SysDict;
 import com.action.system.mapper.SysDictMapper;
 import com.action.system.service.ISysDictService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> implements ISysDictService {
-    @Resource
-    private SysDictMapper sysDictMapper;
+    private final SysDictMapper sysDictMapper;
 
 }

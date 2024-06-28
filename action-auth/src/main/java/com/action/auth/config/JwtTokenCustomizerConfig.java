@@ -40,11 +40,10 @@ public class JwtTokenCustomizerConfig {
                         claims.claim(JwtClaimConstants.USER_ID, userDetails.getId());
                         claims.claim(JwtClaimConstants.USERNAME, userDetails.getUsername());
                         claims.claim(JwtClaimConstants.STATUS, userDetails.getStatus());
-
                         // 这里存入角色至JWT，解析JWT的角色用于鉴权的位置: ResourceServerConfig#jwtAuthenticationConverter
                         var authorities = AuthorityUtils.authorityListToSet(context.getPrincipal().getAuthorities())
                                 .stream()
-                                .collect(Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet));
+                                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
                         claims.claim(JwtClaimConstants.AUTHORITIES, authorities);
 
                     }

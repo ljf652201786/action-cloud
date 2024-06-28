@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public interface ICacheService {
+public interface ICacheService{
     void setUserDataPermRowCache(String username, Set<DataRowFilterStruct> dataRowFilterStructList);
 
     void setUserDataPermColumnCache(String username, Map<String, Set<String>> dataColumnFilterMap);
@@ -26,14 +26,6 @@ public interface ICacheService {
     void setUserPostCache(String username, Set<String> postIdSet);
 
     void setUserRoleCache(String username, Set<String> roleIdSet);
-
-    Set<DataRowFilterStruct> getUserDataPermRowCache();
-
-    Set<DataRowFilterStruct> getUserDataPermRowCache(String username);
-
-    Map<String, Set<String>> getUserDataPermColumnCache();
-
-    Map<String, Set<String>> getUserDataPermColumnCache(String username);
 
     SysUser getUserBasisCache(String username);
 

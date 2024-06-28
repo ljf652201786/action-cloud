@@ -5,12 +5,10 @@ import com.action.system.entity.SysUserGroup;
 import com.action.system.mapper.SysUserGroupMapper;
 import com.action.system.service.ICacheService;
 import com.action.system.service.ISysUserGroupService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,11 +20,10 @@ import java.util.List;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysUserGroupServiceImpl extends ServiceImpl<SysUserGroupMapper, SysUserGroup> implements ISysUserGroupService {
-    @Resource
-    private SysUserGroupMapper sysUserGroupMapper;
-    @Resource
-    private ICacheService iCacheService;
+    private final SysUserGroupMapper sysUserGroupMapper;
+    private final ICacheService iCacheService;
 
     @Override
     public List<SysUserGroup> getSysUserGroupByUserId(String userId) {

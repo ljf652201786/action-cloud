@@ -6,12 +6,10 @@ import com.action.system.entity.SysUserRole;
 import com.action.system.mapper.SysUserRoleMapper;
 import com.action.system.service.ICacheService;
 import com.action.system.service.ISysUserRoleService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
 
@@ -23,11 +21,10 @@ import java.util.List;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRole> implements ISysUserRoleService {
-    @Resource
-    private SysUserRoleMapper sysUserRoleMapper;
-    @Resource
-    private ICacheService iCacheService;
+    private final SysUserRoleMapper sysUserRoleMapper;
+    private final ICacheService iCacheService;
 
     @Override
     public List<SysRole> getSysRoleByUserId(String userId) {

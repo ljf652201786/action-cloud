@@ -11,8 +11,8 @@ import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.dto.SysUserExtend;
 import com.action.system.entity.SysUser;
 import com.action.system.service.*;
+import com.action.system.vo.UserProfileVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -169,6 +169,19 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
         }
         iSysUserService.setUserDefaultRole(sysUser);
         return Result.success("注册成功", sysUser.getId());
+    }
+
+    /**
+     * @Description: 获取个人信息
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/3
+     */
+    @RequestMapping(value = "profile", method = RequestMethod.GET)
+    public Result getUserProfile() {
+        UserProfileVO userProfile = iSysUserService.getUserProfile();
+        return Result.success(userProfile);
     }
 
     /**

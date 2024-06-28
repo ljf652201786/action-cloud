@@ -6,12 +6,11 @@ import com.action.system.entity.SysMenuLimit;
 import com.action.system.mapper.SysMenuLimitMapper;
 import com.action.system.service.ISysMenuLimitService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,9 +21,9 @@ import java.util.stream.Collectors;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysMenuLimitServiceImpl extends ServiceImpl<SysMenuLimitMapper, SysMenuLimit> implements ISysMenuLimitService {
-    @Resource
-    private SysMenuLimitMapper sysMenuLimitMapper;
+    private final SysMenuLimitMapper sysMenuLimitMapper;
 
     @Override
     public Set<SysMenu> getSysMenuByScope(Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet) {

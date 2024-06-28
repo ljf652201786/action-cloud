@@ -5,6 +5,7 @@ import com.action.auth.mapper.Oauth2RegisteredClientMapper;
 import com.action.auth.service.IOauth2RegisteredClientService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
@@ -30,7 +31,7 @@ public class Oauth2RegisteredClientServiceImpl extends ServiceImpl<Oauth2Registe
         }
         RegisteredClient registeredClient = registeredClientRepository.findByClientId(oauth2RegisteredClient.getClientId());
         String id = registeredClient != null ? registeredClient.getId() : UUID.randomUUID().toString();
-        RegisteredClient mallAppClient = RegisteredClient.withId(id)
+        RegisteredClient appClient = RegisteredClient.withId(id)
                 .clientId(oauth2RegisteredClient.getClientId())
                 .clientSecret(oauth2RegisteredClient.getClientSecret())
                 .clientName(StringUtils.isNoneEmpty(oauth2RegisteredClient.getClientName()) ? oauth2RegisteredClient.getClientName() : "客户端")
@@ -47,7 +48,7 @@ public class Oauth2RegisteredClientServiceImpl extends ServiceImpl<Oauth2Registe
                 .tokenSettings(TokenSettings.builder().accessTokenTimeToLive(Duration.ofDays(1)).build())
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
-        registeredClientRepository.save(mallAppClient);
+        registeredClientRepository.save(appClient);
         return true;
     }
 }

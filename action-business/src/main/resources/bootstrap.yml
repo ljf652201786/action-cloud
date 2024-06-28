@@ -1,5 +1,5 @@
 spring:
   application:
-    name: action-test
+    name: action-business
   profiles:
     active: dev

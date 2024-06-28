@@ -4,7 +4,7 @@ import com.action.system.entity.SysLogRequest;
 import com.action.system.mapper.SysLogRequestMapper;
 import com.action.system.service.ISysLogRequestService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysLogRequestServiceImpl extends ServiceImpl<SysLogRequestMapper, SysLogRequest> implements ISysLogRequestService {
-    @Resource
-    private SysLogRequestMapper sysLogRequestMapper;
+    private final SysLogRequestMapper sysLogRequestMapper;
 }

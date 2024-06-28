@@ -6,7 +6,7 @@ import com.action.business.service.ITestService;
 import com.action.common.biz.annotation.FileExtract;
 import com.action.common.file.analysis.ExcelStruct;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,9 +18,9 @@ import java.util.List;
  * @Date: 2024/05/31
  */
 @Service
+@RequiredArgsConstructor
 public class ITestServiceImpl extends ServiceImpl<TestMapper, Test> implements ITestService {
-    @Resource
-    private TestMapper testMapper;
+    private final TestMapper testMapper;
 
     @FileExtract
     @Override

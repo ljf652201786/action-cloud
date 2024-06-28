@@ -3,6 +3,7 @@ package com.action.system.service;
 import com.action.call.vo.AuthUserInfoVo;
 import com.action.system.dto.SysUserExtend;
 import com.action.system.entity.SysUser;
+import com.action.system.vo.UserProfileVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -16,6 +17,13 @@ public interface ISysUserService extends IService<SysUser> {
      * @return Boolean
      */
     Boolean regist(SysUserExtend sysUser);
+
+    /**
+     * 获取个人信息
+     *
+     * @return Boolean
+     */
+    UserProfileVO getUserProfile();
 
     /**
      * 修改个人信息

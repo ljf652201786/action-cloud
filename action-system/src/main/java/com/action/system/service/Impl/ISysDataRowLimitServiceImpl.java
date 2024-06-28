@@ -1,15 +1,13 @@
 package com.action.system.service.Impl;
 
 import com.action.system.entity.SysDataRowLimit;
-import com.action.system.entity.SysMenuRule;
 import com.action.system.mapper.SysDataRowLimitMapper;
 import com.action.system.service.ICacheService;
 import com.action.system.service.ISysDataRowLimitService;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
 
@@ -21,11 +19,10 @@ import java.util.Set;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysDataRowLimitServiceImpl extends ServiceImpl<SysDataRowLimitMapper, SysDataRowLimit> implements ISysDataRowLimitService {
-    @Resource
-    private SysDataRowLimitMapper sysDataRowLimitMapper;
-    @Resource
-    private ICacheService iCacheService;
+    private final SysDataRowLimitMapper sysDataRowLimitMapper;
+    private final ICacheService iCacheService;
 
     @Override
     public Set<SysDataRowLimit> getUserDataRowPerm(Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet) {

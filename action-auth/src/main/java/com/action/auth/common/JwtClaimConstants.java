@@ -18,7 +18,7 @@ public interface JwtClaimConstants {
     String STATUS = "status";
 
     /**
-     * 权限(角色Code)集合
+     * 权限集合
      */
     String AUTHORITIES = "authorities";
 

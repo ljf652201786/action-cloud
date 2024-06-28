@@ -4,7 +4,7 @@ import com.action.system.entity.SysGroup;
 import com.action.system.mapper.SysGroupMapper;
 import com.action.system.service.ISysGroupService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> implements ISysGroupService {
-    @Resource
-    private SysGroupMapper sysGroupMapper;
+    private final SysGroupMapper sysGroupMapper;
 
 }

@@ -8,7 +8,7 @@ import com.action.common.core.handle.RedisCacheHandle;
 import com.action.common.sms.properties.AliyunSmsProperties;
 import com.action.common.sms.service.impl.AliyunSmsService;
 import com.alibaba.fastjson.JSONObject;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -20,16 +20,13 @@ import java.util.Date;
  * @Date: 2024/05/17
  */
 @Service
+@RequiredArgsConstructor
 public class SmsServiceImpl implements ISmsService {
     private static final Long expireTime = 5 * 60L;
-    @Resource
-    private RedisCacheHandle redisCacheHandle;
-    @Resource
-    private AliyunSmsProperties aliyunSmsProperties;
-    @Resource
-    private AliyunSmsService aliyunSmsService;
-    @Resource
-    private RemoteSystemClients remoteSystemClients;
+    private final RedisCacheHandle redisCacheHandle;
+    private final AliyunSmsProperties aliyunSmsProperties;
+    private final AliyunSmsService aliyunSmsService;
+    private final RemoteSystemClients remoteSystemClients;
 
     /**
      * 发送登录短信验证码

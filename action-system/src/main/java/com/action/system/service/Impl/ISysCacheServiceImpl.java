@@ -1,14 +1,14 @@
 package com.action.system.service.Impl;
 
+import com.action.common.biz.service.ICacheImpl;
 import com.action.common.common.RedisSetConstants;
 import com.action.common.core.base.BaseSecurityMenu;
 import com.action.common.core.constants.StringPool;
 import com.action.common.core.service.RedisCacheServices;
 import com.action.common.mybatisplus.extend.filter.datapermission.DataRowFilterStruct;
-import com.action.common.security.util.SecurityUtils;
 import com.action.system.entity.SysUser;
 import com.action.system.service.ICacheService;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,24 +18,27 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.action.common.core.constants.RedisConstants.DATAPERM_COLUMN_KEY;
+import static com.action.common.core.constants.RedisConstants.DATAPERM_ROW_KEY;
+
 /**
  * @Description: 缓存服务
  * @Author: ljf  <lin652210786@163.com>
  * @Date: 2024/04/18
  */
 @Service
+@RequiredArgsConstructor
 public class ISysCacheServiceImpl implements ICacheService {
-    @Resource
-    private RedisCacheServices redisCacheServices;
+    private final RedisCacheServices redisCacheServices;
 
     @Override
     public void setUserDataPermRowCache(String username, Set<DataRowFilterStruct> dataRowFilterStructList) {
-        redisCacheServices.set(RedisSetConstants.USER_DATAPERM_ROW + username, dataRowFilterStructList);
+        redisCacheServices.set(DATAPERM_ROW_KEY + username, dataRowFilterStructList);
     }
 
     @Override
     public void setUserDataPermColumnCache(String username, Map<String, Set<String>> dataColumnFilterMap) {
-        redisCacheServices.set(RedisSetConstants.USER_DATAPERM_COLUMN + username, dataColumnFilterMap);
+        redisCacheServices.set(DATAPERM_COLUMN_KEY + username, dataColumnFilterMap);
     }
 
     @Override
@@ -77,42 +80,6 @@ public class ISysCacheServiceImpl implements ICacheService {
     @Override
     public void setUserRoleCache(String username, Set<String> roleIdSet) {
         redisCacheServices.set(RedisSetConstants.USER_ROLE + username, roleIdSet);
-    }
-
-    @Override
-    public Set<DataRowFilterStruct> getUserDataPermRowCache() {
-        String currentUserName = SecurityUtils.getUserName();
-        if (StringUtils.isEmpty(currentUserName)) {
-            return null;
-        }
-        return this.getUserDataPermRowCache(currentUserName);
-    }
-
-    @Override
-    public Set<DataRowFilterStruct> getUserDataPermRowCache(String username) {
-        Object o = redisCacheServices.get(RedisSetConstants.USER_DATAPERM_ROW + username);
-        if (Objects.isNull(o)) {
-            return null;
-        }
-        return (Set<DataRowFilterStruct>) o;
-    }
-
-    @Override
-    public Map<String, Set<String>> getUserDataPermColumnCache() {
-        String currentUserName = SecurityUtils.getUserName();
-        if (StringUtils.isEmpty(currentUserName)) {
-            return null;
-        }
-        return this.getUserDataPermColumnCache(currentUserName);
-    }
-
-    @Override
-    public Map<String, Set<String>> getUserDataPermColumnCache(String username) {
-        Object o = redisCacheServices.get(RedisSetConstants.USER_DATAPERM_COLUMN + username);
-        if (Objects.isNull(o)) {
-            return null;
-        }
-        return (Map<String, Set<String>>) o;
     }
 
     @Override
@@ -196,7 +163,7 @@ public class ISysCacheServiceImpl implements ICacheService {
 
     @Override
     public void cleanDataRowLimitCache(String dataRowLimitId) {
-        this.removeKeyByIdInValueReturnUsername(RedisSetConstants.USER_DATAPERM_ROW, dataRowLimitId, (o) -> getDataRowCacheObjectId(o));
+        this.removeKeyByIdInValueReturnUsername(DATAPERM_ROW_KEY, dataRowLimitId, (o) -> getDataRowCacheObjectId(o));
     }
 
     @Override

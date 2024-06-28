@@ -188,7 +188,7 @@ public class AuthorizationServerConfig {
     /**
      * 生成RSA密钥对
      */
-    private static KeyPair generateRsaKey() { // <6>
+    private static KeyPair generateRsaKey() {
         KeyPair keyPair;
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");

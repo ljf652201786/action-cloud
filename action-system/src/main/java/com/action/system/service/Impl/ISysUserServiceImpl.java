@@ -1,20 +1,22 @@
 package com.action.system.service.Impl;
 
 import com.action.call.vo.AuthUserInfoVo;
+import com.action.common.biz.service.ICache;
 import com.action.common.common.UserSetConstants;
 import com.action.common.core.base.BaseSecurityMenu;
 import com.action.common.enums.UseType;
 import com.action.common.mybatisplus.extend.filter.datapermission.DataRowFilterStruct;
-import com.action.common.security.util.SecurityUtils;
+import com.action.common.security.util.SecurityUtil;
 import com.action.system.converter.UserConverter;
 import com.action.system.dto.SysUserExtend;
 import com.action.system.entity.*;
 import com.action.system.mapper.*;
 import com.action.system.service.*;
+import com.action.system.vo.UserProfileVO;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -29,27 +31,20 @@ import java.util.stream.Collectors;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements ISysUserService {
-    @Resource
-    private SysUserMapper sysUserMapper;
-    @Resource
-    private ISysMenuLimitService iSysMenuLimitService;
-    @Resource
-    private ISysScopeService iSysScopeService;
-    @Resource
-    private ISysRoleService iSysRoleService;
-    @Resource
-    private ISysUserRoleService iSysUserRoleService;
-    @Resource
-    private ISysUserGroupService iSysUserGroupService;
-    @Resource
-    private ISysDataService iSysDataService;
-    @Resource
-    private PasswordEncoder passwordEncoder;
-    @Resource
-    private ICacheService iCacheService;
-    @Resource
-    private UserConverter userConverter;
+    private final SysUserMapper sysUserMapper;
+    private final ISysMenuLimitService iSysMenuLimitService;
+    private final ISysScopeService iSysScopeService;
+    private final ISysRoleService iSysRoleService;
+    private final ISysUserRoleService iSysUserRoleService;
+    private final ISysUserGroupService iSysUserGroupService;
+    private final ISysDataService iSysDataService;
+    private final PasswordEncoder passwordEncoder;
+    private final ICacheService iCacheService;
+    private final ICache iCache;
+    private final UserConverter userConverter;
+    private final SecurityUtil securityUtil;
 
     @Override
     public Boolean regist(SysUserExtend sysUser) {
@@ -61,6 +56,13 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
         sysUser.setAvatar(UserSetConstants.DEFAULT_AVATAR);
         boolean isSave = SqlHelper.retBool(sysUserMapper.insert(sysUser));
         return isSave;
+    }
+
+    @Override
+    public UserProfileVO getUserProfile() {
+        String userId = securityUtil.getUserId();
+        SysUser sysUser = this.getById(userId);
+        return userConverter.sysUserToUserProfileVO(sysUser);
     }
 
     @Override
@@ -87,9 +89,9 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
 
     @Override
     public Boolean modifyPass(String rawPassword, String newPassword) {
-        boolean matches = passwordEncoder.matches(rawPassword, SecurityUtils.getPassword());
+        boolean matches = passwordEncoder.matches(rawPassword, securityUtil.getPassword());
         String enablePwd = passwordEncoder.encode(newPassword);
-        String userId = SecurityUtils.getUserId();
+        String userId = securityUtil.getUserId();
         return SqlHelper.retBool(sysUserMapper.update(Wrappers.<SysUser>lambdaUpdate().set(matches, SysUser::getPassword, enablePwd).eq(SysUser::getId, userId)));
     }
 
@@ -197,12 +199,12 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
             iCacheService.setUserMenupermCache(username, baseSecurityMenuSet);
         }
         //异步获取用户数据权限
-        Set<DataRowFilterStruct> userDataPermRowCache = iCacheService.getUserDataPermRowCache(username);
+        Set<DataRowFilterStruct> userDataPermRowCache = iCache.getUserDataPermRowCache(username);
         if (Objects.isNull(userDataPermRowCache)) {
             userDataPermRowCache = iSysDataService.getUserDataRowPerm(groupIdSet, postIdSet, roleIdSet);
             iCacheService.setUserDataPermRowCache(username, userDataPermRowCache);
         }
-        Map<String, Set<String>> userDataPermColumnCache = iCacheService.getUserDataPermColumnCache(username);
+        Map<String, Set<String>> userDataPermColumnCache = iCache.getUserDataPermColumnCache(username);
         if (Objects.isNull(userDataPermColumnCache)) {
             userDataPermColumnCache = iSysDataService.getUserDataColumnPerm(groupIdSet, postIdSet, roleIdSet);
             iCacheService.setUserDataPermColumnCache(username, userDataPermColumnCache);

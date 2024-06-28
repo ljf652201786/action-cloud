@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * 默认安全配置
  */
-@ConfigurationProperties(prefix = "security")
+@ConfigurationProperties(prefix = "security-manage")
 @Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
 public class SecurityConfig {

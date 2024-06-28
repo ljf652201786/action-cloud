@@ -4,6 +4,7 @@
 
     <select id="getSysMenuByScope" resultType="com.action.system.entity.SysMenu">
         select sm.id,
+        sm.ancestral,
         sm.parent_id,
         sm.menu_name,
         sm.menu_type,

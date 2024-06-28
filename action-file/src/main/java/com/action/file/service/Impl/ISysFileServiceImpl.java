@@ -5,13 +5,13 @@ import com.action.common.enums.DelType;
 import com.action.common.file.entity.FileStruct;
 import com.action.common.file.properties.FileProperties;
 import com.action.common.file.utils.ActionFileUtils;
-import com.action.common.security.util.SecurityUtils;
+import com.action.common.security.util.SecurityUtil;
 import com.action.file.entity.SysFile;
 import com.action.file.mapper.SysFileMapper;
 import com.action.file.service.ISysFileService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,11 +31,11 @@ import java.util.stream.Collectors;
  * @Date: 2024/08/08
  */
 @Service
+@RequiredArgsConstructor
 public class ISysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> implements ISysFileService {
-    @Resource
-    private SysFileMapper sysFileMapper;
-    @Resource
-    private FileProperties fileProperties;
+    private final SysFileMapper sysFileMapper;
+    private final FileProperties fileProperties;
+    private final SecurityUtil securityUtil;
 
     @Override
     public List<String> upload(MultipartFile[] multipartFiles, Integer index) {
@@ -48,7 +48,7 @@ public class ISysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> imp
             if (CollectionUtils.isEmpty(resources) || resources.size() < index) {
                 return urlList;
             }
-            String userName = SecurityUtils.getUserName();
+            String userName = securityUtil.getUserName();
             FileProperties.Resource resource = resources.get(index);
             String localPath = this.getDefaultPath(resource);
             String pathPattern = this.getDefaultPathPattern(resource);

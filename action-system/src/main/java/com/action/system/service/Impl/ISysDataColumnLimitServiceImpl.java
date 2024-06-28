@@ -4,7 +4,7 @@ import com.action.system.entity.SysDataColumnLimit;
 import com.action.system.mapper.SysDataColumnLimitMapper;
 import com.action.system.service.ISysDataColumnLimitService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import jakarta.annotation.Resource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -15,9 +15,9 @@ import java.util.Set;
  * @Date: 2024/04/02
  */
 @Service
+@RequiredArgsConstructor
 public class ISysDataColumnLimitServiceImpl extends ServiceImpl<SysDataColumnLimitMapper, SysDataColumnLimit> implements ISysDataColumnLimitService {
-    @Resource
-    private SysDataColumnLimitMapper sysDataColumnLimitMapper;
+    private final SysDataColumnLimitMapper sysDataColumnLimitMapper;
 
     @Override
     public Set<SysDataColumnLimit> getUserDataColumnPerm(Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet) {

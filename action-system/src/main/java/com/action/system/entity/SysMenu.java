@@ -24,6 +24,8 @@ import java.util.List;
 public class SysMenu extends BaseEntity {
     @TableId(value = "id")
     private String id;
+    @TableField("ancestral")
+    private String ancestral;
     @TableField("parent_id")
     private String parentId;
     @TableField("menu_name")

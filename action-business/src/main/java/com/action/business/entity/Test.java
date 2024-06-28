@@ -11,7 +11,7 @@ import lombok.Data;
  * @Date: 2024/05/31
  */
 @Data
-@TableName("Test")
+@TableName("biz_test")
 public class Test {
     @TableId("id")
     private String id;
