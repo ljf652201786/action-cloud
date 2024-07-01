@@ -41,7 +41,7 @@ public class WebFluxUtils {
 
     private static HttpStatus determineHttpStatus(ResultCode resultCode) {
         return switch (resultCode) {
-            case ACCESS_UNAUTHORIZED, TOKEN_INVALID -> HttpStatus.UNAUTHORIZED;
+            case UNAUTHORIZED, TOKEN_INVALID -> HttpStatus.UNAUTHORIZED;
             case TOKEN_ACCESS_FORBIDDEN -> HttpStatus.FORBIDDEN;
             default -> HttpStatus.BAD_REQUEST;
         };
