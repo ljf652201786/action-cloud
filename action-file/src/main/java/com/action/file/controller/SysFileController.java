@@ -1,7 +1,7 @@
 package com.action.file.controller;
 
+import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
-import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.file.entity.SysFile;
 import com.action.file.service.ISysFileService;

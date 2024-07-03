@@ -1,12 +1,12 @@
 package com.action.system.controller;
 
 import com.action.call.vo.AuthUserInfoVo;
+import com.action.common.biz.base.BaseController;
 import com.action.common.common.RedisSetConstants;
 import com.action.common.common.UserSetConstants;
 import com.action.common.core.common.Result;
 import com.action.common.core.service.RedisCacheServices;
 import com.action.common.enums.UseType;
-import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.dto.SysUserExtend;
 import com.action.system.entity.SysUser;

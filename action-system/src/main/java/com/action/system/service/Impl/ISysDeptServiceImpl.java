@@ -31,7 +31,7 @@ public class ISysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> imp
 
     @Override
     public List<SysDept> buildDeptTreeSelect(SysDept sysDept) {
-        List<SysDept> sysDeptList = sysDeptMapper.selectList(new QueryWrapper<>());//条件搜索
+        List<SysDept> sysDeptList = this.list();
         if (CollectionUtils.isEmpty(sysDeptList)) {
             return List.of();
         }

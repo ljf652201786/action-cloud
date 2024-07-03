@@ -1,7 +1,7 @@
 package com.action.system.controller;
 
+import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
-import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.system.entity.*;
 import com.action.system.service.ISysMenuLimitService;
 import com.action.system.service.ISysMenuService;

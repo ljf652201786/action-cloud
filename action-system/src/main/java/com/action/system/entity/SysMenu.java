@@ -54,6 +54,14 @@ public class SysMenu extends BaseEntity {
     private String visible;
     @TableField("status")
     private String status;
+    @TableField("enter_transition")
+    private String enterTransition;
+    @TableField("leave_transition")
+    private String leaveTransition;
+    @TableField("frame_loading")
+    private String frameLoading;
+    @TableField("hidden_tag")
+    private String hiddenTag;
     @TableField(exist = false)
     private List<SysMenu> childrenList = new ArrayList<>();
 }

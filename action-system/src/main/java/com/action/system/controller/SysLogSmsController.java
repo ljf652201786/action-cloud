@@ -1,8 +1,8 @@
 package com.action.system.controller;
 
 import com.action.call.vo.LogSMSVo;
+import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
-import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.entity.SysLogSms;
 import com.action.system.service.ISysLogSmsService;

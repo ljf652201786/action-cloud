@@ -65,7 +65,7 @@ public class ISysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> imp
 
     @Override
     public List<SysMenu> buildMenuTreeSelect() {
-        List<SysMenu> sysMenuList = sysMenuMapper.selectList(new QueryWrapper<>());//条件搜索
+        List<SysMenu> sysMenuList = this.list();
         return buildMenu(sysMenuList.stream(), sysMenuList);
     }
 

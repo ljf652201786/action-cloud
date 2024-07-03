@@ -1,16 +1,22 @@
 package com.action.business.controller;
 
 import com.action.business.entity.Test;
+import com.action.business.listener.TestImportListener;
 import com.action.business.service.ITestService;
+import com.action.business.vo.TestImportVo;
+import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
-import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @Description: 测试接口控制类
@@ -92,5 +98,36 @@ public class TestController implements BaseController<ITestService, Test> {
         boolean isImport = iTestService.importFile(multipartFile, new ArrayList<>() {
         });
         return Result.judge(isImport);
+    }
+
+    /**
+     * @param multipartFile 文件对象
+     * @Description: 导入excel文件
+     * @return: void
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/05/31
+     */
+    @RequestMapping(value = "importExcel", method = RequestMethod.POST)
+    public Result ipExcel(MultipartFile multipartFile) throws IOException {
+        TestImportListener importListener = new TestImportListener(iTestService);
+        String msg = this.importExcel(multipartFile, TestImportVo.class, importListener);
+        return Result.success(msg);
+    }
+
+
+    /**
+     * @param response response对象
+     * @param test     test对象
+     * @Description: 导出excel文件
+     * @return: void
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/05/31
+     */
+    @RequestMapping(value = "exportExcel", method = RequestMethod.GET)
+    public void epExcel(HttpServletResponse response, Test test) throws IOException {
+        List<Test> list = iTestService.list(this.getQueryWrapper(test));
+        this.exportExcel(response, Test.class, "用户列表.xlsx", "Test表", list);
     }
 }

@@ -3,7 +3,7 @@ package com.action.auth.controller;
 import com.action.auth.entity.Oauth2RegisteredClient;
 import com.action.auth.service.IOauth2RegisteredClientService;
 import com.action.common.core.common.Result;
-import com.action.common.mybatisplus.extend.base.BaseController;
+import com.action.common.mybatisplus.extend.base.BaseMpController;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController("client")
 @RequiredArgsConstructor
-public class ClientManagerController implements BaseController<IOauth2RegisteredClientService, Oauth2RegisteredClient> {
+public class ClientManagerController implements BaseMpController<IOauth2RegisteredClientService, Oauth2RegisteredClient> {
 
     private final IOauth2RegisteredClientService iOauth2RegisteredClientService;
 

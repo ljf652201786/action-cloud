@@ -1,8 +1,8 @@
 package com.action.system.controller;
 
+import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
 import com.action.common.enums.UseType;
-import com.action.common.mybatisplus.extend.base.BaseController;
 import com.action.system.entity.SysMenuLimit;
 import com.action.system.entity.SysMenuRule;
 import com.action.system.service.ISysMenuLimitService;
