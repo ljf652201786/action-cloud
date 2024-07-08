@@ -12,7 +12,7 @@ public interface ISysMenuService extends IService<SysMenu> {
 
     List<SysMenu> listRoutes();
 
-    List<SysMenu> buildMenuTreeSelect();
+    List<SysMenu> buildMenuTreeSelect(List<SysMenu> sysMenuList);
 
     Set<? extends BaseSecurityMenu> getSysPermission();
 }

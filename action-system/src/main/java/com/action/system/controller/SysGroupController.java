@@ -121,7 +121,7 @@ public class SysGroupController implements BaseController<ISysGroupService, SysG
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "disable/{id}", method = RequestMethod.PUT)
-    public Result disable(@PathVariable String id) {
+    public Result disable(@PathVariable("id") String id) {
         SysGroup sysGroup = iSysGroupService.getById(id);
         if (Objects.isNull(sysGroup)) {
             return Result.failed("该用户组不存在");
@@ -141,7 +141,7 @@ public class SysGroupController implements BaseController<ISysGroupService, SysG
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "enable/{id}", method = RequestMethod.PUT)
-    public Result enable(@PathVariable String id) {
+    public Result enable(@PathVariable("id") String id) {
         SysGroup sysGroup = iSysGroupService.getById(id);
         if (Objects.isNull(sysGroup)) {
             return Result.failed("该用户组不存在");

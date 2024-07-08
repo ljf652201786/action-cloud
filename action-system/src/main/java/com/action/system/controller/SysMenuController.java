@@ -51,10 +51,10 @@ public class SysMenuController implements BaseController<ISysMenuService, SysMen
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody SysMenu sysMenu) {
-        SysMenu sm = iSysMenuService.getOne(this.getLambdaQueryWrapper().eq(SysMenu::getMenuPerm, sysMenu.getMenuPerm()));
+        /*SysMenu sm = iSysMenuService.getOne(this.getLambdaQueryWrapper().eq(SysMenu::getMenuPerm, sysMenu.getMenuPerm()));
         if (Objects.nonNull(sm)) {
             return Result.failed("权限标识已使用");
-        }
+        }*/
         boolean isSave = iSysMenuService.save(sysMenu);
         if (isSave) {
             return Result.success("保存数据成功");
@@ -72,11 +72,11 @@ public class SysMenuController implements BaseController<ISysMenuService, SysMen
      */
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Result update(@RequestBody SysMenu sysMenu) {
-        SysMenu oldMenu = iSysMenuService.getById(sysMenu.getId());
+        /*SysMenu oldMenu = iSysMenuService.getById(sysMenu.getId());
         SysMenu sm = iSysMenuService.getOne(this.getLambdaQueryWrapper().eq(SysMenu::getMenuPerm, sysMenu.getMenuPerm()));
         if (!oldMenu.getMenuPerm().equals(sysMenu.getMenuPerm()) && Objects.nonNull(sm)) {
             return Result.failed("权限标识已使用");
-        }
+        }*/
         boolean isUpdate = iSysMenuService.updateById(sysMenu);
         if (isUpdate) {
             return Result.success("更新数据成功");
@@ -110,8 +110,9 @@ public class SysMenuController implements BaseController<ISysMenuService, SysMen
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "menuTreeSelect", method = RequestMethod.GET)
-    public Result menuTreeSelect() {
-        List<SysMenu> treeSelects = iSysMenuService.buildMenuTreeSelect();
+    public Result menuTreeSelect(SysMenu sysMenu) {
+        List<SysMenu> sysMenuList = iSysMenuService.list(this.getQueryWrapper(sysMenu));
+        List<SysMenu> treeSelects = iSysMenuService.buildMenuTreeSelect(sysMenuList);
         return Result.success("获取数据权限树成功", treeSelects);
     }
 

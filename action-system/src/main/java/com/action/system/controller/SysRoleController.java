@@ -167,7 +167,7 @@ public class SysRoleController implements BaseController<ISysRoleService, SysRol
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "disable/{id}", method = RequestMethod.PUT)
-    public Result disable(@PathVariable String id) {
+    public Result disable(@PathVariable("id") String id) {
         SysRole sysRole = iSysRoleService.getById(id);
         if (Objects.isNull(sysRole)) {
             return Result.failed("该角色不存在");
@@ -187,7 +187,7 @@ public class SysRoleController implements BaseController<ISysRoleService, SysRol
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "enable/{id}", method = RequestMethod.PUT)
-    public Result enable(@PathVariable String id) {
+    public Result enable(@PathVariable("id") String id) {
         SysRole sysRole = iSysRoleService.getById(id);
         if (Objects.isNull(sysRole)) {
             return Result.failed("该角色不存在");

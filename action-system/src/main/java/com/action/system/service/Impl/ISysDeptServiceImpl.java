@@ -30,8 +30,7 @@ public class ISysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> imp
     private final SysPostMapper sysPostMapper;
 
     @Override
-    public List<SysDept> buildDeptTreeSelect(SysDept sysDept) {
-        List<SysDept> sysDeptList = this.list();
+    public List<SysDept> buildDeptTreeSelect(List<SysDept> sysDeptList) {
         if (CollectionUtils.isEmpty(sysDeptList)) {
             return List.of();
         }

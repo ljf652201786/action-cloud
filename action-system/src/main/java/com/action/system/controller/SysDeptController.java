@@ -119,7 +119,7 @@ public class SysDeptController implements BaseController<ISysDeptService, SysDep
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "disable/{id}", method = RequestMethod.PUT)
-    public Result disable(@PathVariable String id) {
+    public Result disable(@PathVariable("id") String id) {
         SysDept sysDept = iSysDeptService.getById(id);
         if (Objects.isNull(sysDept)) {
             return Result.failed("该部门不存在");
@@ -140,7 +140,7 @@ public class SysDeptController implements BaseController<ISysDeptService, SysDep
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "enable/{id}", method = RequestMethod.PUT)
-    public Result enable(@PathVariable String id) {
+    public Result enable(@PathVariable("id") String id) {
         SysDept sysDept = iSysDeptService.getById(id);
         if (Objects.isNull(sysDept)) {
             return Result.failed("该部门不存在");
@@ -161,7 +161,8 @@ public class SysDeptController implements BaseController<ISysDeptService, SysDep
      */
     @RequestMapping(value = "deptTreeSelect", method = RequestMethod.GET)
     public Result deptTreeSelect(SysDept sysDept) {
-        List<SysDept> treeSelects = iSysDeptService.buildDeptTreeSelect(sysDept);
+        List<SysDept> sysDeptList = iSysDeptService.list(this.getQueryWrapper(sysDept));
+        List<SysDept> treeSelects = iSysDeptService.buildDeptTreeSelect(sysDeptList);
         return Result.success("获取权限菜单树成功", treeSelects);
     }
 

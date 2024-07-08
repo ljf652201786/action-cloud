@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ISysDeptService extends IService<SysDept> {
 
-    List<SysDept> buildDeptTreeSelect(SysDept sysDept);
+    List<SysDept> buildDeptTreeSelect(List<SysDept> sysDeptList);
 
     List<SysDept> buildDeptPostTreeSelect();
 }

@@ -1,6 +1,7 @@
 package com.action.system.entity;
 
 import com.action.common.base.BaseEntity;
+import com.action.common.mybatisplus.extend.annotation.Condition;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -28,6 +29,7 @@ public class SysRole extends BaseEntity {
     private Boolean defaultRole;
     @TableField("sort")
     private Integer sort;
+    @Condition(Condition.ConditionTypeEnums.EQ)
     @TableField("status")
     private String status;
 
