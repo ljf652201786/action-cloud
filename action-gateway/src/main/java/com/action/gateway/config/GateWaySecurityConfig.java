@@ -1,5 +1,6 @@
 package com.action.gateway.config;
 
+import com.action.common.entity.ActionInterfaceEncryptStruct;
 import com.alibaba.nacos.common.utils.CollectionUtils;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -42,5 +43,8 @@ public class GateWaySecurityConfig {
         return http.build();
     }
 
-
+    @Bean
+    public ActionInterfaceEncryptStruct actionInterfaceEncryptStruct() {
+        return new ActionInterfaceEncryptStruct();
+    }
 }

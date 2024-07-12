@@ -68,6 +68,4 @@ public class SecurityConfig {
                 AntPathRequestMatcher.antMatcher("/doc.html")
         );
     }
-
-
 }

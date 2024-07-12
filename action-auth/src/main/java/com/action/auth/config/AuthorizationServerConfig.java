@@ -17,8 +17,11 @@ import com.action.auth.support.smscode.SmsCodeAuthenticationConverter;
 import com.action.auth.support.smscode.SmsCodeAuthenticationProvider;
 import com.action.auth.support.wechat.WechatAuthenticationConverter;
 import com.action.auth.support.wechat.WechatAuthenticationProvider;
+import com.action.common.core.constants.ActionConstants;
 import com.action.common.core.constants.RedisConstants;
 import com.action.common.core.service.RedisCacheServices;
+import com.action.common.encrypt.KeyStruct;
+import com.action.common.encrypt.asymmetric.RSAEncrypt;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -165,9 +168,9 @@ public class AuthorizationServerConfig {
             return new ImmutableJWKSet<>(jwkSet);
         } else {
             // 如果Redis中不存在JWKSet，生成新的JWKSet
-            KeyPair keyPair = generateRsaKey();
-            RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-            RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
+            KeyStruct keyStruct = RSAEncrypt.of().generateKey(ActionConstants.RSAKeySize * 2);
+            RSAPublicKey publicKey = (RSAPublicKey) keyStruct.getPublicKey();
+            RSAPrivateKey privateKey = (RSAPrivateKey) keyStruct.getPrivateKey();
 
             // 构建RSAKey
             RSAKey rsaKey = new RSAKey.Builder(publicKey)
@@ -183,21 +186,6 @@ public class AuthorizationServerConfig {
             return new ImmutableJWKSet<>(jwkSet);
         }
 
-    }
-
-    /**
-     * 生成RSA密钥对
-     */
-    private static KeyPair generateRsaKey() {
-        KeyPair keyPair;
-        try {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerator.initialize(2048);
-            keyPair = keyPairGenerator.generateKeyPair();
-        } catch (Exception ex) {
-            throw new IllegalStateException(ex);
-        }
-        return keyPair;
     }
 
     @Bean
