@@ -2,11 +2,11 @@ package com.action.system.service.Impl;
 
 import com.action.common.core.base.BaseSecurityMenu;
 import com.action.common.core.constants.StringPool;
-import com.action.common.enums.UseType;
+import com.action.common.enums.StatusType;
 import com.action.common.security.util.SecurityUtil;
 import com.action.system.mapper.SysMenuLimitMapper;
 import com.action.system.service.ICacheService;
-import com.action.system.entity.SysMenu;
+import com.action.system.struct.entity.SysMenu;
 import com.action.system.enums.MenuType;
 import com.action.system.enums.NodeType;
 import com.action.system.mapper.SysMenuMapper;
@@ -73,7 +73,7 @@ public class ISysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> imp
 
     @Override
     public Set<? extends BaseSecurityMenu> getSysPermission() {
-        List<SysMenu> sysMenuList = sysMenuMapper.selectList(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getStatus, UseType.ENABLE.getStatus()));
+        List<SysMenu> sysMenuList = sysMenuMapper.selectList(Wrappers.<SysMenu>lambdaQuery().eq(SysMenu::getStatus, StatusType.ENABLE.getStatus()));
         if (CollectionUtils.isEmpty(sysMenuList)) {
             return new HashSet<>();
         }

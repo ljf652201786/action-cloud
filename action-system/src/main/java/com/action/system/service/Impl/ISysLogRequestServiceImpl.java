@@ -1,6 +1,6 @@
 package com.action.system.service.Impl;
 
-import com.action.system.entity.SysLogRequest;
+import com.action.system.struct.entity.SysLogRequest;
 import com.action.system.mapper.SysLogRequestMapper;
 import com.action.system.service.ISysLogRequestService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

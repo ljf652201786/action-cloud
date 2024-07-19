@@ -1,9 +1,9 @@
 package com.action.business.listener;
 
-import com.action.business.converter.TestConverter;
-import com.action.business.entity.Test;
+import com.action.business.struct.converter.TestConverter;
+import com.action.business.struct.entity.Test;
 import com.action.business.service.ITestService;
-import com.action.business.vo.TestImportVo;
+import com.action.business.struct.vo.TestImportVo;
 import com.action.common.file.listener.excel.ActionExcelAnalysisEventListener;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.fastjson.JSON;

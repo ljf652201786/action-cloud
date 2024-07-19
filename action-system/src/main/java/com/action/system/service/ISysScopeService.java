@@ -1,6 +1,6 @@
 package com.action.system.service;
 
-import com.action.system.entity.SysScope;
+import com.action.system.struct.entity.SysScope;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

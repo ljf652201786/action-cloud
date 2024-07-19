@@ -1,6 +1,6 @@
 package com.action.system.service.Impl;
 
-import com.action.system.entity.SysPost;
+import com.action.system.struct.entity.SysPost;
 import com.action.system.mapper.SysPostMapper;
 import com.action.system.service.ISysPostService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

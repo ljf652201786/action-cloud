@@ -1,6 +1,6 @@
 package com.action.system.service.Impl;
 
-import com.action.system.entity.SysDict;
+import com.action.system.struct.entity.SysDict;
 import com.action.system.mapper.SysDictMapper;
 import com.action.system.service.ISysDictService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

@@ -4,9 +4,9 @@ import com.action.call.vo.LogSMSVo;
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
-import com.action.system.entity.SysLogSms;
+import com.action.system.struct.entity.SysLogSms;
 import com.action.system.service.ISysLogSmsService;
-import com.action.system.converter.LogSmsConverter;
+import com.action.system.struct.converter.LogSmsConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

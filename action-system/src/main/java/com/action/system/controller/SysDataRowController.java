@@ -2,8 +2,8 @@ package com.action.system.controller;
 
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
-import com.action.common.enums.UseType;
-import com.action.system.entity.SysDataRowLimit;
+import com.action.common.enums.StatusType;
+import com.action.system.struct.entity.SysDataRowLimit;
 import com.action.system.service.ISysDataRowLimitService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +35,7 @@ public class SysDataRowController implements BaseController<ISysDataRowLimitServ
         if (StringUtils.isEmpty(sysDataRowLimit.getDataId()) || StringUtils.isEmpty(sysDataRowLimit.getContactId()) || StringUtils.isEmpty(sysDataRowLimit.getType())) {
             return Result.failed("缺少必要数据");
         }
-        sysDataRowLimit.setStatus(UseType.ENABLE.getStatus());
+        sysDataRowLimit.setStatus(StatusType.ENABLE.getStatus());
         sysDataRowLimit.setRelation("and");
         boolean isSave = iSysDataRowLimitService.save(sysDataRowLimit);
         if (isSave) {
@@ -57,7 +57,7 @@ public class SysDataRowController implements BaseController<ISysDataRowLimitServ
         if (StringUtils.isEmpty(sysDataRowLimit.getDataId()) || StringUtils.isEmpty(sysDataRowLimit.getContactId()) || StringUtils.isEmpty(sysDataRowLimit.getType())) {
             return Result.failed("缺少必要数据");
         }
-        sysDataRowLimit.setStatus(UseType.ENABLE.getStatus());
+        sysDataRowLimit.setStatus(StatusType.ENABLE.getStatus());
         sysDataRowLimit.setRelation("and");
         boolean isUpdate = iSysDataRowLimitService.updateById(sysDataRowLimit);
         if (isUpdate) {
@@ -94,9 +94,9 @@ public class SysDataRowController implements BaseController<ISysDataRowLimitServ
         if (Objects.isNull(sysDataRowLimit)) {
             return Result.failed("该数据不存在");
         }
-        sysDataRowLimit.setStatus(UseType.DISABLED.getStatus());
+        sysDataRowLimit.setStatus(StatusType.DISABLED.getStatus());
         iSysDataRowLimitService.updateById(sysDataRowLimit);
-        iSysDataRowLimitService.updateDataRowLimitStatus(id, UseType.DISABLED.getStatus());
+        iSysDataRowLimitService.updateDataRowLimitStatus(id, StatusType.DISABLED.getStatus());
         return Result.success("禁用成功");
     }
 
@@ -114,9 +114,9 @@ public class SysDataRowController implements BaseController<ISysDataRowLimitServ
         if (Objects.isNull(sysDataRowLimit)) {
             return Result.failed("该数据不存在");
         }
-        sysDataRowLimit.setStatus(UseType.ENABLE.getStatus());
+        sysDataRowLimit.setStatus(StatusType.ENABLE.getStatus());
         iSysDataRowLimitService.updateById(sysDataRowLimit);
-        iSysDataRowLimitService.updateDataRowLimitStatus(id, UseType.ENABLE.getStatus());
+        iSysDataRowLimitService.updateDataRowLimitStatus(id, StatusType.ENABLE.getStatus());
         return Result.success("激活成功");
     }
 }

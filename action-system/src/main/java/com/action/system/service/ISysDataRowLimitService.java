@@ -1,6 +1,6 @@
 package com.action.system.service;
 
-import com.action.system.entity.SysDataRowLimit;
+import com.action.system.struct.entity.SysDataRowLimit;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.Set;

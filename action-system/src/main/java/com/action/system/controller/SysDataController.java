@@ -3,8 +3,10 @@ package com.action.system.controller;
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
 
-import com.action.system.entity.*;
 import com.action.system.service.*;
+import com.action.system.struct.entity.SysData;
+import com.action.system.struct.entity.SysDataColumnLimit;
+import com.action.system.struct.entity.SysDataRowLimit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

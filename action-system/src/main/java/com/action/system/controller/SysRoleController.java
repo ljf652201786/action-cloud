@@ -2,10 +2,10 @@ package com.action.system.controller;
 
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
-import com.action.common.enums.UseType;
+import com.action.common.enums.StatusType;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
-import com.action.system.entity.SysRole;
-import com.action.system.entity.SysUserRole;
+import com.action.system.struct.entity.SysRole;
+import com.action.system.struct.entity.SysUserRole;
 import com.action.system.service.ISysRoleService;
 import com.action.system.service.ISysUserRoleService;
 import lombok.RequiredArgsConstructor;
@@ -172,9 +172,9 @@ public class SysRoleController implements BaseController<ISysRoleService, SysRol
         if (Objects.isNull(sysRole)) {
             return Result.failed("该角色不存在");
         }
-        sysRole.setStatus(UseType.DISABLED.getStatus());
+        sysRole.setStatus(StatusType.DISABLED.getStatus());
         iSysRoleService.updateById(sysRole);
-        iSysUserRoleService.updateRoleStatus(id, UseType.DISABLED.getStatus());
+        iSysUserRoleService.updateRoleStatus(id, StatusType.DISABLED.getStatus());
         return Result.success("禁用成功");
     }
 
@@ -192,9 +192,9 @@ public class SysRoleController implements BaseController<ISysRoleService, SysRol
         if (Objects.isNull(sysRole)) {
             return Result.failed("该角色不存在");
         }
-        sysRole.setStatus(UseType.ENABLE.getStatus());
+        sysRole.setStatus(StatusType.ENABLE.getStatus());
         iSysRoleService.updateById(sysRole);
-        iSysUserRoleService.updateRoleStatus(id, UseType.ENABLE.getStatus());
+        iSysUserRoleService.updateRoleStatus(id, StatusType.ENABLE.getStatus());
         return Result.success("激活成功");
     }
 }

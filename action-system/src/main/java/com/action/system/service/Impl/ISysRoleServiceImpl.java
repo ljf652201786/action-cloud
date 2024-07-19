@@ -1,6 +1,6 @@
 package com.action.system.service.Impl;
 
-import com.action.system.entity.SysRole;
+import com.action.system.struct.entity.SysRole;
 import com.action.system.mapper.SysRoleMapper;
 import com.action.system.service.ISysRoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

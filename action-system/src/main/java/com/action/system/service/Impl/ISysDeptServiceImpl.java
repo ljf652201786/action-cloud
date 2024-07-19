@@ -1,13 +1,12 @@
 package com.action.system.service.Impl;
 
-import com.action.common.enums.UseType;
-import com.action.system.entity.SysDept;
-import com.action.system.entity.SysPost;
+import com.action.common.enums.StatusType;
+import com.action.system.struct.entity.SysDept;
+import com.action.system.struct.entity.SysPost;
 import com.action.system.enums.NodeType;
 import com.action.system.mapper.SysDeptMapper;
 import com.action.system.mapper.SysPostMapper;
 import com.action.system.service.ISysDeptService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -45,8 +44,8 @@ public class ISysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> imp
 
     @Override
     public List<SysDept> buildDeptPostTreeSelect() {
-        List<SysDept> sysDeptList = sysDeptMapper.selectList(Wrappers.<SysDept>lambdaQuery().eq(SysDept::getStatus, UseType.ENABLE.getStatus()));
-        List<SysPost> sysPostList = sysPostMapper.selectList(Wrappers.<SysPost>lambdaQuery().eq(SysPost::getStatus, UseType.ENABLE.getStatus()));
+        List<SysDept> sysDeptList = sysDeptMapper.selectList(Wrappers.<SysDept>lambdaQuery().eq(SysDept::getStatus, StatusType.ENABLE.getStatus()));
+        List<SysPost> sysPostList = sysPostMapper.selectList(Wrappers.<SysPost>lambdaQuery().eq(SysPost::getStatus, StatusType.ENABLE.getStatus()));
         if (CollectionUtils.isEmpty(sysDeptList)) {
             return List.of();
         }

@@ -3,7 +3,7 @@ package com.action.auth.service;
 import com.action.auth.entity.SecurityUser;
 import com.action.call.clients.RemoteSystemClients;
 import com.action.call.vo.AuthUserInfoVo;
-import com.action.common.enums.UseType;
+import com.action.common.enums.StatusType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,7 +36,7 @@ public class SysUserDetailsService implements UserDetailsService {
 
         Assert.isTrue(authUserInfoVo != null, "用户不存在");
 
-        if (!UseType.ENABLE.getStatus().equals(authUserInfoVo.getStatus())) {
+        if (!StatusType.ENABLE.getStatus().equals(authUserInfoVo.getStatus())) {
             throw new DisabledException("该账户已被禁用!");
         }
 

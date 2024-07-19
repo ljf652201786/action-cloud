@@ -1,6 +1,6 @@
 package com.action.system.service.Impl;
 
-import com.action.system.entity.SysGroup;
+import com.action.system.struct.entity.SysGroup;
 import com.action.system.mapper.SysGroupMapper;
 import com.action.system.service.ISysGroupService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

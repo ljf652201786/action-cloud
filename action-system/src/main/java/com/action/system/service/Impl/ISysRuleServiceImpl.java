@@ -1,6 +1,6 @@
 package com.action.system.service.Impl;
 
-import com.action.system.entity.SysRule;
+import com.action.system.struct.entity.SysRule;
 import com.action.system.mapper.SysRuleMapper;
 import com.action.system.service.ISysRuleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

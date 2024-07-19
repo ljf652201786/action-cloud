@@ -2,9 +2,9 @@ package com.action.system.controller;
 
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
-import com.action.common.enums.UseType;
+import com.action.common.enums.StatusType;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
-import com.action.system.entity.SysPost;
+import com.action.system.struct.entity.SysPost;
 import com.action.system.service.ISysPostService;
 import com.action.system.service.ISysScopeService;
 import lombok.RequiredArgsConstructor;
@@ -125,9 +125,9 @@ public class SysPostController implements BaseController<ISysPostService, SysPos
         if (Objects.isNull(sysPost)) {
             return Result.failed("该部门不存在");
         }
-        sysPost.setStatus(UseType.DISABLED.getStatus());
+        sysPost.setStatus(StatusType.DISABLED.getStatus());
         iSysPostService.updateById(sysPost);
-        iSysScopeService.updatePostStatus(id, UseType.DISABLED.getStatus());
+        iSysScopeService.updatePostStatus(id, StatusType.DISABLED.getStatus());
         return Result.success();
     }
 
@@ -145,9 +145,9 @@ public class SysPostController implements BaseController<ISysPostService, SysPos
         if (Objects.isNull(sysPost)) {
             return Result.failed("该部门不存在");
         }
-        sysPost.setStatus(UseType.ENABLE.getStatus());
+        sysPost.setStatus(StatusType.ENABLE.getStatus());
         iSysPostService.updateById(sysPost);
-        iSysScopeService.updatePostStatus(id, UseType.ENABLE.getStatus());
+        iSysScopeService.updatePostStatus(id, StatusType.ENABLE.getStatus());
         return Result.success();
     }
 }

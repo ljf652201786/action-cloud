@@ -1,6 +1,6 @@
 package com.action.system.service;
 
-import com.action.system.entity.SysMenuRule;
+import com.action.system.struct.entity.SysMenuRule;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 

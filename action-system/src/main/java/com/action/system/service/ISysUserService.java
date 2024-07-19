@@ -1,9 +1,9 @@
 package com.action.system.service;
 
 import com.action.call.vo.AuthUserInfoVo;
-import com.action.system.dto.SysUserExtend;
-import com.action.system.entity.SysUser;
-import com.action.system.vo.UserProfileVO;
+import com.action.system.struct.dto.SysUserExtend;
+import com.action.system.struct.entity.SysUser;
+import com.action.system.struct.vo.UserProfileVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

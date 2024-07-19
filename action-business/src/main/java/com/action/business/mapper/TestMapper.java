@@ -1,6 +1,6 @@
 package com.action.business.mapper;
 
-import com.action.business.entity.Test;
+import com.action.business.struct.entity.Test;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

@@ -2,10 +2,14 @@ package com.action.system.controller;
 
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
+import com.action.common.enums.StatusType;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
-import com.action.system.entity.SysDictDetail;
+import com.action.system.service.ISysDictService;
+import com.action.system.struct.entity.SysDict;
+import com.action.system.struct.entity.SysDictDetail;
 import com.action.system.service.ISysDictDetailService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +25,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class SysDictDetailController implements BaseController<ISysDictDetailService, SysDictDetail> {
     private final ISysDictDetailService iSysDictDetailService;
+    private final ISysDictService iSysDictService;
 
     /**
      * @param query 查询对象
@@ -36,6 +41,29 @@ public class SysDictDetailController implements BaseController<ISysDictDetailSer
     }
 
     /**
+     * @param code 字典code
+     * @Description: 字典详情列表
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/14
+     */
+    @RequestMapping(value = "selection", method = RequestMethod.GET)
+    public Result selection(@RequestParam("code") String code) {
+        SysDict sysDict = iSysDictService.getOne(this.getLambdaQueryWrapper(new SysDict())
+                .eq(StringUtils.isNotEmpty(code), SysDict::getDictCode, code)
+                .eq(SysDict::getStatus, StatusType.ENABLE.getStatus()));
+        if (Objects.isNull(sysDict)) {
+            return Result.failed("Dictionary has been disabled");
+        }
+        List<SysDictDetail> list = iSysDictDetailService.list(this.getLambdaQueryWrapper()
+                .eq(StringUtils.isNotEmpty(code), SysDictDetail::getCode, code)
+                .eq(SysDictDetail::getStatus, StatusType.ENABLE.getStatus())
+                .orderByAsc(SysDictDetail::getSort));
+        return Result.success(list);
+    }
+
+    /**
      * @param sysDictDetail 字典详情对象
      * @Description: 保存字典详情
      * @return: Result 结果集
@@ -45,10 +73,6 @@ public class SysDictDetailController implements BaseController<ISysDictDetailSer
      */
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody SysDictDetail sysDictDetail) {
-        SysDictDetail sdd = iSysDictDetailService.getOne(this.getLambdaQueryWrapper().eq(SysDictDetail::getCode, sysDictDetail.getCode()));
-        if (Objects.nonNull(sdd)) {
-            return Result.failed("字典详情编码已存在");
-        }
         boolean isSave = iSysDictDetailService.save(sysDictDetail);
         if (isSave) {
             return Result.success("保存数据成功");
@@ -66,11 +90,6 @@ public class SysDictDetailController implements BaseController<ISysDictDetailSer
      */
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Result update(@RequestBody SysDictDetail sysDictDetail) {
-        SysDictDetail oldDictDetail = iSysDictDetailService.getById(sysDictDetail.getId());
-        SysDictDetail sdd = iSysDictDetailService.getOne(this.getLambdaQueryWrapper().eq(SysDictDetail::getCode, sysDictDetail.getCode()));
-        if (!oldDictDetail.getCode().equals(sysDictDetail.getCode()) && Objects.nonNull(sdd)) {
-            return Result.failed("字典详情编码已存在");
-        }
         boolean isUpdate = iSysDictDetailService.updateById(sysDictDetail);
         if (isUpdate) {
             return Result.success("更新数据成功");

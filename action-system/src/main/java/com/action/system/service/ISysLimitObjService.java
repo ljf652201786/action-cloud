@@ -1,6 +1,6 @@
 package com.action.system.service;
 
-import com.action.system.entity.SysLimitObj;
+import com.action.system.struct.entity.SysLimitObj;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 

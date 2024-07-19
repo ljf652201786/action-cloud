@@ -1,7 +1,7 @@
 package com.action.system.service.Impl;
 
-import com.action.common.enums.UseType;
-import com.action.system.entity.SysUserGroup;
+import com.action.common.enums.StatusType;
+import com.action.system.struct.entity.SysUserGroup;
 import com.action.system.mapper.SysUserGroupMapper;
 import com.action.system.service.ICacheService;
 import com.action.system.service.ISysUserGroupService;
@@ -27,7 +27,7 @@ public class ISysUserGroupServiceImpl extends ServiceImpl<SysUserGroupMapper, Sy
 
     @Override
     public List<SysUserGroup> getSysUserGroupByUserId(String userId) {
-        return sysUserGroupMapper.selectList(Wrappers.<SysUserGroup>lambdaQuery().eq(SysUserGroup::getUserId, userId).eq(SysUserGroup::getStatus, UseType.ENABLE.getStatus()));
+        return sysUserGroupMapper.selectList(Wrappers.<SysUserGroup>lambdaQuery().eq(SysUserGroup::getUserId, userId).eq(SysUserGroup::getStatus, StatusType.ENABLE.getStatus()));
     }
 
     @Override

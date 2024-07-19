@@ -1,7 +1,7 @@
 package com.action.system.mapper;
 
-import com.action.system.entity.SysMenu;
-import com.action.system.entity.SysMenuLimit;
+import com.action.system.struct.entity.SysMenu;
+import com.action.system.struct.entity.SysMenuLimit;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 

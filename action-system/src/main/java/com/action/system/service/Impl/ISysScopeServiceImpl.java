@@ -1,7 +1,7 @@
 package com.action.system.service.Impl;
 
-import com.action.common.enums.UseType;
-import com.action.system.entity.SysScope;
+import com.action.common.enums.StatusType;
+import com.action.system.struct.entity.SysScope;
 import com.action.system.mapper.SysScopeMapper;
 import com.action.system.service.ICacheService;
 import com.action.system.service.ISysScopeService;
@@ -29,7 +29,7 @@ public class ISysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> 
     private final ICacheService iCacheService;
 
     public List<SysScope> getSysScopeByUserId(String userId) {
-        return sysScopeMapper.selectList(Wrappers.<SysScope>lambdaQuery().eq(SysScope::getUserId, userId).eq(SysScope::getDeptStatus, UseType.ENABLE.getStatus()).eq(SysScope::getPostStatus, UseType.ENABLE.getStatus()));
+        return sysScopeMapper.selectList(Wrappers.<SysScope>lambdaQuery().eq(SysScope::getUserId, userId).eq(SysScope::getDeptStatus, StatusType.ENABLE.getStatus()).eq(SysScope::getPostStatus, StatusType.ENABLE.getStatus()));
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ISysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> 
 
     @Override
     public boolean updateDeptStatus(String deptId, String status) {
-        List<SysScope> sysScopeList = sysScopeMapper.selectList(Wrappers.<SysScope>lambdaQuery().eq(SysScope::getDeptId, deptId).eq(SysScope::getPostStatus, UseType.ENABLE.getStatus()));
+        List<SysScope> sysScopeList = sysScopeMapper.selectList(Wrappers.<SysScope>lambdaQuery().eq(SysScope::getDeptId, deptId).eq(SysScope::getPostStatus, StatusType.ENABLE.getStatus()));
         if (CollectionUtils.isEmpty(sysScopeList)) {
             return true;
         }

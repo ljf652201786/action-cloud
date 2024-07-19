@@ -2,10 +2,10 @@ package com.action.system.controller;
 
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
-import com.action.common.enums.UseType;
+import com.action.common.enums.StatusType;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
-import com.action.system.entity.SysGroup;
-import com.action.system.entity.SysUserGroup;
+import com.action.system.struct.entity.SysGroup;
+import com.action.system.struct.entity.SysUserGroup;
 import com.action.system.service.ISysGroupService;
 import com.action.system.service.ISysUserGroupService;
 import lombok.RequiredArgsConstructor;
@@ -126,9 +126,9 @@ public class SysGroupController implements BaseController<ISysGroupService, SysG
         if (Objects.isNull(sysGroup)) {
             return Result.failed("该用户组不存在");
         }
-        sysGroup.setStatus(UseType.DISABLED.getStatus());
+        sysGroup.setStatus(StatusType.DISABLED.getStatus());
         iSysGroupService.updateById(sysGroup);
-        iSysUserGroupService.updateGroupStatus(id, UseType.DISABLED.getStatus());
+        iSysUserGroupService.updateGroupStatus(id, StatusType.DISABLED.getStatus());
         return Result.success();
     }
 
@@ -146,9 +146,9 @@ public class SysGroupController implements BaseController<ISysGroupService, SysG
         if (Objects.isNull(sysGroup)) {
             return Result.failed("该用户组不存在");
         }
-        sysGroup.setStatus(UseType.ENABLE.getStatus());
+        sysGroup.setStatus(StatusType.ENABLE.getStatus());
         iSysGroupService.updateById(sysGroup);
-        iSysUserGroupService.updateGroupStatus(id, UseType.ENABLE.getStatus());
+        iSysUserGroupService.updateGroupStatus(id, StatusType.ENABLE.getStatus());
         return Result.success();
     }
 }

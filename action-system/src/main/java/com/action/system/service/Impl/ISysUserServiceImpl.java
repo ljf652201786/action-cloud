@@ -4,15 +4,15 @@ import com.action.call.vo.AuthUserInfoVo;
 import com.action.common.biz.service.ICache;
 import com.action.common.common.UserSetConstants;
 import com.action.common.core.base.BaseSecurityMenu;
-import com.action.common.enums.UseType;
+import com.action.common.enums.StatusType;
 import com.action.common.mybatisplus.extend.filter.datapermission.DataRowFilterStruct;
 import com.action.common.security.util.SecurityUtil;
-import com.action.system.converter.UserConverter;
-import com.action.system.dto.SysUserExtend;
-import com.action.system.entity.*;
+import com.action.system.struct.converter.UserConverter;
+import com.action.system.struct.dto.SysUserExtend;
 import com.action.system.mapper.*;
 import com.action.system.service.*;
-import com.action.system.vo.UserProfileVO;
+import com.action.system.struct.entity.*;
+import com.action.system.struct.vo.UserProfileVO;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
@@ -81,7 +81,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
         List<SysRole> roleList = iSysRoleService.listObjs(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getDefaultRole, true));
         if (CollectionUtils.isEmpty(roleList)) {
             List<SysUserRole> sysUserRoleList = roleList.stream().map(sysRole -> {
-                return new SysUserRole(sysUserExtend.getId(), sysRole.getId(), UseType.ENABLE.getStatus());
+                return new SysUserRole(sysUserExtend.getId(), sysRole.getId(), StatusType.ENABLE.getStatus());
             }).collect(Collectors.toList());
             iSysUserRoleService.saveBatch(sysUserRoleList);
         }
@@ -219,21 +219,21 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
         List<String> groupList = sysUserExtend.getGroupList();
         if (!CollectionUtils.isEmpty(roleList)) {
             List<SysUserRole> userRoleList = roleList.stream().map(roleId -> {
-                return new SysUserRole(sysUserExtend.getId(), roleId, UseType.ENABLE.getStatus());
+                return new SysUserRole(sysUserExtend.getId(), roleId, StatusType.ENABLE.getStatus());
             }).collect(Collectors.toList());
             iSysUserRoleService.saveBatch(userRoleList);
         }
         if (!CollectionUtils.isEmpty(scopeList)) {
             scopeList.stream().forEach(scope -> {
                 scope.setUserId(sysUserExtend.getId());
-                scope.setDeptStatus(UseType.ENABLE.getStatus());
-                scope.setPostStatus(UseType.ENABLE.getStatus());
+                scope.setDeptStatus(StatusType.ENABLE.getStatus());
+                scope.setPostStatus(StatusType.ENABLE.getStatus());
             });
             iSysScopeService.saveBatch(scopeList);
         }
         if (!CollectionUtils.isEmpty(groupList)) {
             List<SysUserGroup> userGroupList = groupList.stream().map(groupId -> {
-                return new SysUserGroup(sysUserExtend.getId(), groupId, UseType.ENABLE.getStatus());
+                return new SysUserGroup(sysUserExtend.getId(), groupId, StatusType.ENABLE.getStatus());
             }).collect(Collectors.toList());
             iSysUserGroupService.saveBatch(userGroupList);
         }
@@ -251,7 +251,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
         if (!CollectionUtils.isEmpty(roles)) {
             List<SysUserRole> userRoleList = roles.stream().map(roleId -> {
                 roleIdSet.add(roleId);
-                return new SysUserRole(sysUser.getId(), roleId, UseType.ENABLE.getStatus());
+                return new SysUserRole(sysUser.getId(), roleId, StatusType.ENABLE.getStatus());
             }).collect(Collectors.toList());
             iSysUserRoleService.saveBatch(userRoleList);
         }
@@ -260,8 +260,8 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
             scopeList.stream().forEach(scope -> {
                 postIdSet.add(scope.getPostId());
                 scope.setUserId(sysUser.getId());
-                scope.setDeptStatus(UseType.ENABLE.getStatus());
-                scope.setPostStatus(UseType.ENABLE.getStatus());
+                scope.setDeptStatus(StatusType.ENABLE.getStatus());
+                scope.setPostStatus(StatusType.ENABLE.getStatus());
             });
             iSysScopeService.saveBatch(scopeList);
         }

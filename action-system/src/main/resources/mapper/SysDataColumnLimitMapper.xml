@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.action.system.mapper.SysDataColumnLimitMapper">
 
-    <select id="getUserDataColumnPerm" resultType="com.action.system.entity.SysDataColumnLimit">
+    <select id="getUserDataColumnPerm" resultType="com.action.system.struct.entity.SysDataColumnLimit">
         select sdcl.id,
         sdcl.data_id,
         sdcl.type,

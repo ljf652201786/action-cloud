@@ -1,6 +1,6 @@
 package com.action.system.mapper;
 
-import com.action.system.entity.SysPost;
+import com.action.system.struct.entity.SysPost;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

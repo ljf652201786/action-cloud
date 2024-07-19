@@ -1,6 +1,6 @@
 package com.action.system.service.Impl;
 
-import com.action.system.entity.SysDataColumnLimit;
+import com.action.system.struct.entity.SysDataColumnLimit;
 import com.action.system.mapper.SysDataColumnLimitMapper;
 import com.action.system.service.ISysDataColumnLimitService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

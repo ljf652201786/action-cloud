@@ -1,6 +1,6 @@
 package com.action.system.mapper;
 
-import com.action.system.entity.SysDataColumnLimit;
+import com.action.system.struct.entity.SysDataColumnLimit;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 

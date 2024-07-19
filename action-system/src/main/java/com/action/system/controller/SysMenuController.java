@@ -2,9 +2,10 @@ package com.action.system.controller;
 
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
-import com.action.system.entity.*;
 import com.action.system.service.ISysMenuLimitService;
 import com.action.system.service.ISysMenuService;
+import com.action.system.struct.entity.SysMenu;
+import com.action.system.struct.entity.SysMenuLimit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

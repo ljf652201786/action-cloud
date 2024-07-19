@@ -1,6 +1,6 @@
 package com.action.system.service.Impl;
 
-import com.action.system.entity.SysMenuRule;
+import com.action.system.struct.entity.SysMenuRule;
 import com.action.system.mapper.SysMenuRuleMapper;
 import com.action.system.service.ISysMenuRuleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

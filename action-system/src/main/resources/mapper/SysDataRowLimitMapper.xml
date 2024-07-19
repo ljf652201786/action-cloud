@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.action.system.mapper.SysDataRowLimitMapper">
 
-    <select id="getUserDataRowPerm" resultType="com.action.system.entity.SysDataRowLimit">
+    <select id="getUserDataRowPerm" resultType="com.action.system.struct.entity.SysDataRowLimit">
         select sdrl.id,
         sdrl.data_id,
         sdrl.type,

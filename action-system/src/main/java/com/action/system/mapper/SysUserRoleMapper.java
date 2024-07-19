@@ -1,7 +1,7 @@
 package com.action.system.mapper;
 
-import com.action.system.entity.SysRole;
-import com.action.system.entity.SysUserRole;
+import com.action.system.struct.entity.SysRole;
+import com.action.system.struct.entity.SysUserRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 

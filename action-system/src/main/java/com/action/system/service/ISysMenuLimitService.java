@@ -1,8 +1,8 @@
 package com.action.system.service;
 
 import com.action.common.core.base.BaseSecurityMenu;
-import com.action.system.entity.SysMenu;
-import com.action.system.entity.SysMenuLimit;
+import com.action.system.struct.entity.SysMenu;
+import com.action.system.struct.entity.SysMenuLimit;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

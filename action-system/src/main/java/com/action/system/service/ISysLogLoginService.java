@@ -1,6 +1,6 @@
 package com.action.system.service;
 
-import com.action.system.entity.SysLogLogin;
+import com.action.system.struct.entity.SysLogLogin;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 

@@ -3,9 +3,10 @@ package com.action.system.controller;
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
-import com.action.system.entity.*;
 import com.action.system.service.ISysLimitObjService;
 import com.action.system.service.ISysRuleService;
+import com.action.system.struct.entity.SysLimitObj;
+import com.action.system.struct.entity.SysRule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

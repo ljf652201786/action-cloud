@@ -2,13 +2,13 @@ package com.action.system.controller;
 
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
-import com.action.common.enums.UseType;
-import com.action.system.entity.SysMenuLimit;
-import com.action.system.entity.SysMenuRule;
+import com.action.common.enums.StatusType;
+import com.action.system.struct.entity.SysMenuLimit;
+import com.action.system.struct.entity.SysMenuRule;
 import com.action.system.service.ISysMenuLimitService;
 import com.action.system.service.ISysMenuRuleService;
-import com.action.system.vo.PermAllocationVo;
-import com.action.system.vo.RuleAllocationVo;
+import com.action.system.struct.vo.PermAllocationVo;
+import com.action.system.struct.vo.RuleAllocationVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +52,7 @@ public class SysPermAllocationController implements BaseController {
                 return Result.failed("请先选择分配的菜单");
             }
             List<SysMenuLimit> sysMenuLimitList = permAllocationVo.getMenuIds().stream().map(menuId -> {
-                return new SysMenuLimit(permAllocationVo.getType(), permAllocationVo.getContactId(), menuId, UseType.ENABLE.getStatus());
+                return new SysMenuLimit(permAllocationVo.getType(), permAllocationVo.getContactId(), menuId, StatusType.ENABLE.getStatus());
             }).collect(Collectors.toList());
             boolean isSaveBatch = iSysMenuLimitService.saveBatch(sysMenuLimitList);
             if (isSaveBatch) {

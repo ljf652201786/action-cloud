@@ -6,12 +6,12 @@ import com.action.common.common.RedisSetConstants;
 import com.action.common.common.UserSetConstants;
 import com.action.common.core.common.Result;
 import com.action.common.core.service.RedisCacheServices;
-import com.action.common.enums.UseType;
+import com.action.common.enums.StatusType;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
-import com.action.system.dto.SysUserExtend;
-import com.action.system.entity.SysUser;
+import com.action.system.struct.dto.SysUserExtend;
+import com.action.system.struct.entity.SysUser;
 import com.action.system.service.*;
-import com.action.system.vo.UserProfileVO;
+import com.action.system.struct.vo.UserProfileVO;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -215,7 +215,7 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
         if (Objects.isNull(sysUser)) {
             return Result.failed("该用户不存在");
         }
-        sysUser.setStatus(UseType.DISABLED.getStatus());
+        sysUser.setStatus(StatusType.DISABLED.getStatus());
         iSysUserService.updateById(sysUser);
         return Result.success("禁用成功");
     }
@@ -234,7 +234,7 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
         if (Objects.isNull(sysUser)) {
             return Result.failed("该用户不存在");
         }
-        sysUser.setStatus(UseType.ENABLE.getStatus());
+        sysUser.setStatus(StatusType.ENABLE.getStatus());
         iSysUserService.updateById(sysUser);
         return Result.success("激活成功");
     }

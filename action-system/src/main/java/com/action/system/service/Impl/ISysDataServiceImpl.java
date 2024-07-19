@@ -1,10 +1,10 @@
 package com.action.system.service.Impl;
 
-import com.action.common.enums.UseType;
+import com.action.common.enums.StatusType;
 import com.action.common.mybatisplus.extend.filter.datapermission.DataRowFilterStruct;
-import com.action.system.entity.SysData;
-import com.action.system.entity.SysDataColumnLimit;
-import com.action.system.entity.SysDataRowLimit;
+import com.action.system.struct.entity.SysData;
+import com.action.system.struct.entity.SysDataColumnLimit;
+import com.action.system.struct.entity.SysDataRowLimit;
 import com.action.system.enums.NodeType;
 import com.action.system.mapper.SysDataMapper;
 import com.action.system.service.ISysDataColumnLimitService;
@@ -34,7 +34,7 @@ public class ISysDataServiceImpl extends ServiceImpl<SysDataMapper, SysData> imp
 
     @Override
     public List<SysData> buildDataTreeSelect() {
-        List<SysData> sysDataList = sysDataMapper.selectList(Wrappers.<SysData>lambdaQuery().eq(SysData::getStatus, UseType.ENABLE.getStatus()));
+        List<SysData> sysDataList = sysDataMapper.selectList(Wrappers.<SysData>lambdaQuery().eq(SysData::getStatus, StatusType.ENABLE.getStatus()));
         if (CollectionUtils.isEmpty(sysDataList)) {
             return List.of();
         }

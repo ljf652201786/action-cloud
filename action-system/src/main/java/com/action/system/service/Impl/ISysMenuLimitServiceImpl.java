@@ -1,8 +1,8 @@
 package com.action.system.service.Impl;
 
 import com.action.common.core.base.BaseSecurityMenu;
-import com.action.system.entity.SysMenu;
-import com.action.system.entity.SysMenuLimit;
+import com.action.system.struct.entity.SysMenu;
+import com.action.system.struct.entity.SysMenuLimit;
 import com.action.system.mapper.SysMenuLimitMapper;
 import com.action.system.service.ISysMenuLimitService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

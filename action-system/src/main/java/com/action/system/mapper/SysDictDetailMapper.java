@@ -1,6 +1,6 @@
 package com.action.system.mapper;
 
-import com.action.system.entity.SysDictDetail;
+import com.action.system.struct.entity.SysDictDetail;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

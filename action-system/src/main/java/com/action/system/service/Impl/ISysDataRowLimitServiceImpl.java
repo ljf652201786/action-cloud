@@ -1,6 +1,6 @@
 package com.action.system.service.Impl;
 
-import com.action.system.entity.SysDataRowLimit;
+import com.action.system.struct.entity.SysDataRowLimit;
 import com.action.system.mapper.SysDataRowLimitMapper;
 import com.action.system.service.ICacheService;
 import com.action.system.service.ISysDataRowLimitService;

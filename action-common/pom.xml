@@ -135,11 +135,5 @@
             <version>${easyexcel.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.hikvision.ga</groupId>
-            <artifactId>artemis-http-client</artifactId>
-            <version>${artemis-http-client.version}</version>
-        </dependency>
-
     </dependencies>
 </project>

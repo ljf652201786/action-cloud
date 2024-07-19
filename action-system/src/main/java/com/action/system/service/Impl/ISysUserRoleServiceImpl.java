@@ -1,8 +1,8 @@
 package com.action.system.service.Impl;
 
-import com.action.common.enums.UseType;
-import com.action.system.entity.SysRole;
-import com.action.system.entity.SysUserRole;
+import com.action.common.enums.StatusType;
+import com.action.system.struct.entity.SysRole;
+import com.action.system.struct.entity.SysUserRole;
 import com.action.system.mapper.SysUserRoleMapper;
 import com.action.system.service.ICacheService;
 import com.action.system.service.ISysUserRoleService;
@@ -33,7 +33,7 @@ public class ISysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysU
 
     @Override
     public List<SysUserRole> getSysUserRoleByUserId(String userId) {
-        return sysUserRoleMapper.selectList(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, userId).eq(SysUserRole::getStatus, UseType.ENABLE.getStatus()));
+        return sysUserRoleMapper.selectList(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, userId).eq(SysUserRole::getStatus, StatusType.ENABLE.getStatus()));
     }
 
     @Override

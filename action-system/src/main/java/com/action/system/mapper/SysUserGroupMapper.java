@@ -1,6 +1,6 @@
 package com.action.system.mapper;
 
-import com.action.system.entity.SysUserGroup;
+import com.action.system.struct.entity.SysUserGroup;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

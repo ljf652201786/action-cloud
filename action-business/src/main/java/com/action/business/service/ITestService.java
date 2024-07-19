@@ -1,6 +1,6 @@
 package com.action.business.service;
 
-import com.action.business.entity.Test;
+import com.action.business.struct.entity.Test;
 import com.action.common.file.analysis.ExcelStruct;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;

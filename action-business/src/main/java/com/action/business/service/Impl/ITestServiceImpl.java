@@ -1,6 +1,6 @@
 package com.action.business.service.Impl;
 
-import com.action.business.entity.Test;
+import com.action.business.struct.entity.Test;
 import com.action.business.mapper.TestMapper;
 import com.action.business.service.ITestService;
 import com.action.common.biz.annotation.FileExtract;

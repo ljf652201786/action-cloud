@@ -2,10 +2,10 @@ package com.action.system.controller;
 
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
-import com.action.common.enums.UseType;
+import com.action.common.enums.StatusType;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
-import com.action.system.entity.*;
 import com.action.system.service.*;
+import com.action.system.struct.entity.SysDept;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -124,10 +124,10 @@ public class SysDeptController implements BaseController<ISysDeptService, SysDep
         if (Objects.isNull(sysDept)) {
             return Result.failed("该部门不存在");
         }
-        sysDept.setStatus(UseType.DISABLED.getStatus());
+        sysDept.setStatus(StatusType.DISABLED.getStatus());
         iSysDeptService.updateById(sysDept);
         //更新scope表
-        iSysScopeService.updateDeptStatus(id, UseType.DISABLED.getStatus());
+        iSysScopeService.updateDeptStatus(id, StatusType.DISABLED.getStatus());
         return Result.success();
     }
 
@@ -145,10 +145,10 @@ public class SysDeptController implements BaseController<ISysDeptService, SysDep
         if (Objects.isNull(sysDept)) {
             return Result.failed("该部门不存在");
         }
-        sysDept.setStatus(UseType.ENABLE.getStatus());
+        sysDept.setStatus(StatusType.ENABLE.getStatus());
         iSysDeptService.updateById(sysDept);
         //更新scope表
-        iSysScopeService.updateDeptStatus(id, UseType.ENABLE.getStatus());
+        iSysScopeService.updateDeptStatus(id, StatusType.ENABLE.getStatus());
         return Result.success();
     }
 
