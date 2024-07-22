@@ -40,6 +40,19 @@ public class SysPostController implements BaseController<ISysPostService, SysPos
     }
 
     /**
+     * @Description: 获取所有岗位
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/14
+     */
+    @RequestMapping(value = "getAllList", method = RequestMethod.GET)
+    public Result getAllList() {
+        List<SysPost> list = iSysPostService.list();
+        return Result.success("获取岗位列表成功", list);
+    }
+
+    /**
      * @param sysPost 岗位对象
      * @Description: 保存岗位数据
      * @return: Result 结果集

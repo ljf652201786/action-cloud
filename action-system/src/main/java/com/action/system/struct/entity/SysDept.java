@@ -1,6 +1,7 @@
 package com.action.system.struct.entity;
 
 import com.action.common.base.BaseEntity;
+import com.action.common.core.service.ITreeNodeSelect;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -20,9 +21,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("sys_dept")
-public class SysDept extends BaseEntity {
+public class SysDept extends BaseEntity implements ITreeNodeSelect {
     @TableId(value = "id")
     private String id;
+    @TableField("ancestral")
+    private String ancestral;
     @TableField("parent_id")
     private String parentId;
     @TableField("dept_code")
@@ -37,4 +40,9 @@ public class SysDept extends BaseEntity {
     private List<SysDept> childrenList = new ArrayList<>();
     @TableField(exist = false)
     private List<SysPost> postList = new ArrayList<>();
+
+    @Override
+    public void setChildrenList(List list) {
+        this.childrenList = list;
+    }
 }

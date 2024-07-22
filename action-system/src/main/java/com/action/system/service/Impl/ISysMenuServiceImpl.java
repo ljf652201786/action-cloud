@@ -2,13 +2,14 @@ package com.action.system.service.Impl;
 
 import com.action.common.core.base.BaseSecurityMenu;
 import com.action.common.core.constants.StringPool;
+import com.action.common.core.enums.NodeTypeEnum;
+import com.action.common.core.tool.TreeNodeUtils;
 import com.action.common.enums.StatusType;
 import com.action.common.security.util.SecurityUtil;
 import com.action.system.mapper.SysMenuLimitMapper;
 import com.action.system.service.ICacheService;
 import com.action.system.struct.entity.SysMenu;
 import com.action.system.enums.MenuType;
-import com.action.system.enums.NodeType;
 import com.action.system.mapper.SysMenuMapper;
 import com.action.system.service.ISysMenuService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -16,13 +17,11 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @Description: 菜单表
@@ -60,15 +59,8 @@ public class ISysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> imp
                 });
         List<SysMenu> sysMenuList = sysMenuMapper.selectList(new QueryWrapper<SysMenu>().lambda().in(SysMenu::getId, ancestralMenuIdList));
         sysMenuByScope.addAll(sysMenuList);
-        return buildMenu(sysMenuByScope.stream(), sysMenuByScope.stream().toList());
-    }
-
-    @Override
-    public List<SysMenu> buildMenuTreeSelect(List<SysMenu> sysMenuList) {
-        if (CollectionUtils.isEmpty(sysMenuList)) {
-            return List.of();
-        }
-        return buildMenu(sysMenuList.stream(), sysMenuList);
+        List<SysMenu> list = sysMenuByScope.stream().toList();
+        return buildMenu(list);
     }
 
     @Override
@@ -83,25 +75,13 @@ public class ISysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> imp
         return securityMenuSet;
     }
 
-    @NotNull
-    private List<SysMenu> buildMenu(@NotNull Stream<SysMenu> sysMenuStream, List<SysMenu> sysMenuList) {
-        List<SysMenu> parentMenuList = sysMenuStream.filter(menu -> menu.getParentId().equals(NodeType.PARENT.getType()) && menu.getMenuType().equalsIgnoreCase(MenuType.LIST.getType())).collect(Collectors.toList());
+    private List<SysMenu> buildMenu(List<SysMenu> sysMenuList) {
+        List<SysMenu> parentMenuList = sysMenuList.stream().filter(menu -> menu.getParentId().equals(NodeTypeEnum.PARENT.getType()) && menu.getMenuType().equalsIgnoreCase(MenuType.LIST.getType())).collect(Collectors.toList());
         parentMenuList.stream().forEach(parentMenu -> {
             List<SysMenu> childrenDeptList = new ArrayList<>();
             parentMenu.setChildrenList(childrenDeptList);
-            this.buildMenuTree(sysMenuList, childrenDeptList, parentMenu.getId());
+            TreeNodeUtils.buildTree(sysMenuList, childrenDeptList, parentMenu.getParentId());
         });
         return parentMenuList;
-    }
-
-    private void buildMenuTree(@NotNull List<SysMenu> menus, List<SysMenu> childrenDeptList, String parentId) {
-        menus.stream().forEach(menu -> {
-            if (menu.getParentId().equals(parentId)) {
-                List<SysMenu> childrenMenuList1 = new ArrayList<>();
-                menu.setChildrenList(childrenMenuList1);
-                childrenDeptList.add(menu);
-                this.buildMenuTree(menus, childrenMenuList1, menu.getId());
-            }
-        });
     }
 }

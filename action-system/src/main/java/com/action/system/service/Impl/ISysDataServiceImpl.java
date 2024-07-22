@@ -1,11 +1,11 @@
 package com.action.system.service.Impl;
 
+import com.action.common.core.enums.NodeTypeEnum;
 import com.action.common.enums.StatusType;
 import com.action.common.mybatisplus.extend.filter.datapermission.DataRowFilterStruct;
 import com.action.system.struct.entity.SysData;
 import com.action.system.struct.entity.SysDataColumnLimit;
 import com.action.system.struct.entity.SysDataRowLimit;
-import com.action.system.enums.NodeType;
 import com.action.system.mapper.SysDataMapper;
 import com.action.system.service.ISysDataColumnLimitService;
 import com.action.system.service.ISysDataRowLimitService;
@@ -38,7 +38,7 @@ public class ISysDataServiceImpl extends ServiceImpl<SysDataMapper, SysData> imp
         if (CollectionUtils.isEmpty(sysDataList)) {
             return List.of();
         }
-        List<SysData> parentDataList = sysDataList.stream().filter(data -> data.getParentId().equals(NodeType.PARENT.getType())).collect(Collectors.toList());
+        List<SysData> parentDataList = sysDataList.stream().filter(data -> data.getParentId().equals(NodeTypeEnum.PARENT.getType())).collect(Collectors.toList());
         parentDataList.stream().forEach(parentData -> {
             List<SysData> childrenDataList = new ArrayList<>();
             parentData.setChildrenDataList(childrenDataList);

@@ -41,6 +41,19 @@ public class SysGroupController implements BaseController<ISysGroupService, SysG
     }
 
     /**
+     * @Description: 获取所有组
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/14
+     */
+    @RequestMapping(value = "getAllList", method = RequestMethod.GET)
+    public Result getAllList() {
+        List<SysGroup> list = iSysGroupService.list();
+        return Result.success("获取用户组列表成功", list);
+    }
+
+    /**
      * @param sysGroup 用户组对象
      * @Description: 保存用户组
      * @return: Result 结果集

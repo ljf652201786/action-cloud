@@ -1,9 +1,9 @@
 package com.action.system.service.Impl;
 
+import com.action.common.core.enums.NodeTypeEnum;
 import com.action.common.enums.StatusType;
 import com.action.system.struct.entity.SysDept;
 import com.action.system.struct.entity.SysPost;
-import com.action.system.enums.NodeType;
 import com.action.system.mapper.SysDeptMapper;
 import com.action.system.mapper.SysPostMapper;
 import com.action.system.service.ISysDeptService;
@@ -13,8 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -29,27 +28,13 @@ public class ISysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> imp
     private final SysPostMapper sysPostMapper;
 
     @Override
-    public List<SysDept> buildDeptTreeSelect(List<SysDept> sysDeptList) {
-        if (CollectionUtils.isEmpty(sysDeptList)) {
-            return List.of();
-        }
-        List<SysDept> parentDeptList = sysDeptList.stream().filter(dept -> dept.getParentId().equals(NodeType.PARENT.getType())).collect(Collectors.toList());
-        parentDeptList.stream().forEach(parentDept -> {
-            List<SysDept> childrenDeptList = new ArrayList<>();
-            parentDept.setChildrenList(childrenDeptList);
-            this.buildDeptTree(sysDeptList, childrenDeptList, parentDept.getId());
-        });
-        return parentDeptList;
-    }
-
-    @Override
     public List<SysDept> buildDeptPostTreeSelect() {
         List<SysDept> sysDeptList = sysDeptMapper.selectList(Wrappers.<SysDept>lambdaQuery().eq(SysDept::getStatus, StatusType.ENABLE.getStatus()));
         List<SysPost> sysPostList = sysPostMapper.selectList(Wrappers.<SysPost>lambdaQuery().eq(SysPost::getStatus, StatusType.ENABLE.getStatus()));
         if (CollectionUtils.isEmpty(sysDeptList)) {
             return List.of();
         }
-        List<SysDept> parentDeptList = sysDeptList.stream().filter(dept -> dept.getParentId().equals(NodeType.PARENT.getType())).collect(Collectors.toList());
+        List<SysDept> parentDeptList = sysDeptList.stream().filter(dept -> dept.getParentId().equals(NodeTypeEnum.PARENT.getType())).collect(Collectors.toList());
         parentDeptList.stream().forEach(parentDept -> {
             List<SysDept> childrenDeptList = new ArrayList<>();
             parentDept.setChildrenList(childrenDeptList);
@@ -65,17 +50,6 @@ public class ISysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> imp
             this.buildDeptPostTree(sysDeptList, sysPostList, childrenDeptList, parentDept.getId());
         });
         return parentDeptList;
-    }
-
-    private void buildDeptTree(List<SysDept> depts, List<SysDept> childrenDeptList, String parentId) {
-        depts.stream().forEach(dept -> {
-            if (dept.getParentId().equals(parentId)) {
-                List<SysDept> childrenDeptList1 = new ArrayList<>();
-                dept.setChildrenList(childrenDeptList1);
-                childrenDeptList.add(dept);
-                this.buildDeptTree(depts, childrenDeptList1, dept.getId());
-            }
-        });
     }
 
     private void buildDeptPostTree(List<SysDept> depts, List<SysPost> posts, List<SysDept> childrenDeptList, String parentId) {

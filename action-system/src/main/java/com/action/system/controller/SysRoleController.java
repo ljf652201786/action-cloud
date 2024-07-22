@@ -63,7 +63,7 @@ public class SysRoleController implements BaseController<ISysRoleService, SysRol
     @RequestMapping(value = "getAllList", method = RequestMethod.GET)
     public Result getAllList() {
         List<SysRole> result = iSysRoleService.list();
-        return Result.success("获取系统管理-角色表 列表成功", result);
+        return Result.success("获取角色列表成功", result);
     }
 
     /**

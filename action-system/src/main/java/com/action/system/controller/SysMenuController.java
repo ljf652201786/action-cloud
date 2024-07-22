@@ -112,9 +112,7 @@ public class SysMenuController implements BaseController<ISysMenuService, SysMen
      */
     @RequestMapping(value = "menuTreeSelect", method = RequestMethod.GET)
     public Result menuTreeSelect(SysMenu sysMenu) {
-        List<SysMenu> sysMenuList = iSysMenuService.list(this.getQueryWrapper(sysMenu));
-        List<SysMenu> treeSelects = iSysMenuService.buildMenuTreeSelect(sysMenuList);
-        return Result.success("获取数据权限树成功", treeSelects);
+        return this.treeSelect(iSysMenuService, sysMenu, SysMenu::getId);
     }
 
     /**

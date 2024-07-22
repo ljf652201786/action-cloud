@@ -35,8 +35,5 @@ public class SysPost extends BaseEntity {
     @Condition(Condition.ConditionTypeEnums.EQ)
     @TableField("status")
     private String status;
-    @TableField(exist = false)
-    @CorrelationField(table = SysDept.class, column = "dept_name")
-    private String deptName;
 
 }

@@ -161,9 +161,7 @@ public class SysDeptController implements BaseController<ISysDeptService, SysDep
      */
     @RequestMapping(value = "deptTreeSelect", method = RequestMethod.GET)
     public Result deptTreeSelect(SysDept sysDept) {
-        List<SysDept> sysDeptList = iSysDeptService.list(this.getQueryWrapper(sysDept));
-        List<SysDept> treeSelects = iSysDeptService.buildDeptTreeSelect(sysDeptList);
-        return Result.success("获取权限菜单树成功", treeSelects);
+        return this.treeSelect(iSysDeptService, sysDept, SysDept::getId);
     }
 
     /**
