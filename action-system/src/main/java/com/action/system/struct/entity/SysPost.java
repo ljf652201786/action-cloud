@@ -1,6 +1,6 @@
 package com.action.system.struct.entity;
 
-import com.action.common.base.BaseEntity;
+import com.action.common.mybatisplus.extend.base.BaseEntity;
 import com.action.common.mybatisplus.extend.annotation.Condition;
 import com.action.common.mybatisplus.extend.annotation.CorrelationField;
 import com.action.common.mybatisplus.extend.annotation.CorrelationTables;
