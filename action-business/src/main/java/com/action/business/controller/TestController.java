@@ -84,7 +84,7 @@ public class TestController implements BaseController<ITestService, Test> {
     }
 
     /**
-     * @Description: 菜单树形选择
+     * @Description: 树形选择
      * 需满足条件 1、实体对象中需要实现 ITreeNodeSelect接口
      *          2、对应实体表结构中有 ancestral(祖籍)，parentId(父节点id)字段
      *          3、实体对象中需包含有 List<T> childrenList = new ArrayList<>(); 属性
@@ -93,8 +93,8 @@ public class TestController implements BaseController<ITestService, Test> {
      * @Author: ljf  <lin652210786@163.com>
      * @Date: 2024/05/31
      */
-    @RequestMapping(value = "menuTreeSelect", method = RequestMethod.GET)
-    public Result menuTreeSelect(Test test) {
+    @RequestMapping(value = "treeSelect", method = RequestMethod.GET)
+    public Result treeSelect(Test test) {
         return this.treeSelect(iTestService, test, Test::getId);
     }
 

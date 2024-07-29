@@ -70,6 +70,11 @@
             <artifactId>action-common-mybatisplus-extend</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.action</groupId>
+            <artifactId>action-common-network</artifactId>
+        </dependency>
+
         <!-- 第三方依赖 -->
         <dependency>
             <groupId>mysql</groupId>
@@ -95,6 +100,16 @@
                     <artifactId>mybatis-spring</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
         </dependency>
     </dependencies>
 
