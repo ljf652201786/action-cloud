@@ -78,7 +78,7 @@ public class SysDataController implements BaseController<ISysDataService, SysDat
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "deleteById", method = RequestMethod.DELETE)
-    public Result deleteByIds(@RequestParam("id") String id) {
+    public Result deleteById(@RequestParam("id") String id) {
         SysDataRowLimit sysDataRowLimit = iSysDataRowLimitService.getOne(this.getLambdaQueryWrapper(new SysDataRowLimit()).eq(SysDataRowLimit::getDataId, id));
         SysDataColumnLimit sysDataColumnLimit = iSysDataColumnLimitService.getOne(this.getLambdaQueryWrapper(new SysDataColumnLimit()).eq(SysDataColumnLimit::getDataId, id));
         if (Objects.nonNull(sysDataRowLimit) || Objects.nonNull(sysDataColumnLimit)) {

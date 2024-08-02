@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.action.business.mapper.TestMapper">
+<mapper namespace="com.action.business.mapper.TestCpMapper">
 
     <!--<resultMap id="selectMap" type="com.action.business.struct.entity.Test">
         &lt;!&ndash; id为主键 &ndash;&gt;
@@ -33,11 +33,12 @@
         </collection>
     </resultMap>
 
-    <select id="getTes" resultMap="selectMap">
+    <!--    <select id="getTescp" resultMap="selectMap">-->
+    <select id="getTescp" resultType="com.action.business.struct.entity.TestCp">
         select bt.id, bt.name, btc.age, btc.test_id, btc.id
-        from biz_test bt
-                 left join biz_test_cp btc on btc.test_id = bt.id
-        where bt.id = #{id}
+        from biz_test_cp btc
+                 left join biz_test bt on bt.id = btc.test_id
+        where btc.id = #{id}
     </select>
 
 

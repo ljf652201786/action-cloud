@@ -1,8 +1,7 @@
 package com.action.system.service;
 
+import com.action.common.mybatisplus.extend.base.BaseMpService;
 import com.action.system.struct.entity.SysLogLogin;
-import com.baomidou.mybatisplus.extension.service.IService;
 
-
-public interface ISysLogLoginService extends IService<SysLogLogin> {
+public interface ISysLogLoginService extends BaseMpService<SysLogLogin> {
 }

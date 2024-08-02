@@ -14,5 +14,8 @@ public class ActionWebSocketServerHandler extends SimpleChannelInboundHandler<Ac
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, ActionNetWorkProtocolFormat.Message message) throws Exception {
         System.out.println(String.format("time：%s, The obtained data is：%s", message.getTime(), message.getWebSockerMsg().getMsgContent()));
+
+        ActionNetWorkProtocolFormat.WebSockerMsg niaho = ActionNetWorkProtocolFormat.WebSockerMsg.newBuilder().setMsgContent("niaho").build();
+        channelHandlerContext.writeAndFlush(niaho);
     }
 }

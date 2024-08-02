@@ -2,8 +2,6 @@ package com.action.system.struct.entity;
 
 import com.action.common.mybatisplus.extend.base.BaseEntity;
 import com.action.common.mybatisplus.extend.annotation.Condition;
-import com.action.common.mybatisplus.extend.annotation.CorrelationField;
-import com.action.common.mybatisplus.extend.annotation.CorrelationTables;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -23,7 +21,6 @@ import lombok.NoArgsConstructor;
 public class SysPost extends BaseEntity {
     @TableId(value = "id")
     private String id;
-    @CorrelationTables({SysDept.class})
     @TableField(value = "dept_id")
     private String deptId;
     @TableField(value = "post_code")

@@ -94,7 +94,7 @@ public class SysMenuController implements BaseController<ISysMenuService, SysMen
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "deleteById", method = RequestMethod.DELETE)
-    public Result deleteByIds(@RequestParam("id") String id) {
+    public Result deleteById(@RequestParam("id") String id) {
         SysMenuLimit sysMenuLimit = iSysMenuLimitService.getOne(this.getLambdaQueryWrapper(new SysMenuLimit()).eq(SysMenuLimit::getMenuId, id));
         if (Objects.nonNull(sysMenuLimit)) {
             return Result.failed("该数据删除失败，因为包含正被使用");

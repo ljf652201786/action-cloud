@@ -9,7 +9,6 @@ import com.action.system.struct.entity.SysDept;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -91,23 +90,7 @@ public class SysDeptController implements BaseController<ISysDeptService, SysDep
      */
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
-        List<String> idList = new ArrayList<>();
-        List<String> idExistList = new ArrayList<>();
-        for (int i = 0; i < ids.size(); i++) {
-            long num = iSysScopeService.deptNum(ids.get(i));
-            if (num == 0) {
-                idList.add(ids.get(i));
-            } else {
-                idExistList.add(ids.get(i));
-            }
-        }
-        if (idList.size() > 0) {
-            iSysDeptService.removeBatchByIds(idList);
-        }
-        if (idExistList.size() > 0) {
-            return Result.failed("该部门删除失败，因为包含正被使用", idExistList);
-        }
-        return Result.success("批量通过id删除数据成功");
+        return this.deleteByIds(iSysDeptService, ids, (id) -> (iSysScopeService.deptNum(id)) == 0);
     }
 
     /**

@@ -107,10 +107,6 @@ public class SysDictDetailController implements BaseController<ISysDictDetailSer
      */
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
-        boolean isRemove = iSysDictDetailService.removeBatchByIds(ids);
-        if (isRemove) {
-            return Result.success("删除数据成功");
-        }
-        return Result.failed("删除数据失败");
+        return this.deleteByIds(iSysDictDetailService, ids);
     }
 }

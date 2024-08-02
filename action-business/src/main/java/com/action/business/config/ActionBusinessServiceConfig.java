@@ -33,14 +33,14 @@ public class ActionBusinessServiceConfig {
         iEventService.registerEvent(ActionBusinessEvent.class, new ActionBusinessEvent(new EventStruct(), appName, new ActionBusinessEventHandler()));
     }
 
-    @Bean
+    /*@Bean
     public ActionNet actionHttpNet(NetWorkManagerProperties netWorkManagerProperties) {
         NetWorkManagerProperties.HttpNet httpNetProperties = netWorkManagerProperties.getHttpNet();
         //开启debug模式
         httpNetProperties.setNetDubug(true);
         ActionHttpNet actionHttpNet = new ActionHttpNet(httpNetProperties);
         return actionHttpNet.run();
-    }
+    }*/
 
     @Bean
     public ActionNet actionWebSockerNet(NetWorkManagerProperties netWorkManagerProperties) {

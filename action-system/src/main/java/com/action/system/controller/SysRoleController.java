@@ -119,23 +119,7 @@ public class SysRoleController implements BaseController<ISysRoleService, SysRol
      */
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
-        List<String> idList = new ArrayList<>();
-        List<String> idExistList = new ArrayList<>();
-        for (int i = 0; i < ids.size(); i++) {
-            long num = iSysUserRoleService.count(this.getLambdaQueryWrapper(new SysUserRole()).eq(SysUserRole::getRoleId, ids.get(i)));
-            if (num == 0) {
-                idList.add(ids.get(i));
-            } else {
-                idExistList.add(ids.get(i));
-            }
-        }
-        if (idList.size() > 0) {
-            iSysRoleService.removeBatchByIds(idList);
-        }
-        if (idExistList.size() > 0) {
-            return Result.failed("该角色删除失败，因为包含正被用户使用", idExistList);
-        }
-        return Result.success("批量通过id删除数据成功");
+        return this.deleteByIds(iSysRoleService, ids, (id) -> (iSysUserRoleService.count(this.getLambdaQueryWrapper(new SysUserRole()).eq(SysUserRole::getRoleId, id))) == 0);
     }
 
     /**

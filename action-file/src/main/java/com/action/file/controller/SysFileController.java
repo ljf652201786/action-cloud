@@ -44,8 +44,7 @@ public class SysFileController implements BaseController<ISysFileService, SysFil
 
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
-        boolean isUpdateBatchById = iSysFileService.removeBatchFilesByIds(ids);
-        return isUpdateBatchById ? Result.success("Batch deletion of data successful！") : Result.failed("Batch deletion of data failed！");
+        return this.deleteByIds(iSysFileService, ids);
     }
 
     @RequestMapping(value = "recovery", method = RequestMethod.PUT)

@@ -63,10 +63,6 @@ public class SysLogSmsController implements BaseController<ISysLogSmsService, Sy
      */
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
-        boolean isRemove = iSysLogSmsService.removeBatchByIds(ids);
-        if (isRemove) {
-            return Result.success("批量通过id删除数据成功");
-        }
-        return Result.failed("批量删除数据失败");
+        return this.deleteByIds(iSysLogSmsService, ids);
     }
 }

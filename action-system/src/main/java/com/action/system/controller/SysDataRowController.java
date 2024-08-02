@@ -75,7 +75,7 @@ public class SysDataRowController implements BaseController<ISysDataRowLimitServ
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "deleteById", method = RequestMethod.DELETE)
-    public Result deleteByIds(@RequestParam("id") String id) {
+    public Result deleteById(@RequestParam("id") String id) {
         iSysDataRowLimitService.removeById(id);
         return Result.success("通过id删除数据成功");
     }

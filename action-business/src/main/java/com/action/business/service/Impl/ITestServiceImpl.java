@@ -29,4 +29,9 @@ public class ITestServiceImpl extends ServiceImpl<TestMapper, Test> implements I
         System.out.println(String.format("The length of the content of the result set for parsing the excel file:{}", excelStructList.size()));
         return true;
     }
+
+    @Override
+    public List<Test> getTes(String test_id) {
+        return testMapper.getTes(test_id);
+    }
 }

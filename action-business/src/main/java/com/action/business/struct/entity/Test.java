@@ -2,7 +2,7 @@ package com.action.business.struct.entity;
 
 import com.action.common.core.service.ITreeNodeSelect;
 import com.action.common.mybatisplus.extend.annotation.Condition;
-import com.action.common.mybatisplus.extend.annotation.CorrelationField;
+import com.action.common.mybatisplus.extend.annotation.CorrelationTable;
 import com.action.common.mybatisplus.extend.annotation.CorrelationTables;
 import com.action.common.mybatisplus.extend.base.BaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -24,25 +24,23 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("biz_test")
-public class Test extends BaseEntity /*implements ITreeNodeSelect*/ {
-//    @CorrelationTables({xxx.class})
+public class Test extends BaseEntity/*implements ITreeNodeSelect*/ {
     @TableId("id")
+    @CorrelationTables({@CorrelationTable(value = Test.class, column = "testcp_id", and = "name='张三'")})
     private String id;
-//    @Condition(order = Condition.OrderTypeEnums.DESC, sort = 2)
+    //    @Condition(order = Condition.OrderTypeEnums.DESC, sort = 2)
     @TableField("name")
     private String name;
-//    @CorrelationField(table = xxx.class, column = "age")
-//    @TableField(exist = false)
-//    private Integer age;
-
-
-
+    @TableField("testcp_id")
+    private String testcpId;
     /*@TableField(exist = false)
     private List<Test> childrenList = new ArrayList<>();
-
     @Override
     public void setChildrenList(List list) {
         this.childrenList = list;
     }*/
+
+    @TableField(exist = false)
+    private List<TestCp> testCpList;
 
 }
