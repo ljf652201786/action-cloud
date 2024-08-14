@@ -20,14 +20,16 @@ import lombok.NoArgsConstructor;
 public class SysUser extends BaseEntity {
     @TableId(value = "id")
     private String id;
+    @TableField("tenant_id")
+    private String tenantId;
     @TableField("avatar")
     private String avatar;
-//    @SensitiveField(SensitiveTypeEnums.CHINESE_NAME)
+    //    @SensitiveField(SensitiveTypeEnums.CHINESE_NAME)
     @TableField("user_name")
     private String username;
     @TableField("nick_name")
     private String nickName;
-//    @SensitiveField(value = SensitiveTypeEnums.PASSWORD)
+    //    @SensitiveField(value = SensitiveTypeEnums.PASSWORD)
     @TableField("password")
     private String password;
     @TableField("email")

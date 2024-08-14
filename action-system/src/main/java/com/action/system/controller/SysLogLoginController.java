@@ -32,7 +32,7 @@ public class SysLogLoginController implements BaseController<ISysLogLoginService
      * @Date: 2024/4/14
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result getDictList(SysLogLogin sysLogLogin, BaseQuery query) {
+    public Result listPage(SysLogLogin sysLogLogin, BaseQuery query) {
         return this.page(iSysLogLoginService, sysLogLogin, query);
     }
 

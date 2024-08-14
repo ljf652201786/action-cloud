@@ -27,10 +27,11 @@ class SysUserDeserializer extends JsonDeserializer<SecurityUser> {
                 SIMPLE_GRANTED_AUTHORITY_SET);
         JsonNode passwordNode = readJsonNode(jsonNode, "password");
         String userId = readJsonNode(jsonNode, "id").asText();
+        String tenantId = readJsonNode(jsonNode, "tenantId").asText();
         String username = readJsonNode(jsonNode, "username").asText();
         String password = passwordNode.asText("");
         String status = readJsonNode(jsonNode, "status").asText();
-        SecurityUser result = new SecurityUser(userId, username, password, status,authorities);
+        SecurityUser result = new SecurityUser(userId, tenantId, username, password, status, authorities);
         if (passwordNode.asText(null) == null) {
             result.eraseCredentials();
         }

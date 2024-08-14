@@ -46,8 +46,6 @@ import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.O
 
 /**
  * 参数解密
- *
- * @author ZhangHao
  */
 @Component
 @RequiredArgsConstructor

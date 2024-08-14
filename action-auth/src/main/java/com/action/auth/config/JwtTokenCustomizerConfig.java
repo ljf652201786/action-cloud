@@ -38,6 +38,7 @@ public class JwtTokenCustomizerConfig {
                     if (principal instanceof SecurityUser userDetails) { // 系统用户添加自定义字段
 
                         claims.claim(JwtClaimConstants.USER_ID, userDetails.getId());
+                        claims.claim(JwtClaimConstants.TENANT_ID, userDetails.getTenantId());
                         claims.claim(JwtClaimConstants.USERNAME, userDetails.getUsername());
                         claims.claim(JwtClaimConstants.STATUS, userDetails.getStatus());
                         // 这里存入角色至JWT，解析JWT的角色用于鉴权的位置: ResourceServerConfig#jwtAuthenticationConverter

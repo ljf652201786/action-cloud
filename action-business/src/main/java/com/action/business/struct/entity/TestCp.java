@@ -24,4 +24,6 @@ public class TestCp extends BaseEntity {
     private String age;
     @TableField("test_id")
     private String TestId;
+    @TableField("re")
+    private String re;
 }

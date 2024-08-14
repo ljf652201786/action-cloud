@@ -32,7 +32,7 @@ public class SysLogRequestController implements BaseController<ISysLogRequestSer
      * @Date: 2024/4/14
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result getDictList(SysLogRequest sysLogRequest, BaseQuery query) {
+    public Result listPage(SysLogRequest sysLogRequest, BaseQuery query) {
         return this.page(iSysLogRequestService, sysLogRequest, query);
     }
 

@@ -34,7 +34,7 @@ public class SysDictController implements BaseController<ISysDictService, SysDic
      * @Date: 2024/4/14
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result getDictList(SysDict sysDict, BaseQuery query) {
+    public Result listPage(SysDict sysDict, BaseQuery query) {
         return this.page(iSysDictService, sysDict, query);
     }
 

@@ -32,7 +32,7 @@ public class SysLogSmsController implements BaseController<ISysLogSmsService, Sy
      * @Date: 2024/4/14
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result getDictList(SysLogSms sysLogSms, BaseQuery query) {
+    public Result listPage(SysLogSms sysLogSms, BaseQuery query) {
         return this.page(iSysLogSmsService, sysLogSms, query);
     }
 

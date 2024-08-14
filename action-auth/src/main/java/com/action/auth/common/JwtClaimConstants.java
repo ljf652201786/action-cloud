@@ -8,6 +8,11 @@ public interface JwtClaimConstants {
     String USER_ID = "userId";
 
     /**
+     * 租户ID
+     */
+    String TENANT_ID = "tenantId";
+
+    /**
      * 用户名
      */
     String USERNAME = "username";

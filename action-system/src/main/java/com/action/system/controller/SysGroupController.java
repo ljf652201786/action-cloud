@@ -35,7 +35,7 @@ public class SysGroupController implements BaseController<ISysGroupService, SysG
      * @Date: 2024/4/14
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result getDictList(SysGroup sysGroup, BaseQuery query) {
+    public Result listPage(SysGroup sysGroup, BaseQuery query) {
         return this.page(iSysGroupService, sysGroup, query);
     }
 

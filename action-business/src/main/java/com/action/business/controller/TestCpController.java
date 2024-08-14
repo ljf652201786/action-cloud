@@ -4,9 +4,12 @@ import com.action.business.service.ITestCpService;
 import com.action.business.struct.converter.TestCpConverter;
 import com.action.business.struct.entity.TestCp;
 import com.action.business.struct.vo.TestCpVo;
+import com.action.business.struct.vo.TestCpsVo;
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +28,11 @@ public class TestCpController implements BaseController<ITestCpService, TestCp> 
 
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
     public Result getDictList(TestCp test, BaseQuery query) {
-        return this.page(iTestCpService, test, query);
+        this.setConverter(TestCpVo.class);
+        IPage<TestCpVo> page = (IPage) iTestCpService.pageList(test, query);
+        List<TestCpVo> listVo = this.toListVo(page.getRecords(), TestCpVo.class);
+        listVo.stream().forEach(System.out::println);
+        return this.page(iTestCpService, test, query, TestCpVo.class);
     }
 
     /**
@@ -43,13 +50,23 @@ public class TestCpController implements BaseController<ITestCpService, TestCp> 
 
     @RequestMapping(value = "getTestsub", method = RequestMethod.GET)
     public Result getTestsub() {
+        iTestCpService.getOne(new QueryWrapper<TestCp>().eq("age",""));
         this.setConverter(TestCpVo.class);
         TestCpVo vo = toVo(iTestCpService.getById("1"));
         System.out.println(vo);
         TestCpVo infoById = iTestCpService.getInfoById("1", TestCpVo.class);
         List<TestCp> tesCp = iTestCpService.getTesCp("1");
-        return this.getInfoById(iTestCpService, "1", TestCpVo.class);
-
+        Result result = this.selectListBy(iTestCpService, (e) -> {
+            return e.getById("1");
+        }, TestCpVo.class);
+        Result re = this.getInfoById(iTestCpService, "1", TestCpVo.class);
+        TestCp testCp = new TestCp();
+//        testCp.setId("1");
+//        testCp.setAge("989898");
+//        testCp.setRemark("林靖峰");
+        List<TestCpsVo> list = iTestCpService.getSelectList(testCp, TestCpsVo.class);
+        list.stream().forEach(System.out::println);
+        return this.getList(iTestCpService, new TestCp(), TestCpVo.class);
     }
 
 }

@@ -6,13 +6,11 @@ import com.action.business.struct.entity.Test;
 import com.action.business.listener.TestImportListener;
 import com.action.business.service.ITestService;
 import com.action.business.struct.vo.TestImportVo;
-import com.action.business.struct.vo.TestVo;
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
 import com.action.common.core.listener.IEventService;
 import com.action.common.entity.EventStruct;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -184,15 +182,22 @@ public class TestController implements BaseController<ITestService, Test> {
     }
 
     /**
-     * @Description: 测试推送系统事件
+     * @Description: 多租户测试
      * @return: void
      * @throws:
      * @Author: ljf  <lin652210786@163.com>
      * @Date: 2024/05/31
      */
-    @RequestMapping(value = "getTestsub", method = RequestMethod.GET)
-    public void getTestsub() {
-        List<Test> tes = iTestService.getTes("1");
-        System.out.println(tes);
+    @RequestMapping(value = "multiTenant", method = RequestMethod.GET)
+    public void multiTenant() {
+        String id = "";
+        Test test = new Test();
+        test.setName("testsave");
+        iTestService.save(test);
+        id = test.getId();
+        Test tes = iTestService.getById(id);
+        test.setName("testupdate");
+        iTestService.updateById(test);
+        iTestService.removeById(id);
     }
 }

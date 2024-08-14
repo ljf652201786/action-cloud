@@ -33,13 +33,13 @@ public class SecurityUser extends BaseSecurityUser implements UserDetails, Crede
     public SecurityUser() {
     }
 
-    public SecurityUser(String userId, String username, String password, String status, List<? extends GrantedAuthority> authorities) {
-        super(userId, username, password, status, null);
+    public SecurityUser(String userId, String tenantId, String username, String password, String status, List<? extends GrantedAuthority> authorities) {
+        super(userId, tenantId, username, password, status, null);
         this.authorities = Collections.unmodifiableList(authorities);
     }
 
     public <T extends BaseSecurityUser> SecurityUser(T user) {
-        super(user.getId(), user.getUsername(), user.getPassword(), user.getStatus(), user.getMenuScopeList());
+        super(user.getId(), user.getTenantId(), user.getUsername(), user.getPassword(), user.getStatus(), user.getMenuScopeList());
         this.authorities = buildAuthority();
     }
 
