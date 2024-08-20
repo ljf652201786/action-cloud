@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class SysUserExtend extends SysUser {
     private String code;
+    private String tenantId;
     private List<String> groupList;
     private List<String> roleList;
     private List<SysScope> sysScopeList;
@@ -22,6 +23,14 @@ public class SysUserExtend extends SysUser {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 
     public List<String> getGroupList() {

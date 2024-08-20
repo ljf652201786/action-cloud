@@ -13,6 +13,8 @@ import com.action.common.entity.EventStruct;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +34,7 @@ import java.util.List;
 public class TestController implements BaseController<ITestService, Test> {
     private final ITestService iTestService;
     private final IEventService iEventService;
+    private final SqlSessionFactory sqlSessionFactory;
 
     /**
      * @param query 查询对象
@@ -190,14 +193,16 @@ public class TestController implements BaseController<ITestService, Test> {
      */
     @RequestMapping(value = "multiTenant", method = RequestMethod.GET)
     public void multiTenant() {
-        String id = "";
-        Test test = new Test();
-        test.setName("testsave");
-        iTestService.save(test);
-        id = test.getId();
-        Test tes = iTestService.getById(id);
-        test.setName("testupdate");
-        iTestService.updateById(test);
-        iTestService.removeById(id);
+//        String id = "";
+//        Test test = new Test();
+//        test.setName("testsave");
+//        iTestService.save(test);
+//        id = test.getId();
+//        Test tes = iTestService.getById(id);
+//        test.setName("testupdate");
+//        iTestService.updateById(test);
+//        iTestService.removeById(id);
+        Configuration configuration = sqlSessionFactory.getConfiguration();
+        System.out.println(configuration.getEnvironment().getDataSource().toString());
     }
 }

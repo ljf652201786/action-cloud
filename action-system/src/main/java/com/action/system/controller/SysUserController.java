@@ -5,6 +5,7 @@ import com.action.common.biz.base.BaseController;
 import com.action.common.common.RedisSetConstants;
 import com.action.common.common.UserSetConstants;
 import com.action.common.core.common.Result;
+import com.action.common.core.constants.ActionConstants;
 import com.action.common.core.service.RedisCacheServices;
 import com.action.common.enums.StatusType;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
@@ -83,6 +84,10 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
             return Result.failed("该手机号已被注册");
         }
 
+        if (Objects.isNull(sysUserExtend.getTenantId())) {
+            sysUserExtend.setTenantId(ActionConstants.topTenantId);
+        }
+
         sysUserExtend.setAvatar(sysUserExtend.getAvatar() == null ? UserSetConstants.DEFAULT_AVATAR : sysUserExtend.getAvatar());
         boolean isSave = iSysUserService.save(sysUserExtend);
         if (!isSave) {
@@ -151,6 +156,10 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
 
         if (Objects.nonNull(iSysUserService.findByPhone(sysUser.getEmail()))) {
             return Result.failed("该手机号已被注册");
+        }
+
+        if (Objects.isNull(sysUser.getTenantId())) {
+            sysUser.setTenantId(ActionConstants.topTenantId);
         }
 
         String email_key = RedisSetConstants.AUTH_EMAIL + sysUser.getEmail();

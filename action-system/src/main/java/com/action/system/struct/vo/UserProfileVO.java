@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 public class UserProfileVO {
     private String id;
+    private String tenantId;
     private String avatar;
     private String username;
     private String nickName;

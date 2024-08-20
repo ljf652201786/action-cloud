@@ -4,6 +4,7 @@ import com.action.common.core.listener.IEventService;
 import com.action.common.entity.EventStruct;
 import com.action.system.event.ActionSystemEvent;
 import com.action.system.event.ActionSystemEventHandler;
+import com.action.system.service.ISysScheduleTaskService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class ActionSystemServiceConfig {
     private final IEventService iEventService;
+    private final ISysScheduleTaskService iSysScheduleTaskService;
 
     @Value("${spring.application.name}")
     private String appName;
@@ -25,6 +27,7 @@ public class ActionSystemServiceConfig {
     @PostConstruct
     public void configService() {
         iEventService.registerEvent(ActionSystemEvent.class, new ActionSystemEvent(new EventStruct(), appName, new ActionSystemEventHandler()));
+        iSysScheduleTaskService.initScheduleTask();
     }
 
 }
