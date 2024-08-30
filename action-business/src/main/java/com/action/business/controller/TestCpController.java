@@ -27,7 +27,7 @@ public class TestCpController implements BaseController<ITestCpService, TestCp> 
     private final ITestCpService iTestCpService;
 
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result getDictList(TestCp test, BaseQuery query) {
+    public Result listPage(TestCp test, BaseQuery query) {
         this.setConverter(TestCpVo.class);
         IPage<TestCpVo> page = (IPage) iTestCpService.pageList(test, query);
         List<TestCpVo> listVo = this.toListVo(page.getRecords(), TestCpVo.class);

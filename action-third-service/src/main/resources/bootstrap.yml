@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: action-thrid-service
+  profiles:
+    active: dev

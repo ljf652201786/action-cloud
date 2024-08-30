@@ -18,6 +18,9 @@
         <module>action-call</module>
 
         <module>action-business</module>
+<!--        <module>action-process</module>-->
+<!--        <module>action-flow</module>-->
+        <module>action-third-service</module>
     </modules>
 
     <properties>

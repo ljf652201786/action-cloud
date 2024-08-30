@@ -1,5 +1,7 @@
 package com.action.business.controller;
 
+import com.action.business.api.LoginDto;
+import com.action.business.api.TestApi;
 import com.action.business.listener.event.ActionBusinessEvent;
 import com.action.business.struct.dto.TestDto;
 import com.action.business.struct.entity.Test;
@@ -11,10 +13,9 @@ import com.action.common.core.common.Result;
 import com.action.common.core.listener.IEventService;
 import com.action.common.entity.EventStruct;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
+import com.action.common.network.struct.WebClientBody;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,7 +35,7 @@ import java.util.List;
 public class TestController implements BaseController<ITestService, Test> {
     private final ITestService iTestService;
     private final IEventService iEventService;
-    private final SqlSessionFactory sqlSessionFactory;
+    private final TestApi testApi;
 
     /**
      * @param query 查询对象
@@ -45,7 +46,7 @@ public class TestController implements BaseController<ITestService, Test> {
      * @Date: 2024/05/31
      */
     @RequestMapping(value = "listPage", method = RequestMethod.GET)
-    public Result getDictList(Test test, BaseQuery query) {
+    public Result listPage(Test test, BaseQuery query) {
         return this.page(iTestService, test, query);
     }
 
@@ -193,16 +194,31 @@ public class TestController implements BaseController<ITestService, Test> {
      */
     @RequestMapping(value = "multiTenant", method = RequestMethod.GET)
     public void multiTenant() {
-//        String id = "";
-//        Test test = new Test();
-//        test.setName("testsave");
-//        iTestService.save(test);
-//        id = test.getId();
-//        Test tes = iTestService.getById(id);
-//        test.setName("testupdate");
-//        iTestService.updateById(test);
-//        iTestService.removeById(id);
-        Configuration configuration = sqlSessionFactory.getConfiguration();
-        System.out.println(configuration.getEnvironment().getDataSource().toString());
+        String id = "";
+        Test test = new Test();
+        test.setName("testsave");
+        iTestService.save(test);
+        id = test.getId();
+        Test tes = iTestService.getById(id);
+        test.setName("testupdate");
+        iTestService.updateById(test);
+        iTestService.removeById(id);
+    }
+
+
+    /**
+     * @Description: 远程调用测试
+     * @return: void
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/05/31
+     */
+    @RequestMapping(value = "testHttp", method = RequestMethod.GET)
+    public void testHttp() {
+        LoginDto loginDto = new LoginDto();
+        loginDto.setUsername("zhangsan");
+        loginDto.setPassword("123456");
+        Result result = testApi.login(loginDto);
+        System.out.println(result.toString());
     }
 }

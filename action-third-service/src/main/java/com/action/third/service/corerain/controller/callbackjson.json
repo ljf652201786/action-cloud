@@ -1,0 +1,99 @@
+{
+  "algorithm_id": 4,
+  "algorithm_name": "行人闯入",
+  "algorithm_name_en": "CR_PERSON_INVASION",
+  "degree": "3",
+
+  "camera_id": 10,
+  "camera_uuid": null,
+  "camera_name": "Camera 1",
+  "camera_group": null,
+  "camera_types": [
+    1
+  ],
+  "stream_url": "rtsp://192.168.0.1:3554/live/2",
+  "online_status": 1,
+  "gps": "50.85045,4.34878",
+
+  "snowflake_id": "1768287987212271616",
+  "analysis_job_id": "ee6234ca5a7541dba61062d66ad82a8b",
+  "timestamp": "2006-01-02 15:04:05",
+  "image_width": 1920,
+  "image_height": 1080,
+  "src_pic_name": "source_picture.jpg",
+  "src_pic_url": "http://example.com/source_picture.jpg",
+  "src_pic_data": null,
+  "alarm_pic_name": "alarm_picture.jpg",
+  "alarm_pic_url": "http://example.com/alarm_picture.jpg",
+  "alarm_pic_data": null,
+  "result_data": [
+    {
+      "algorithm_en_name": "CR_PERSON_INVASION",
+      "algorithm_name": "行人闯入",
+      "degree": "3",
+      "draw_content": null,
+      "other": "",
+      "parameter": {
+        "option": {
+          "actions": {
+            "timestamp": 3000
+          }
+        }
+      },
+      "result_data": {
+        "task_id": 4,
+        "task_result": {
+          "class_id": 1,
+          "extra_data": "",
+          "object_list": [
+            {
+              "class_id": 0,
+              "rect": {
+                "height": 349,
+                "width": 206,
+                "x": 224,
+                "y": 605
+              },
+              "score": 0.853873,
+              "score_list": [
+                0.853873,
+                0.605893,
+                1
+              ]
+            },
+            {
+              "class_id": 1,
+              "rect": {
+                "height": 107,
+                "width": 203,
+                "x": 622,
+                "y": 227
+              },
+              "score": 0.853799,
+              "score_list": [
+                0.853799,
+                0.815552,
+                7
+              ]
+            }
+          ],
+          "score": 0
+        }
+      },
+      "task_id": 4
+    }
+  ],
+  "video_name": "Example Video",
+  "video_url": "http://example.com/video.mp4",
+  "extra": "Extra information here",
+  "members": [
+    {
+      "photo": "http://example.com/user_photo.jpg",
+      "role": "Black",
+      "score": 95,
+      "tag": "test",
+      "user_id": 200,
+      "user_name": "John Doe"
+    }
+  ]
+}
