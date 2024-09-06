@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 public class SysPost extends BaseEntity {
     @TableId(value = "id")
     private String id;
+    @Condition(Condition.ConditionTypeEnums.EQ)
     @TableField(value = "dept_id")
     private String deptId;
     @TableField(value = "post_code")

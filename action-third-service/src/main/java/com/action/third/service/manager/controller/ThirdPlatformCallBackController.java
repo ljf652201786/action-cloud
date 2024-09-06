@@ -2,11 +2,10 @@ package com.action.third.service.manager.controller;
 
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
-import com.action.common.corerain.api.struct.dto.CallBackContentDto;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.third.service.manager.service.IThirdPlatformCallBackService;
 import com.action.third.service.manager.struct.entity.ThirdPlatformCallBack;
-import com.action.third.service.manager.struct.entity.ThirdPlatformInfo;
+import com.alibaba.fastjson.JSONObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +47,7 @@ public class ThirdPlatformCallBackController implements BaseController<IThirdPla
     }
 
     /**
-     * @param callBackContentDto 第三方平台回调信息对象
+     * @param jsonObject 第三方平台回调信息对象
      * @Description: 保存第三方平台回调信息
      * @return: Result 结果集
      * @throws:
@@ -57,8 +56,8 @@ public class ThirdPlatformCallBackController implements BaseController<IThirdPla
      */
 //    @PreAuthorize("@ss.hasPerm('sys:test:save')")   // 开启注解权限时生效
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    public Result save(@RequestBody CallBackContentDto callBackContentDto) {
-        boolean isSave = iThirdPlatformCallBackService.analyzeAndSave(callBackContentDto);
+    public Result save(@RequestBody JSONObject jsonObject) {
+        boolean isSave = iThirdPlatformCallBackService.analyzeAndSave(jsonObject);
         return Result.judge(isSave);
     }
 

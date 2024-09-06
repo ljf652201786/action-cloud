@@ -1,13 +1,14 @@
 package com.action.third.service.impl;
 
-import com.action.common.core.common.Result;
 import com.action.common.core.constants.StringPool;
 import com.action.common.core.handle.RedisCacheHandle;
+import com.action.common.core.tool.JsonUtils;
 import com.action.common.network.holder.WebClientManager;
 import com.action.common.network.properties.NetWorkManagerProperties;
 import com.action.common.network.service.IWebClientAuthService;
 import com.action.common.network.struct.RemoteWebClient;
 import com.action.common.network.utils.WebClientUtils;
+import com.action.third.service.manager.service.IThirdPlatformRequestLogService;
 import com.action.third.service.util.RequestUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +19,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ClientRequest;
+import org.springframework.web.reactive.function.client.ClientResponse;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static com.action.common.common.RedisSetConstants.OTHER_WEBCLIENT;
 
 /**
  * @Description:
@@ -32,8 +36,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WebClientAuthServiceImpl implements IWebClientAuthService {
     private static final Logger logger = LoggerFactory.getLogger(WebClientAuthServiceImpl.class);
-    private static final String webClientKey = "webClient_";
     private static final List<String> ingoreUrlList = List.of("/um/user/login", "/corerain-sysauth/login", "/corerain-sysauth/getToken", "corerain-app/appsPage", "corerain-app/create", "corerain-app/update", "corerain-app/delete");
+    private final IThirdPlatformRequestLogService iThirdPlatformRequestLogService;
     private final RedisCacheHandle redisCacheHandle;
     private final NetWorkManagerProperties netWorkManagerProperties;
 
@@ -63,13 +67,15 @@ public class WebClientAuthServiceImpl implements IWebClientAuthService {
         }
         RemoteWebClient webClient = webClientOptional.get();
 
-        Object o = redisCacheHandle.get(webClientKey + baseUrl);
+        Object o = redisCacheHandle.get(OTHER_WEBCLIENT + baseUrl);
         if (Objects.nonNull(o)) {
-            webClientToken = o.toString();
+            webClientToken = (String) o;
         } else {
             webClientToken = WebClientManager.getWebClientToken(webClient.getTokenApiUrl(), baseUrl, String.class);
             if (StringUtils.isNotBlank(webClientToken)) {
-                redisCacheHandle.set(webClientKey + baseUrl, webClientToken, webClient.getExpiryTime());
+                if (!JsonUtils.isValidJson(webClientToken)) {
+                    redisCacheHandle.set(OTHER_WEBCLIENT + baseUrl, webClientToken, webClient.getExpiryTime());
+                }
             }
         }
         logger.info("AccessToken has been obtained:{}", webClientToken);
@@ -80,5 +86,23 @@ public class WebClientAuthServiceImpl implements IWebClientAuthService {
         }
         logger.info("Dynamic addition of authentication token completed");
 
+    }
+
+    /*
+     * 执行成功回调
+     * */
+    @Override
+    public void successHander(ClientResponse clientResponse) {
+        System.out.println("执行成功回调" + clientResponse.request().getURI().getPath());
+        iThirdPlatformRequestLogService.savelog(clientResponse);
+    }
+
+    /*
+     * 执行成功回调
+     * */
+    @Override
+    public void errorHander(ClientResponse clientResponse) {
+        System.out.println("执行失败回调" + clientResponse.request().getURI().getPath());
+        iThirdPlatformRequestLogService.savelog(clientResponse);
     }
 }

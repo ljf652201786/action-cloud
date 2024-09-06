@@ -1,11 +1,10 @@
 package com.action.auth.service.impl;
 
-import com.action.auth.entity.Oauth2RegisteredClient;
+import com.action.auth.struct.entity.Oauth2RegisteredClient;
 import com.action.auth.mapper.Oauth2RegisteredClientMapper;
 import com.action.auth.service.IOauth2RegisteredClientService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import jakarta.annotation.Resource;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;

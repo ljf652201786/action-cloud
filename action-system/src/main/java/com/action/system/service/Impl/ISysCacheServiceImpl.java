@@ -17,8 +17,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.action.common.core.constants.RedisConstants.DATAPERM_COLUMN_KEY;
-import static com.action.common.core.constants.RedisConstants.DATAPERM_ROW_KEY;
+import static com.action.common.core.constants.ActionRedisConstants.DATAPERM_COLUMN_KEY;
+import static com.action.common.core.constants.ActionRedisConstants.DATAPERM_ROW_KEY;
 
 /**
  * @Description: 缓存服务

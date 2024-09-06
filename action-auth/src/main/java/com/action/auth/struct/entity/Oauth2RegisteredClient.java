@@ -1,4 +1,4 @@
-package com.action.auth.entity;
+package com.action.auth.struct.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;

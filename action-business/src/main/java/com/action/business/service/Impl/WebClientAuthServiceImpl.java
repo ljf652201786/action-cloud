@@ -1,6 +1,5 @@
 package com.action.business.service.Impl;
 
-import com.action.common.core.common.Result;
 import com.action.common.core.constants.StringPool;
 import com.action.common.core.handle.RedisCacheHandle;
 import com.action.common.network.holder.WebClientManager;
@@ -18,6 +17,8 @@ import org.springframework.web.reactive.function.client.ClientRequest;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.action.common.common.RedisSetConstants.OTHER_WEBCLIENT;
+
 /**
  * @Description:
  * @Author: ljf  <lin652210786@163.com>
@@ -26,7 +27,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class WebClientAuthServiceImpl implements IWebClientAuthService {
-    private static final String webClientKey = "webClient_";
     private final RedisCacheHandle redisCacheHandle;
     private final NetWorkManagerProperties netWorkManagerProperties;
 
@@ -35,7 +35,6 @@ public class WebClientAuthServiceImpl implements IWebClientAuthService {
      * */
     @Override
     public void header(String baseUrl, HttpHeaders httpHeaders) {
-        System.out.println("进来了");
         httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
     }
 
@@ -51,13 +50,13 @@ public class WebClientAuthServiceImpl implements IWebClientAuthService {
             return;
         }
         RemoteWebClient webClient = webClientOptional.get();
-        Object o = redisCacheHandle.get(webClientKey + baseUrl);
+        Object o = redisCacheHandle.get(OTHER_WEBCLIENT + baseUrl);
         if (Objects.nonNull(o)) {
             webClientToken = o.toString();
         } else {
             webClientToken = WebClientManager.getWebClientToken(webClient.getTokenApiUrl(), baseUrl, String.class);
             if (StringUtils.isNotBlank(webClientToken)) {
-                redisCacheHandle.set(webClientKey + baseUrl, webClientToken, webClient.getExpiryTime());
+                redisCacheHandle.set(OTHER_WEBCLIENT + baseUrl, webClientToken, webClient.getExpiryTime());
             }
         }
         System.out.println(webClientToken);

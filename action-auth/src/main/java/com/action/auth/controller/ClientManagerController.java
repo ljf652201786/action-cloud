@@ -1,6 +1,6 @@
 package com.action.auth.controller;
 
-import com.action.auth.entity.Oauth2RegisteredClient;
+import com.action.auth.struct.entity.Oauth2RegisteredClient;
 import com.action.auth.service.IOauth2RegisteredClientService;
 import com.action.common.core.common.Result;
 import com.action.common.mybatisplus.extend.base.BaseMpController;

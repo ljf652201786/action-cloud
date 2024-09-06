@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
+
 /**
  * @Description: 此过滤器只缓存请求的body的数据
  * @Author: ljf  <lin652210786@163.com>
@@ -34,19 +36,18 @@ public class GlobalCacheRequestBodyFilter implements GlobalFilter, Ordered {
         if (HttpMethod.POST == request.getMethod() || HttpMethod.PUT == request.getMethod()) {
             String url = request.getURI().toString();
             Object cachedRequestBodyObject = exchange.getAttributeOrDefault(url, null);
-            if (cachedRequestBodyObject != null) {
-                return chain.filter(exchange);
+            if (Objects.isNull(cachedRequestBodyObject)) {
+                // 如果没有缓存过，获取字节数组存入 exchange 的自定义属性中
+                return DataBufferUtils.join(request.getBody())
+                        .map(dataBuffer -> {
+                            byte[] bytes = new byte[dataBuffer.readableByteCount()];
+                            dataBuffer.read(bytes);
+                            DataBufferUtils.release(dataBuffer);
+                            return bytes;
+                        }).defaultIfEmpty(new byte[0])
+                        .doOnNext(bytes -> exchange.getAttributes().put(url, bytes))
+                        .then(chain.filter(exchange));
             }
-            // 如果没有缓存过，获取字节数组存入 exchange 的自定义属性中
-            return DataBufferUtils.join(request.getBody())
-                    .map(dataBuffer -> {
-                        byte[] bytes = new byte[dataBuffer.readableByteCount()];
-                        dataBuffer.read(bytes);
-                        DataBufferUtils.release(dataBuffer);
-                        return bytes;
-                    }).defaultIfEmpty(new byte[0])
-                    .doOnNext(bytes -> exchange.getAttributes().put(url, bytes))
-                    .then(chain.filter(exchange));
         }
         return chain.filter(exchange);
     }

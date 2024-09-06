@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-
     private final CaptchaService captchaService;
     private final CaptchaProperties captchaProperties;
     private final ISmsService iSmsService;

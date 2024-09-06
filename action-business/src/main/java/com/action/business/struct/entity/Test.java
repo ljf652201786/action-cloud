@@ -5,6 +5,7 @@ import com.action.common.mybatisplus.extend.annotation.Condition;
 import com.action.common.mybatisplus.extend.annotation.CorrelationTable;
 import com.action.common.mybatisplus.extend.annotation.CorrelationTables;
 import com.action.common.mybatisplus.extend.base.BaseEntity;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -13,6 +14,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,5 +44,14 @@ public class Test extends BaseEntity/*implements ITreeNodeSelect*/ {
 
     @TableField(exist = false)
     private List<TestCp> testCpList;
+
+    @Condition(
+            value = Condition.ConditionTypeEnums.BETWEEN,
+            order = Condition.OrderTypeEnums.DESC
+    )
+    @TableField(
+            fill = FieldFill.INSERT
+    )
+    private String createTime;
 
 }

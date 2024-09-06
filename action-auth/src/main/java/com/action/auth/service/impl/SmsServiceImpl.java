@@ -3,7 +3,6 @@ package com.action.auth.service.impl;
 import com.action.auth.service.ISmsService;
 import com.action.call.clients.RemoteSystemClients;
 import com.action.call.vo.LogSMSVo;
-import com.action.common.core.constants.RedisConstants;
 import com.action.common.core.handle.RedisCacheHandle;
 import com.action.common.sms.properties.AliyunSmsProperties;
 import com.action.common.sms.service.impl.AliyunSmsService;
@@ -13,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.Date;
+
+import static com.action.common.core.constants.ActionRedisConstants.REGISTER_SMS_CODE_KEY;
 
 /**
  * @Description: 短信服务实现类
@@ -46,7 +47,7 @@ public class SmsServiceImpl implements ISmsService {
         boolean result = aliyunSmsService.sendSms(phone, templateCode, templateParams);
         if (result) {
             // 将验证码存入redis，有效期5分钟
-            redisCacheHandle.set(RedisConstants.REGISTER_SMS_CODE_PREFIX + phone, code, expireTime);
+            redisCacheHandle.set(REGISTER_SMS_CODE_KEY + phone, code, expireTime);
         }
         LogSMSVo logSMSVo = new LogSMSVo(phone, templateParams, result, new Date(), String.valueOf(expireTime));
         remoteSystemClients.save(logSMSVo);

@@ -13,7 +13,6 @@ import java.util.Date;
 @Data
 public class AuthUserInfoVo extends BaseSecurityUser {
     private String avatar;
-    private String nickName;
     private String email;
     private String phone;
     private String sex;

@@ -47,8 +47,9 @@ public class SysPostController implements BaseController<ISysPostService, SysPos
      * @Date: 2024/4/14
      */
     @RequestMapping(value = "getAllList", method = RequestMethod.GET)
-    public Result getAllList() {
-        List<SysPost> list = iSysPostService.list();
+    public Result getAllList(SysPost sysPost) {
+        sysPost.setStatus(StatusType.ENABLE.getStatus());
+        List<SysPost> list = iSysPostService.getSelectList(sysPost);
         return Result.success("获取岗位列表成功", list);
     }
 

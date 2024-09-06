@@ -43,6 +43,11 @@
         <!-- common依赖 -->
         <dependency>
             <groupId>com.action</groupId>
+            <artifactId>action-common-oauth2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.action</groupId>
             <artifactId>action-common-sms</artifactId>
         </dependency>
 
