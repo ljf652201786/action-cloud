@@ -5,7 +5,6 @@ import com.action.common.core.common.Result;
 import com.action.common.enums.StatusType;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.system.service.ISysDictService;
-import com.action.system.struct.entity.SysDict;
 import com.action.system.struct.entity.SysDictDetail;
 import com.action.system.service.ISysDictDetailService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @Description: 字典详情管理
@@ -25,7 +23,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class SysDictDetailController implements BaseController<ISysDictDetailService, SysDictDetail> {
     private final ISysDictDetailService iSysDictDetailService;
-    private final ISysDictService iSysDictService;
 
     /**
      * @param query 查询对象
@@ -50,12 +47,6 @@ public class SysDictDetailController implements BaseController<ISysDictDetailSer
      */
     @RequestMapping(value = "selection", method = RequestMethod.GET)
     public Result selection(@RequestParam("code") String code) {
-        SysDict sysDict = iSysDictService.getOne(this.getLambdaQueryWrapper(new SysDict())
-                .eq(StringUtils.isNotEmpty(code), SysDict::getDictCode, code)
-                .eq(SysDict::getStatus, StatusType.ENABLE.getStatus()));
-        if (Objects.isNull(sysDict)) {
-            return Result.failed("Dictionary has been disabled");
-        }
         List<SysDictDetail> list = iSysDictDetailService.list(this.getLambdaQueryWrapper()
                 .eq(StringUtils.isNotEmpty(code), SysDictDetail::getCode, code)
                 .eq(SysDictDetail::getStatus, StatusType.ENABLE.getStatus())

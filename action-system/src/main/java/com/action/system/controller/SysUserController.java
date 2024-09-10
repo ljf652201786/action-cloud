@@ -335,6 +335,40 @@ public class SysUserController implements BaseController<ISysUserService, SysUse
     }
 
     /**
+     * @param openid openid
+     * @Description: 通过openid获取用户信息
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/3
+     */
+    @RequestMapping(value = "getUserByOpenId", method = RequestMethod.GET)
+    public Result getUserByOpenId(@RequestParam("openid") String openid) {
+        AuthUserInfoVo authUserInfoVo = iSysUserService.findByOpenId(openid);
+        if (Objects.isNull(authUserInfoVo)) {
+            return Result.failed("微信未进行绑定");
+        }
+        return Result.success("通过openid获取用户信息成功", authUserInfoVo);
+    }
+
+    /**
+     * @param appid 应用id
+     * @Description: 通过应用id获取用户信息
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/3
+     */
+    @RequestMapping(value = "getUserByAppId", method = RequestMethod.GET)
+    public Result getUserByAppId(@RequestParam("appid") String appid) {
+        AuthUserInfoVo authUserInfoVo = iSysUserService.findByAppId(appid);
+        if (Objects.isNull(authUserInfoVo)) {
+            return Result.failed("该应用不存在");
+        }
+        return Result.success("通过应用id获取用户信息成功", authUserInfoVo);
+    }
+
+    /**
      * @param email 邮箱
      * @Description: 通过邮箱获取用户信息
      * @return: Result 结果集

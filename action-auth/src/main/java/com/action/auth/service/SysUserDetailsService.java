@@ -90,6 +90,22 @@ public class SysUserDetailsService implements UserDetailsService, IThirdDetailsS
         return userDetails;
     }
 
+    public UserDetails getUserByAppId(String appid) {
+        // 根据 openid 获取微信用户认证信息
+        AuthUserInfoVo authUserInfoVo = remoteSystemClients.getUserByAppId(appid);
+        Assert.isTrue(authUserInfoVo != null, "用户不存在");
+        //todo 用户不存在，注册成为新用户(待实现)
+        UserDetails userDetails = new SecurityUser(authUserInfoVo);
+        if (!userDetails.isEnabled()) {
+            throw new DisabledException("该账户已被禁用!");
+        } else if (!userDetails.isAccountNonLocked()) {
+            throw new LockedException("该账号已被锁定!");
+        } else if (!userDetails.isAccountNonExpired()) {
+            throw new AccountExpiredException("该账号已过期!");
+        }
+        return userDetails;
+    }
+
     public CustomOidcUserInfo getOidcUserByUsername(String username) {
         try {
             AuthUserInfoVo authUserInfoVo = remoteSystemClients.getUserByUserName(username);

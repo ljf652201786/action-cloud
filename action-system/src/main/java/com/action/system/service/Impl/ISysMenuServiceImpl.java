@@ -59,7 +59,7 @@ public class ISysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> imp
                 });
         List<SysMenu> sysMenuList = sysMenuMapper.selectList(new QueryWrapper<SysMenu>().lambda().in(SysMenu::getId, ancestralMenuIdList));
         sysMenuByScope.addAll(sysMenuList);
-        List<SysMenu> list = sysMenuByScope.stream().toList();
+        List<SysMenu> list = sysMenuByScope.stream().sorted(Comparator.comparing(SysMenu::getSort)).toList();
         return buildMenu(list);
     }
 

@@ -1,5 +1,6 @@
 package com.action.system.struct.entity;
 
+import com.action.common.mybatisplus.extend.annotation.Condition;
 import com.action.common.mybatisplus.extend.base.BaseEntity;
 import com.action.common.core.service.ITreeNodeSelect;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -49,6 +50,7 @@ public class SysMenu extends BaseEntity implements ITreeNodeSelect {
     private String iframeUrl;
     @TableField("is_cache")
     private Integer isCache;
+    @Condition(order = Condition.OrderTypeEnums.ASC)
     @TableField("sort")
     private Integer sort;
     @TableField("visible")

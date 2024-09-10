@@ -39,6 +39,18 @@ public class SysLimitObjController implements BaseController<ISysLimitObjService
     }
 
     /**
+     * @Description: 所有限制对象列表
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/3
+     */
+    @RequestMapping(value = "allList", method = RequestMethod.GET)
+    public Result allList() {
+        return this.getList(iSysLimitObjService, new SysLimitObj());
+    }
+
+    /**
      * @param id 限制对象id
      * @Description: 获取限制对象详情
      * @return: Result 结果集
@@ -104,7 +116,7 @@ public class SysLimitObjController implements BaseController<ISysLimitObjService
      */
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
-        return this.deleteByIds(iSysLimitObjService, ids, (id) -> (iSysRuleService.count(this.getLambdaQueryWrapper(new SysRule()).eq(SysRule::getLimitObjId, id))) == 0);
+        return this.deleteByIds(iSysLimitObjService, ids, (sysLimitObj) -> (iSysRuleService.count(this.getLambdaQueryWrapper(new SysRule()).eq(SysRule::getLimitObjId, sysLimitObj.getId()))) == 0);
     }
 
 }

@@ -83,6 +83,22 @@ public interface ISysUserService extends BaseMpService<SysUser> {
     AuthUserInfoVo findByPhone(String phone);
 
     /**
+     * 通过openid获取用户信息
+     *
+     * @param openid openid
+     * @return SysUser
+     */
+    AuthUserInfoVo findByOpenId(String openid);
+
+    /**
+     * 通过应用id获取用户信息
+     *
+     * @param appid 应用id
+     * @return SysUser
+     */
+    AuthUserInfoVo findByAppId(String appid);
+
+    /**
      * 通过邮箱获取用户信息
      *
      * @param email 邮箱

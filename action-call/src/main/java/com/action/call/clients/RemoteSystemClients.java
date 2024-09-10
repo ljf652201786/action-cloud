@@ -30,6 +30,10 @@ public interface RemoteSystemClients {
     @RequestMapping(value = "user/getUserByOpenId", method = RequestMethod.GET)
     AuthUserInfoVo getUserByOpenId(@RequestParam("openid") String openid);
 
+    @LoadBalanced  //启用负载均衡
+    @RequestMapping(value = "user/getUserByAppId", method = RequestMethod.GET)
+    AuthUserInfoVo getUserByAppId(@RequestParam("appid") String appid);
+
     @LoadBalanced
     @RequestMapping(value = "user/getUserByEmail", method = RequestMethod.GET)
     AuthUserInfoVo getUserByEmail(@RequestParam("email") String email);

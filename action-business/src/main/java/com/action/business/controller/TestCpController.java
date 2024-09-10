@@ -69,4 +69,9 @@ public class TestCpController implements BaseController<ITestCpService, TestCp> 
         return this.getList(iTestCpService, new TestCp(), TestCpVo.class);
     }
 
+    @GetMapping("code")
+    public void testBetween1(@RequestParam("code") String code) {
+        System.out.println("接收" + code);
+    }
+
 }

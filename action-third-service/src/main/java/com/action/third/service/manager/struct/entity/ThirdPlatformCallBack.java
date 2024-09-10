@@ -24,6 +24,8 @@ public class ThirdPlatformCallBack {
     private String contentId;
     @TableField("camera_name")
     private String cameraName;
+    @Condition(value = Condition.ConditionTypeEnums.IN,
+            convert = Condition.ConvertTypeEnums.COMMA_SPLIT)
     @TableField("algorithm_id")
     private String algorithmId;
     @TableField("algorithm_name")

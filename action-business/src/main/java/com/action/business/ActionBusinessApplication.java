@@ -1,6 +1,7 @@
 package com.action.business;
 
 import com.action.call.annotation.EnableFeign;
+import com.action.common.biz.annotation.EnableApiVersion;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Author: ljf  <lin652210786@163.com>
  * @Date: 2024/4/1
  */
+@EnableApiVersion
 @EnableFeign
 @SpringBootApplication
 public class ActionBusinessApplication {

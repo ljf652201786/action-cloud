@@ -36,6 +36,8 @@ public class SysUser extends BaseEntity {
     private String email;
     @TableField("phone")
     private String phone;
+    @TableField("openid")
+    private String openid;
     @TableField("sex")
     private String sex;
     @TableField("status")

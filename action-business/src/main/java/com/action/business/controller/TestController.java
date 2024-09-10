@@ -8,12 +8,13 @@ import com.action.business.struct.entity.Test;
 import com.action.business.listener.TestImportListener;
 import com.action.business.service.ITestService;
 import com.action.business.struct.vo.TestImportVo;
+import com.action.common.biz.annotation.ApiVersion;
+import com.action.common.biz.annotation.OpenApi;
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
 import com.action.common.core.listener.IEventService;
 import com.action.common.entity.EventStruct;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
-import com.action.common.network.struct.WebClientBody;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ import java.util.List;
 @RequestMapping("test")
 @RestController
 @RequiredArgsConstructor
+@OpenApi
 public class TestController implements BaseController<ITestService, Test> {
     private final ITestService iTestService;
     private final IEventService iEventService;
@@ -225,11 +227,18 @@ public class TestController implements BaseController<ITestService, Test> {
         System.out.println(result.toString());
     }
 
-
-    @RequestMapping(value = "testBetween", method = RequestMethod.GET)
+    @ApiVersion(1.1)
+//    @RequestMapping(value = "testBetween", method = RequestMethod.GET)
+    @GetMapping("testBetween")
     public void testBetween() {
         LocalDateTime startTime = LocalDateTime.parse("2022-01-01 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         LocalDateTime endTime = LocalDateTime.parse("2022-01-31 23:59:59", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        iTestService.list(new QueryWrapper<Test>().eq("id","3").between("create_time", "2024-9-4","2024-9-5").notLike("name","zz"));
+        iTestService.list(new QueryWrapper<Test>().eq("id", "3").between("create_time", "2024-9-4", "2024-9-5").notLike("name", "zz"));
+    }
+
+    //    @RequestMapping(value = "testBetween", method = RequestMethod.GET)
+    @GetMapping("code")
+    public void testBetween1(@RequestParam("code") String code) {
+        System.out.println("接收" + code);
     }
 }

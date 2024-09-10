@@ -105,7 +105,7 @@ public class SysGroupController implements BaseController<ISysGroupService, SysG
      */
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
-        return this.deleteByIds(iSysGroupService, ids, (id) -> (iSysUserGroupService.count(this.getLambdaQueryWrapper(new SysUserGroup()).eq(SysUserGroup::getGroupId, id))) == 0);
+        return this.deleteByIds(iSysGroupService, ids, (sysGroup) -> (iSysUserGroupService.count(this.getLambdaQueryWrapper(new SysUserGroup()).eq(SysUserGroup::getGroupId, sysGroup.getId()))) == 0);
     }
 
     /**

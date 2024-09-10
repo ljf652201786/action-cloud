@@ -53,6 +53,11 @@
 
         <dependency>
             <groupId>com.action</groupId>
+            <artifactId>action-common-network</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.action</groupId>
             <artifactId>action-common-mybatisplus-extend</artifactId>
         </dependency>
 

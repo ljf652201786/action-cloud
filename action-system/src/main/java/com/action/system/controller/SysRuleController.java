@@ -104,6 +104,6 @@ public class SysRuleController implements BaseController<ISysRuleService, SysRul
      */
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
-        return this.deleteByIds(iSysRuleService, ids, (id) -> (iSysMenuRuleService.count(this.getLambdaQueryWrapper(new SysMenuRule()).eq(SysMenuRule::getRuleId, id))) == 0);
+        return this.deleteByIds(iSysRuleService, ids, (sysRule) -> (iSysMenuRuleService.count(this.getLambdaQueryWrapper(new SysMenuRule()).eq(SysMenuRule::getRuleId, sysRule.getId()))) == 0);
     }
 }

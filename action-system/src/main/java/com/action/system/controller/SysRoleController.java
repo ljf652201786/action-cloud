@@ -119,7 +119,7 @@ public class SysRoleController implements BaseController<ISysRoleService, SysRol
      */
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
-        return this.deleteByIds(iSysRoleService, ids, (id) -> (iSysUserRoleService.count(this.getLambdaQueryWrapper(new SysUserRole()).eq(SysUserRole::getRoleId, id))) == 0);
+        return this.deleteByIds(iSysRoleService, ids, (sysRole) -> (iSysUserRoleService.count(this.getLambdaQueryWrapper(new SysUserRole()).eq(SysUserRole::getRoleId, sysRole.getId()))) == 0);
     }
 
     /**

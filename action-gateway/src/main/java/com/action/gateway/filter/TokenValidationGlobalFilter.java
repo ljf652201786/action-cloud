@@ -1,5 +1,6 @@
 package com.action.gateway.filter;
 
+import com.action.common.common.RedisSetConstants;
 import com.action.common.core.common.ResultCode;
 import com.action.common.core.handle.RedisCacheHandle;
 import com.action.gateway.util.WebFluxUtils;
@@ -49,7 +50,7 @@ public class TokenValidationGlobalFilter implements GlobalFilter, Ordered {
             String token = authorization.substring(BEARER_PREFIX.length());
             JWSObject jwsObject = JWSObject.parse(token);
             String jti = (String) jwsObject.getPayload().toJSONObject().get("jti");
-            Boolean isBlackToken = redisCacheHandle.exists("token:blacklist:" + jti);
+            Boolean isBlackToken = redisCacheHandle.exists(RedisSetConstants.TOKEN_BLACKLIST_KEY + jti);
             if (Boolean.TRUE.equals(isBlackToken)) {
                 return WebFluxUtils.writeErrorResponse(response, ResultCode.TOKEN_ACCESS_FORBIDDEN);
             }

@@ -90,7 +90,7 @@ public class SysDeptController implements BaseController<ISysDeptService, SysDep
      */
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
-        return this.deleteByIds(iSysDeptService, ids, (id) -> (iSysScopeService.deptNum(id)) == 0);
+        return this.deleteByIds(iSysDeptService, ids, (sysDept) -> (iSysScopeService.deptNum(sysDept.getId())) == 0);
     }
 
     /**

@@ -12,6 +12,7 @@ import com.action.system.struct.dto.SysUserExtend;
 import com.action.system.mapper.*;
 import com.action.system.service.*;
 import com.action.system.struct.entity.*;
+import com.action.system.struct.vo.AppVo;
 import com.action.system.struct.vo.UserProfileVO;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -23,6 +24,7 @@ import org.springframework.util.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -40,6 +42,7 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
     private final ISysUserRoleService iSysUserRoleService;
     private final ISysUserGroupService iSysUserGroupService;
     private final ISysDataService iSysDataService;
+    private final ISysAppService iSysAppService;
     private final PasswordEncoder passwordEncoder;
     private final ICacheService iCacheService;
     private final ICache iCache;
@@ -122,13 +125,33 @@ public class ISysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
     @Override
     public AuthUserInfoVo findByPhone(String phone) {
         SysUser sysUser = sysUserMapper.selectOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, phone));
-        return userConverter.sysUserToAuthUserVo(sysUser);
+        return Objects.nonNull(sysUser) ? getUserByUserName(sysUser.getUsername()) : new AuthUserInfoVo();
+    }
+
+    @Override
+    public AuthUserInfoVo findByOpenId(String openid) {
+        SysUser sysUser = sysUserMapper.selectOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getOpenid, openid));
+        return Objects.nonNull(sysUser) ? getUserByUserName(sysUser.getUsername()) : new AuthUserInfoVo();
     }
 
     @Override
     public AuthUserInfoVo findByEmail(String email) {
         SysUser sysUser = sysUserMapper.selectOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getEmail, email));
-        return userConverter.sysUserToAuthUserVo(sysUser);
+        return Objects.nonNull(sysUser) ? getUserByUserName(sysUser.getUsername()) : new AuthUserInfoVo();
+    }
+
+    @Override
+    public AuthUserInfoVo findByAppId(String appid) {
+        AppVo appVo = iSysAppService.selectOneBy((e) -> e.getOne(this.getLambdaQueryWrapper(new SysApp()).eq(SysApp::getAppId, appid).eq(SysApp::getStatus, StatusType.ENABLE.getStatus())), AppVo.class);
+        AtomicReference<AuthUserInfoVo> authuserInfoVo = new AtomicReference<>(new AuthUserInfoVo());
+        Optional.ofNullable(appVo).ifPresent(app -> {
+            AuthUserInfoVo au = getUserByUserName(app.getUsername());
+            if (au != null) {
+                au.setOpen(true);
+                authuserInfoVo.set(au);
+            }
+        });
+        return authuserInfoVo.get();
     }
 
     @Override

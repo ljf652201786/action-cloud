@@ -106,7 +106,7 @@ public class SysPostController implements BaseController<ISysPostService, SysPos
      */
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
-        return this.deleteByIds(iSysPostService, ids, (id) -> (iSysScopeService.postNum(id)) == 0);
+        return this.deleteByIds(iSysPostService, ids, (sysPost) -> (iSysScopeService.postNum(sysPost.getId())) == 0);
     }
 
     /**

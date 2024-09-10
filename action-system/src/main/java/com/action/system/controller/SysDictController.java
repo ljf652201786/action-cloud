@@ -91,6 +91,6 @@ public class SysDictController implements BaseController<ISysDictService, SysDic
      */
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
-        return this.deleteByIds(iSysDictService, ids, (id) -> (iSysDictDetailService.count(this.getLambdaQueryWrapper(new SysDictDetail()).eq(SysDictDetail::getDictId, id))) == 0);
+        return this.deleteByIds(iSysDictService, ids, (sysDict) -> (iSysDictDetailService.count(this.getLambdaQueryWrapper(new SysDictDetail()).eq(SysDictDetail::getDictId, sysDict.getId()))) == 0);
     }
 }
