@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -25,11 +26,12 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Slf4j
 public class GlobalCacheRequestBodyFilter implements GlobalFilter, Ordered {
+    private static final List<String> ignoreUrls = List.of("/auth/oauth2/jwks");
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        if (!checkIgnore(request)) {
+        if (checkIgnore(request)) {
             return chain.filter(exchange);
         }
 
@@ -60,7 +62,7 @@ public class GlobalCacheRequestBodyFilter implements GlobalFilter, Ordered {
      */
     public static boolean checkIgnore(ServerHttpRequest request) {
         String isIgnore = request.getHeaders().getFirst(ActionConstants.IGNORE);
-        if (StringUtils.isNotEmpty(isIgnore) && isIgnore.equalsIgnoreCase(ActionConstants.IGNORE_VALUE)) {
+        if ((StringUtils.isNotEmpty(isIgnore) && isIgnore.equalsIgnoreCase(ActionConstants.IGNORE_VALUE)) || ignoreUrls.contains(request.getURI().getPath())) {
             return true;
         }
         return false;

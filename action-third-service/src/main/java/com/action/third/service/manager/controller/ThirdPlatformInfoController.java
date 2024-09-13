@@ -56,8 +56,7 @@ public class ThirdPlatformInfoController implements BaseController<IThirdPlatfor
 //    @PreAuthorize("@ss.hasPerm('sys:test:save')")   // 开启注解权限时生效
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody ThirdPlatformInfo thirdPlatformInfo) {
-        boolean isSave = iThirdPlatformInfoService.save(thirdPlatformInfo);
-        return Result.judge(isSave);
+        return Result.judge(iThirdPlatformInfoService.save(thirdPlatformInfo));
     }
 
     /**
@@ -70,8 +69,7 @@ public class ThirdPlatformInfoController implements BaseController<IThirdPlatfor
      */
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Result update(@RequestBody ThirdPlatformInfo thirdPlatformInfo) {
-        boolean isUpdate = iThirdPlatformInfoService.updateById(thirdPlatformInfo);
-        return Result.judge(isUpdate);
+        return Result.judge(iThirdPlatformInfoService.updateById(thirdPlatformInfo));
     }
 
     /**
@@ -84,7 +82,6 @@ public class ThirdPlatformInfoController implements BaseController<IThirdPlatfor
      */
     @RequestMapping(value = "deleteById", method = RequestMethod.DELETE)
     public Result deleteById(@RequestParam("id") String id) {
-        boolean isDelete = iThirdPlatformInfoService.removeById(id);
-        return Result.judge(isDelete);
+        return Result.judge(iThirdPlatformInfoService.removeById(id));
     }
 }

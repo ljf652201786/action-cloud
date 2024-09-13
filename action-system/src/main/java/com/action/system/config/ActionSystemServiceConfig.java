@@ -4,7 +4,7 @@ import com.action.common.core.listener.IEventService;
 import com.action.common.entity.EventStruct;
 import com.action.system.event.ActionSystemEvent;
 import com.action.system.event.ActionSystemEventHandler;
-import com.action.system.service.ISysScheduleTaskService;
+import com.action.system.sconf.service.ISysScheduleTaskService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

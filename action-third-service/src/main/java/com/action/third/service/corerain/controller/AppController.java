@@ -79,7 +79,6 @@ public class AppController {
      */
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public Result delete(@RequestBody AppDeleteDto appDeleteDto) {
-        boolean isDelete = sysAuthService.deleteApp(appDeleteDto);
-        return Result.judge(isDelete);
+        return Result.judge(sysAuthService.deleteApp(appDeleteDto));
     }
 }

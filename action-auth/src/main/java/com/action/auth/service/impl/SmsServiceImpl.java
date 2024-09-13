@@ -2,7 +2,7 @@ package com.action.auth.service.impl;
 
 import com.action.auth.service.ISmsService;
 import com.action.call.clients.RemoteSystemClients;
-import com.action.call.vo.LogSMSVo;
+import com.action.call.vo.LogSMSDto;
 import com.action.common.core.handle.RedisCacheHandle;
 import com.action.common.sms.properties.AliyunSmsProperties;
 import com.action.common.sms.service.impl.AliyunSmsService;
@@ -49,8 +49,8 @@ public class SmsServiceImpl implements ISmsService {
             // 将验证码存入redis，有效期5分钟
             redisCacheHandle.set(REGISTER_SMS_CODE_KEY + phone, code, expireTime);
         }
-        LogSMSVo logSMSVo = new LogSMSVo(phone, templateParams, result, new Date(), String.valueOf(expireTime));
-        remoteSystemClients.save(logSMSVo);
+        LogSMSDto logSMSDto = new LogSMSDto(phone, templateParams, result, new Date(), String.valueOf(expireTime));
+        remoteSystemClients.save(logSMSDto);
         return result;
     }
 }

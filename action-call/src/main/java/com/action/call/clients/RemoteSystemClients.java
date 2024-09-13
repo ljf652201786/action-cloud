@@ -3,9 +3,9 @@ package com.action.call.clients;
 import com.action.call.config.FeignDecoderConfig;
 import com.action.call.factory.RemoteSystemClientsFallbackFactory;
 import com.action.call.vo.AuthUserInfoVo;
-import com.action.call.vo.LogLoginVo;
-import com.action.call.vo.LogRequestVo;
-import com.action.call.vo.LogSMSVo;
+import com.action.call.vo.LogLoginDto;
+import com.action.call.vo.LogRequestDto;
+import com.action.call.vo.LogSMSDto;
 import com.action.common.core.common.Result;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -48,13 +48,13 @@ public interface RemoteSystemClients {
 
     @LoadBalanced
     @RequestMapping(value = "logRequest/save", method = RequestMethod.POST)
-    Result save(@RequestBody LogRequestVo logRequestVo);
+    Result save(@RequestBody LogRequestDto logRequestDto);
 
     @LoadBalanced
     @RequestMapping(value = "logLogin/save", method = RequestMethod.POST)
-    Result save(@RequestBody LogLoginVo logLoginVo);
+    Result save(@RequestBody LogLoginDto logLoginDto);
 
     @LoadBalanced
     @RequestMapping(value = "logSMS/save", method = RequestMethod.POST)
-    Result save(@RequestBody LogSMSVo logSMSVo);
+    Result save(@RequestBody LogSMSDto logSMSDto);
 }

@@ -56,7 +56,6 @@ public class ThirdPlatformRequestLogController implements BaseController<IThirdP
      */
     @RequestMapping(value = "deleteById", method = RequestMethod.DELETE)
     public Result deleteById(@RequestParam("id") String id) {
-        boolean isDelete = iThirdPlatformRequestLogService.removeById(id);
-        return Result.judge(isDelete);
+        return Result.judge(iThirdPlatformRequestLogService.removeById(id));
     }
 }

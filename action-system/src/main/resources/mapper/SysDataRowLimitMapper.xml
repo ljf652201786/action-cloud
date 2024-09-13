@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.action.system.mapper.SysDataRowLimitMapper">
+<mapper namespace="com.action.system.bsup.mapper.SysDataRowLimitMapper">
 
-    <select id="getUserDataRowPerm" resultType="com.action.system.struct.entity.SysDataRowLimit">
+    <select id="getUserDataRowPerm" resultType="com.action.system.bsup.struct.entity.SysDataRowLimit">
         select sdrl.id,
         sdrl.data_id,
         sdrl.type,

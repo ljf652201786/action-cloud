@@ -2,7 +2,7 @@ package com.action.system.holder;
 
 import com.action.common.core.base.BaseSecurityMenu;
 import com.action.common.security.holder.IAuthHolder;
-import com.action.system.service.ISysMenuService;
+import com.action.system.manager.service.ISysMenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

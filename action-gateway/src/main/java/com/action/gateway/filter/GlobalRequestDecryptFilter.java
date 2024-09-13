@@ -58,7 +58,7 @@ public class GlobalRequestDecryptFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
 
-        if (!checkIgnore(request)) {
+        if (checkIgnore(request)) {
             return chain.filter(exchange);
         }
 

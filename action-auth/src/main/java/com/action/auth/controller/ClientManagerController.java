@@ -31,9 +31,6 @@ public class ClientManagerController implements BaseMpController<IOauth2Register
     @RequestMapping(value = "registered", method = RequestMethod.POST)
     public Result registered(@RequestBody Oauth2RegisteredClient oauth2RegisteredClient) {
         boolean isRegistered = iOauth2RegisteredClientService.registered(oauth2RegisteredClient);
-        if (isRegistered) {
-            return Result.success("注册客户端成功");
-        }
-        return Result.failed("注册客户端失败");
+        return Result.judge(isRegistered, "注册客户端成功", "注册客户端失败");
     }
 }

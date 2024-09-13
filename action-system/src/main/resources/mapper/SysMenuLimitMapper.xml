@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.action.system.mapper.SysMenuLimitMapper">
+<mapper namespace="com.action.system.bsup.mapper.SysMenuLimitMapper">
 
-    <select id="getSysMenuByScope" resultType="com.action.system.struct.entity.SysMenu">
+    <select id="getSysMenuByScope" resultType="com.action.system.manager.struct.entity.SysMenu">
         select sm.id,
         sm.ancestral,
         sm.parent_id,

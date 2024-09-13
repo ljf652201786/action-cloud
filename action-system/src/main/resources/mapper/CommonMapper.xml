@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.action.system.bsup.mapper.CommonMapper">
+
+    <resultMap id="dbTableMap" type="com.action.system.bsup.struct.entity.DbTable">
+        <result property="TABLE_CATALOG" column="TABLE_CATALOG"/>
+        <result property="TABLE_SCHEMA" column="TABLE_SCHEMA"/>
+        <result property="TABLE_NAME" column="TABLE_NAME"/>
+        <result property="TABLE_COMMENT" column="TABLE_COMMENT"/>
+        <result property="ENGINE" column="ENGINE"/>
+        <result property="CREATE_TIME" column="CREATE_TIME"/>
+        <result property="DATA_LENGTH" column="DATA_LENGTH"/>
+        <result property="MAX_DATA_LENGTH" column="MAX_DATA_LENGTH"/>
+        <result property="ROW_FORMAT" column="ROW_FORMAT"/>
+        <result property="AUTO_INCREMENT" column="AUTO_INCREMENT"/>
+        <result property="TABLE_COLLATION" column="TABLE_COLLATION"/>
+        <result property="VERSION" column="VERSION"/>
+    </resultMap>
+
+    <resultMap id="dbTableColumnMap" type="com.action.system.bsup.struct.entity.DbTableColumn">
+        <result property="TABLE_CATALOG" column="TABLE_CATALOG"/>
+        <result property="TABLE_SCHEMA" column="TABLE_SCHEMA"/>
+        <result property="TABLE_NAME" column="TABLE_NAME"/>
+        <result property="COLUMN_NAME" column="COLUMN_NAME"/>
+        <result property="COLUMN_KEY" column="COLUMN_KEY"/>
+        <result property="IS_NULLABLE" column="IS_NULLABLE"/>
+        <result property="COLUMN_COMMENT" column="COLUMN_COMMENT"/>
+        <result property="COLUMN_TYPE" column="COLUMN_TYPE"/>
+        <result property="DATA_TYPE" column="DATA_TYPE"/>
+    </resultMap>
+
+    <select id="listTable" resultMap="dbTableMap">
+        select *
+        from information_schema.TABLES
+        where TABLE_SCHEMA = (select database())
+    </select>
+
+    <select id="listTableColumn" parameterType="String" resultMap="dbTableColumnMap">
+        select *
+        from information_schema.COLUMNS
+        where TABLE_SCHEMA = (select database())
+          and TABLE_NAME = #{tableName}
+    </select>
+</mapper>

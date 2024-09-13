@@ -36,7 +36,7 @@ import java.util.List;
 @RequestMapping("test")
 @RestController
 @RequiredArgsConstructor
-@OpenApi
+//@OpenApi
 public class TestController implements BaseController<ITestService, Test> {
     private final ITestService iTestService;
     private final IEventService iEventService;
@@ -79,8 +79,7 @@ public class TestController implements BaseController<ITestService, Test> {
 //    @PreAuthorize("@ss.hasPerm('sys:test:save')")   // 开启注解权限时生效
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody TestDto testDto) {
-        boolean isSave = iTestService.save(testDto);
-        return Result.judge(isSave);
+        return Result.judge(iTestService.save(testDto));
     }
 
     /**
@@ -93,8 +92,7 @@ public class TestController implements BaseController<ITestService, Test> {
      */
     @RequestMapping(value = "update", method = RequestMethod.PUT)
     public Result update(@RequestBody TestDto testDto) {
-        boolean isUpdate = iTestService.updateById(testDto);
-        return Result.judge(isUpdate);
+        return Result.judge(iTestService.updateById(testDto));
     }
 
     /**
@@ -107,8 +105,7 @@ public class TestController implements BaseController<ITestService, Test> {
      */
     @RequestMapping(value = "deleteById", method = RequestMethod.DELETE)
     public Result deleteById(@RequestParam("id") String id) {
-        boolean isDelete = iTestService.removeById(id);
-        return Result.judge(isDelete);
+        return Result.judge(iTestService.removeById(id));
     }
 
     /**
@@ -137,9 +134,8 @@ public class TestController implements BaseController<ITestService, Test> {
      */
     @RequestMapping(value = "importFile", method = RequestMethod.POST)
     public Result importFile(@RequestParam("file") MultipartFile multipartFile) {
-        boolean isImport = iTestService.importFile(multipartFile, new ArrayList<>() {
-        });
-        return Result.judge(isImport);
+        return Result.judge(iTestService.importFile(multipartFile, new ArrayList<>() {
+        }));
     }
 
     /**
@@ -240,5 +236,10 @@ public class TestController implements BaseController<ITestService, Test> {
     @GetMapping("code")
     public void testBetween1(@RequestParam("code") String code) {
         System.out.println("接收" + code);
+    }
+
+    @GetMapping("sssaaaa")
+    public Result ff() {
+        return Result.judge(true, "222", "3343");
     }
 }

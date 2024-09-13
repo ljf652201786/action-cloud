@@ -57,8 +57,7 @@ public class ThirdPlatformCallBackController implements BaseController<IThirdPla
 //    @PreAuthorize("@ss.hasPerm('sys:test:save')")   // 开启注解权限时生效
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestBody JSONObject jsonObject) {
-        boolean isSave = iThirdPlatformCallBackService.analyzeAndSave(jsonObject);
-        return Result.judge(isSave);
+        return Result.judge(iThirdPlatformCallBackService.analyzeAndSave(jsonObject));
     }
 
     /**
@@ -71,7 +70,6 @@ public class ThirdPlatformCallBackController implements BaseController<IThirdPla
      */
     @RequestMapping(value = "deleteById", method = RequestMethod.DELETE)
     public Result deleteById(@RequestParam("id") String id) {
-        boolean isDelete = iThirdPlatformCallBackService.removeById(id);
-        return Result.judge(isDelete);
+        return Result.judge(iThirdPlatformCallBackService.removeById(id));
     }
 }

@@ -3,8 +3,6 @@ package com.action.call.vo;
 import com.action.common.core.base.BaseSecurityUser;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
  * @Description: 认证用户信息
  * @Author: ljf  <lin652210786@163.com>
@@ -17,8 +15,8 @@ public class AuthUserInfoVo extends BaseSecurityUser {
     private String phone;
     private String sex;
     private String createBy;
-    private Date createTime;
+    private String createTime;
     private String updateBy;
-    private Date updateTime;
+    private String updateTime;
     private String remark;
 }

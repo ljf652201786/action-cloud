@@ -34,8 +34,7 @@ public class AuthController {
 
     @RequestMapping(value = "sendSms", method = RequestMethod.POST)
     public Result sendLoginSmsCode(@RequestParam String phone) {
-        boolean isSend = iSmsService.sendSmsCode(phone);
-        return Result.judge(isSend);
+        return Result.judge(iSmsService.sendSmsCode(phone));
     }
 
     @RequestMapping(value = "sendEmail", method = RequestMethod.POST)

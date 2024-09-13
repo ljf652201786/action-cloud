@@ -38,8 +38,7 @@ public class SysFileController implements BaseController<ISysFileService, SysFil
 
     @RequestMapping(value = "pseudoDeleteByIds", method = RequestMethod.PUT)
     public Result pseudoDeleteByIds(@RequestParam("ids") List<String> ids) {
-        boolean isUpdateBatchById = iSysFileService.pseudoDeletionBatchByIds(ids);
-        return isUpdateBatchById ? Result.success("Batch deletion of data successful！") : Result.failed("Batch deletion of data failed！");
+        return Result.judge(iSysFileService.pseudoDeletionBatchByIds(ids), "Batch deletion of data successful！", "Batch deletion of data failed！");
     }
 
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
@@ -49,8 +48,7 @@ public class SysFileController implements BaseController<ISysFileService, SysFil
 
     @RequestMapping(value = "recovery", method = RequestMethod.PUT)
     public Result recovery(@RequestParam("ids") List<String> ids) {
-        boolean isUpdateBatchById = iSysFileService.recoveryBaseFilesByIds(ids);
-        return isUpdateBatchById ? Result.success("Batch file recovery successful！") : Result.failed("Batch file recovery failed！");
+        return Result.judge(iSysFileService.recoveryBaseFilesByIds(ids), "Batch file recovery successful！", "Batch file recovery failed！");
     }
 
     @RequestMapping(value = "upload", method = RequestMethod.POST)
