@@ -17,6 +17,10 @@ public interface ISysDataService extends BaseMpService<SysData> {
 
     boolean updateInfo(SysData sysData);
 
+    boolean disable(String dataId);
+
+    boolean enable(String dataId);
+
     Set<DataRowFilterStruct> getUserDataRowPerm(Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet);
 
     Map<String, Set<String>> getUserDataColumnPerm(Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet);

@@ -1,7 +1,7 @@
 package com.action.auth.service;
 
 import com.action.call.clients.RemoteSystemClients;
-import com.action.call.vo.AuthUserInfoVo;
+import com.action.call.struct.vo.AuthUserInfoVo;
 import com.action.common.enums.StatusType;
 import com.action.common.oauth2.entity.SecurityUser;
 import com.action.common.oauth2.service.IThirdDetailsService;

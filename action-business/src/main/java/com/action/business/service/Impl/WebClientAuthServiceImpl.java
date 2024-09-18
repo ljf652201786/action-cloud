@@ -44,7 +44,7 @@ public class WebClientAuthServiceImpl implements IWebClientAuthService {
     @Override
     public void requestFilter(String baseUrl, ClientRequest clientRequest) {
         //通过redis 验证redis中是否存在token，如果不存在就重新获取token
-        String webClientToken = null;
+       /* String webClientToken = null;
         Optional<RemoteWebClient> webClientOptional = netWorkManagerProperties.getRemoteHttp().getRemoteWebClientByServiceUrl(baseUrl);
         if (!webClientOptional.isPresent()) {
             return;
@@ -64,6 +64,6 @@ public class WebClientAuthServiceImpl implements IWebClientAuthService {
             //重新设置请求头
             WebClientUtils.putHeader(clientRequest, webClient.getTokenKey(), webClient.getTokenBearer() + StringPool.SPACE + webClientToken);
         }
-        System.out.println("Dynamic addition of authentication token completed");
+        System.out.println("Dynamic addition of authentication token completed");*/
     }
 }

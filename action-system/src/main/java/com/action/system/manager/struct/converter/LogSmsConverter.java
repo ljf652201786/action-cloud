@@ -1,6 +1,6 @@
 package com.action.system.manager.struct.converter;
 
-import com.action.call.vo.LogSMSDto;
+import com.action.call.struct.dto.LogSMSDto;
 import com.action.system.manager.struct.entity.SysLogSms;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

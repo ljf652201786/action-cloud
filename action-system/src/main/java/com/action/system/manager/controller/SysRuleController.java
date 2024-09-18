@@ -111,4 +111,30 @@ public class SysRuleController implements BaseController<ISysRuleService, SysRul
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
         return this.deleteByIds(iSysRuleService, ids, (sysRule) -> (iSysMenuRuleService.count(this.getLambdaQueryWrapper(new SysMenuRule()).eq(SysMenuRule::getRuleId, sysRule.getId()))) == 0);
     }
+
+    /**
+     * @param id 规则id
+     * @Description: 禁用规则
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/3
+     */
+    @RequestMapping(value = "disable/{id}", method = RequestMethod.PUT)
+    public Result disable(@PathVariable("id") String id) {
+        return Result.judge(iSysRuleService.disable(id));
+    }
+
+    /**
+     * @param id 规则d
+     * @Description: 激活规则
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/3
+     */
+    @RequestMapping(value = "enable/{id}", method = RequestMethod.PUT)
+    public Result enable(@PathVariable("id") String id) {
+        return Result.judge(iSysRuleService.disable(id));
+    }
 }

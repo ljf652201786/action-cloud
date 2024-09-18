@@ -7,8 +7,10 @@ import com.action.system.bsup.struct.entity.SysMenuLimit;
 import com.action.system.bsup.service.ISysMenuLimitService;
 import com.action.system.bsup.service.ISysMenuRuleService;
 import com.action.system.manager.struct.dto.RuleAllocationDto;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,7 +40,7 @@ public class SysPermAllocationController implements BaseController {
         if (StringUtils.isEmpty(permAllocationDto.getContactId()) || StringUtils.isEmpty(permAllocationDto.getType())) {
             return Result.failed("请先选择所属分配对象");
         }
-        return Result.judge(iSysMenuLimitService.allocationMenu(permAllocationDto));
+        return Result.judge(iSysMenuLimitService.allocationMenu(permAllocationDto), "权限分配成功", "权限分配失败");
     }
 
     /**
@@ -51,7 +53,8 @@ public class SysPermAllocationController implements BaseController {
      * @Date: 2024/4/3
      */
     @RequestMapping(value = "getAllocationMenu", method = RequestMethod.GET)
-    public Result getAllocationMenu(@RequestParam("type") String type, @RequestParam("contactId") String contactId) {
+    public Result getAllocationMenu(@RequestParam("type") @NotBlank(message = "所属类型不能为空！") String type,
+                                    @RequestParam("contactId") @NotBlank(message = "关联id不能为空！") String contactId) {
         if (StringUtils.isEmpty(type) || StringUtils.isEmpty(contactId)) {
             return Result.failed("请先选择所属分配对象");
         }

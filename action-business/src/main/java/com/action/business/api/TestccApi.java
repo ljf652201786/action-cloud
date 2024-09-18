@@ -2,7 +2,8 @@ package com.action.business.api;
 
 import com.action.common.core.common.Result;
 import com.action.common.network.service.IWebClientApi;
-import org.springframework.web.service.annotation.*;
+import org.springframework.web.service.annotation.GetExchange;
+import org.springframework.web.service.annotation.HttpExchange;
 
 /**
  * @Description: 测试API
@@ -10,9 +11,9 @@ import org.springframework.web.service.annotation.*;
  * @Date: 2024/08/20
  */
 @HttpExchange("")
-public interface TestApi extends IWebClientApi {
+public interface TestccApi extends IWebClientApi {
 
-    @GetExchange("/test/testHttp")
-    Result testHttp();
+    @GetExchange("/test/testHttp_2")
+    Result testHttp_2();
 
 }

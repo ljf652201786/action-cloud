@@ -88,4 +88,30 @@ public class SysDataController implements BaseController<ISysDataService, SysDat
     public Result deptTreeSelect(SysData sysData) {
         return this.treeSelect(iSysDataService, sysData, SysData::getId);
     }
+
+    /**
+     * @param id 数据id
+     * @Description: 禁用数据
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/3
+     */
+    @RequestMapping(value = "disable/{id}", method = RequestMethod.PUT)
+    public Result disable(@PathVariable("id") String id) {
+        return Result.judge(iSysDataService.disable(id));
+    }
+
+    /**
+     * @param id 数据id
+     * @Description: 激活数据
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/3
+     */
+    @RequestMapping(value = "enable/{id}", method = RequestMethod.PUT)
+    public Result enable(@PathVariable("id") String id) {
+        return Result.judge(iSysDataService.enable(id));
+    }
 }

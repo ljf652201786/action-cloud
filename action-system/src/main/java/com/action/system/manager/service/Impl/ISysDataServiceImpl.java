@@ -61,6 +61,16 @@ public class ISysDataServiceImpl extends ServiceImpl<SysDataMapper, SysData> imp
     }
 
     @Override
+    public boolean disable(String dataId) {
+        return this.update(this.getLambdaUpdateWrapper().set(SysData::getStatus, StatusType.DISABLED.getStatus()).eq(SysData::getId, dataId));
+    }
+
+    @Override
+    public boolean enable(String dataId) {
+        return this.update(this.getLambdaUpdateWrapper().set(SysData::getStatus, StatusType.ENABLE.getStatus()).eq(SysData::getId, dataId));
+    }
+
+    @Override
     public Set<DataRowFilterStruct> getUserDataRowPerm(Set<String> groupIdSet, Set<String> postIdSet, Set<String> roleIdSet) {
         Set<SysDataRowLimit> userDataRowPermSet = iSysDataRowLimitService.getUserDataRowPerm(groupIdSet, postIdSet, roleIdSet);
         Set<DataRowFilterStruct> dataRowFilterStructSet = new HashSet<>();

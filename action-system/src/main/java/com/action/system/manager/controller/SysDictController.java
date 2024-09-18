@@ -78,4 +78,30 @@ public class SysDictController implements BaseController<ISysDictService, SysDic
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
         return this.deleteByIds(iSysDictService, ids, (sysDict) -> (iSysDictDetailService.count(this.getLambdaQueryWrapper(new SysDictDetail()).eq(SysDictDetail::getDictId, sysDict.getId()))) == 0);
     }
+
+    /**
+     * @param id 字典id
+     * @Description: 禁用字典
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/3
+     */
+    @RequestMapping(value = "disable/{id}", method = RequestMethod.PUT)
+    public Result disable(@PathVariable("id") String id) {
+        return Result.judge(iSysDictService.disable(id));
+    }
+
+    /**
+     * @param id 字典id
+     * @Description: 激活字典
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/3
+     */
+    @RequestMapping(value = "enable/{id}", method = RequestMethod.PUT)
+    public Result enable(@PathVariable("id") String id) {
+        return Result.judge(iSysDictService.enable(id));
+    }
 }

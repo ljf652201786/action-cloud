@@ -1,17 +1,15 @@
 package com.action.system.manager.service.Impl;
 
-import com.action.call.vo.AuthUserInfoVo;
+import com.action.call.struct.vo.AuthUserInfoVo;
 import com.action.common.biz.service.ICache;
 import com.action.common.common.UserSetConstants;
 import com.action.common.core.base.BaseSecurityMenu;
-import com.action.common.core.common.Result;
 import com.action.common.core.constants.ActionConstants;
 import com.action.common.enums.StatusType;
 import com.action.common.mybatisplus.extend.filter.datapermission.DataRowFilterStruct;
 import com.action.common.security.util.SecurityUtil;
 import com.action.system.bsup.service.*;
 import com.action.system.bsup.struct.entity.SysScope;
-import com.action.system.bsup.struct.entity.SysUserGroup;
 import com.action.system.bsup.struct.entity.SysUserRole;
 import com.action.system.manager.mapper.SysUserMapper;
 import com.action.system.manager.service.ISysDataService;
@@ -26,9 +24,7 @@ import com.action.system.manager.struct.converter.UserConverter;
 import com.action.system.manager.struct.dto.SysUserDto;
 import com.action.system.sconf.struct.vo.AppVo;
 import com.action.system.manager.struct.vo.UserProfileVO;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

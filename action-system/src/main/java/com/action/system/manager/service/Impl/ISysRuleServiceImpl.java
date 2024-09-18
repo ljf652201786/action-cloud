@@ -1,5 +1,6 @@
 package com.action.system.manager.service.Impl;
 
+import com.action.common.enums.StatusType;
 import com.action.system.bsup.service.ISysMenuRuleService;
 import com.action.system.manager.service.ISysRuleService;
 import com.action.system.manager.struct.entity.SysRule;
@@ -26,9 +27,19 @@ public class ISysRuleServiceImpl extends ServiceImpl<SysRuleMapper, SysRule> imp
     @Override
     public List<SysRule> getInfoByMenuId(String menuId) {
         List<String> ruleIds = iSysMenuRuleService.getRuleIdsByMenuId(menuId);
-        if(CollectionUtils.isEmpty(ruleIds)){
+        if (CollectionUtils.isEmpty(ruleIds)) {
             return null;
         }
-        return this.list(this.getLambdaQueryWrapper().in(SysRule::getId,ruleIds));
+        return this.list(this.getLambdaQueryWrapper().in(SysRule::getId, ruleIds));
+    }
+
+    @Override
+    public boolean disable(String ruleId) {
+        return this.update(this.getLambdaUpdateWrapper().set(SysRule::getStatus, StatusType.DISABLED.getStatus()).eq(SysRule::getId, ruleId));
+    }
+
+    @Override
+    public boolean enable(String ruleId) {
+        return this.update(this.getLambdaUpdateWrapper().set(SysRule::getStatus, StatusType.ENABLE.getStatus()).eq(SysRule::getId, ruleId));
     }
 }

@@ -8,4 +8,8 @@ public interface ISysDictService extends BaseMpService<SysDict> {
     boolean checkDictCodeExist(String code);
 
     boolean updateInfo(SysDict sysDict);
+
+    boolean disable(String dictId);
+
+    boolean enable(String dictId);
 }

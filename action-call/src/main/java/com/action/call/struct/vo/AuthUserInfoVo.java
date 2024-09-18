@@ -1,4 +1,4 @@
-package com.action.call.vo;
+package com.action.call.struct.vo;
 
 import com.action.common.core.base.BaseSecurityUser;
 import lombok.Data;

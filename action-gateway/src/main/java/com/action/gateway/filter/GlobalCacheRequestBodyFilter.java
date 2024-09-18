@@ -1,6 +1,8 @@
 package com.action.gateway.filter;
 
 import com.action.common.core.constants.ActionConstants;
+import com.action.common.core.constants.JwtClaimConstants;
+import com.nimbusds.jose.JWSObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -8,12 +10,14 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,7 +30,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Slf4j
 public class GlobalCacheRequestBodyFilter implements GlobalFilter, Ordered {
-    private static final List<String> ignoreUrls = List.of("/auth/oauth2/jwks");
+    private static final List<String> ignoreUrls = List.of("/auth/oauth2/token", "/auth/oauth2/jwks");
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -62,8 +66,28 @@ public class GlobalCacheRequestBodyFilter implements GlobalFilter, Ordered {
      */
     public static boolean checkIgnore(ServerHttpRequest request) {
         String isIgnore = request.getHeaders().getFirst(ActionConstants.IGNORE);
-        if ((StringUtils.isNotEmpty(isIgnore) && isIgnore.equalsIgnoreCase(ActionConstants.IGNORE_VALUE)) || ignoreUrls.contains(request.getURI().getPath())) {
+        if ((StringUtils.isNotEmpty(isIgnore) && isIgnore.equalsIgnoreCase(ActionConstants.IGNORE_VALUE)) ||
+                ignoreUrls.contains(request.getURI().getPath()) || isOpenApi(request)
+        ) {
             return true;
+        }
+        return false;
+    }
+
+    public static boolean isOpenApi(ServerHttpRequest request) {
+        String authorization = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+        if (StringUtils.isBlank(authorization) || !StringUtils.startsWith(authorization, ActionConstants.BEARER_PREFIX)) {
+            String token = authorization.substring(ActionConstants.BEARER_PREFIX.length());
+            if (StringUtils.isNotBlank(token)) {
+                JWSObject jwsObject = null;
+                try {
+                    jwsObject = JWSObject.parse(token);
+                    Object o = jwsObject.getPayload().toJSONObject().get(JwtClaimConstants.OPEN);
+                    return Objects.isNull(o) ? false : Boolean.valueOf(String.valueOf(o));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
         return false;
     }

@@ -1,5 +1,6 @@
 package com.action.system.manager.service.Impl;
 
+import com.action.common.enums.StatusType;
 import com.action.system.manager.service.ISysDictService;
 import com.action.system.manager.struct.entity.SysDict;
 import com.action.system.manager.mapper.SysDictMapper;
@@ -26,5 +27,16 @@ public class ISysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> imp
     @Override
     public boolean updateInfo(SysDict sysDict) {
         return this.update(sysDict, this.getLambdaUpdateWrapper().eq(SysDict::getId, sysDict.getId()).eq(SysDict::getDictCode, sysDict.getDictCode()));
+    }
+
+    @Override
+    public boolean disable(String dictId) {
+        return this.update(this.getLambdaUpdateWrapper().set(SysDict::getStatus, StatusType.DISABLED.getStatus()).eq(SysDict::getId, dictId));
+
+    }
+
+    @Override
+    public boolean enable(String dictId) {
+        return this.update(this.getLambdaUpdateWrapper().set(SysDict::getStatus, StatusType.ENABLE.getStatus()).eq(SysDict::getId, dictId));
     }
 }

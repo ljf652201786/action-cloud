@@ -1,6 +1,6 @@
 package com.action.system.manager.controller;
 
-import com.action.call.vo.AuthUserInfoVo;
+import com.action.call.struct.vo.AuthUserInfoVo;
 import com.action.common.biz.base.BaseController;
 import com.action.common.common.RedisSetConstants;
 import com.action.common.core.common.Result;

@@ -102,4 +102,30 @@ public class SysMenuController implements BaseController<ISysMenuService, SysMen
     public Result getSysPermission() {
         return Result.success("系统菜单权限获取成功", iSysMenuService.getSysPermission());
     }
+
+    /**
+     * @param id 菜单id
+     * @Description: 禁用菜单
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/3
+     */
+    @RequestMapping(value = "disable/{id}", method = RequestMethod.PUT)
+    public Result disable(@PathVariable("id") String id) {
+        return Result.judge(iSysMenuService.disable(id));
+    }
+
+    /**
+     * @param id 菜单id
+     * @Description: 激活菜单
+     * @return: Result 结果集
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/4/3
+     */
+    @RequestMapping(value = "enable/{id}", method = RequestMethod.PUT)
+    public Result enable(@PathVariable("id") String id) {
+        return Result.judge(iSysMenuService.disable(id));
+    }
 }

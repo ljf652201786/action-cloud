@@ -2,6 +2,8 @@ package com.action.gateway.filter;
 
 import com.action.common.common.RedisSetConstants;
 import com.action.common.core.common.ResultCode;
+import com.action.common.core.constants.ActionConstants;
+import com.action.common.core.constants.JwtClaimConstants;
 import com.action.common.core.handle.RedisCacheHandle;
 import com.action.gateway.util.WebFluxUtils;
 import com.nimbusds.jose.JWSObject;
@@ -32,9 +34,6 @@ public class TokenValidationGlobalFilter implements GlobalFilter, Ordered {
 
     private final RedisCacheHandle redisCacheHandle;
 
-    private static final String BEARER_PREFIX = "Bearer ";
-
-
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
@@ -42,14 +41,14 @@ public class TokenValidationGlobalFilter implements GlobalFilter, Ordered {
         ServerHttpResponse response = exchange.getResponse();
 
         String authorization = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.isBlank(authorization) || !StringUtils.startsWith(authorization, BEARER_PREFIX)) {
+        if (StringUtils.isBlank(authorization) || !StringUtils.startsWith(authorization, ActionConstants.BEARER_PREFIX)) {
             return chain.filter(exchange);
         }
 
         try {
-            String token = authorization.substring(BEARER_PREFIX.length());
+            String token = authorization.substring(ActionConstants.BEARER_PREFIX.length());
             JWSObject jwsObject = JWSObject.parse(token);
-            String jti = (String) jwsObject.getPayload().toJSONObject().get("jti");
+            String jti = (String) jwsObject.getPayload().toJSONObject().get(JwtClaimConstants.JTI);
             Boolean isBlackToken = redisCacheHandle.exists(RedisSetConstants.TOKEN_BLACKLIST_KEY + jti);
             if (Boolean.TRUE.equals(isBlackToken)) {
                 return WebFluxUtils.writeErrorResponse(response, ResultCode.TOKEN_ACCESS_FORBIDDEN);

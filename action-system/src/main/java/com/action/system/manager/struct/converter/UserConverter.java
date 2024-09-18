@@ -1,6 +1,6 @@
 package com.action.system.manager.struct.converter;
 
-import com.action.call.vo.AuthUserInfoVo;
+import com.action.call.struct.vo.AuthUserInfoVo;
 import com.action.common.helper.StructHelper;
 import com.action.system.manager.struct.dto.SysUserDto;
 import com.action.system.manager.struct.entity.SysUser;

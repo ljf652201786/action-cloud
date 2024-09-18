@@ -8,4 +8,8 @@ import java.util.List;
 
 public interface ISysRuleService extends BaseMpService<SysRule> {
     List<SysRule> getInfoByMenuId(String menuId);
+
+    boolean disable(String ruleId);
+
+    boolean enable(String ruleId);
 }

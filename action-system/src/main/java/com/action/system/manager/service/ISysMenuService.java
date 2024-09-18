@@ -13,4 +13,8 @@ public interface ISysMenuService extends BaseMpService<SysMenu> {
     List<SysMenu> listRoutes();
 
     Set<? extends BaseSecurityMenu> getSysPermission();
+
+    boolean disable(String menuId);
+
+    boolean enable(String menuId);
 }

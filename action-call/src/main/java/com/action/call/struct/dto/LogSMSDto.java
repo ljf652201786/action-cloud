@@ -1,4 +1,4 @@
-package com.action.call.vo;
+package com.action.call.struct.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

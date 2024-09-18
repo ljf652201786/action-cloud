@@ -1,6 +1,6 @@
 package com.action.system.manager.service;
 
-import com.action.call.vo.AuthUserInfoVo;
+import com.action.call.struct.vo.AuthUserInfoVo;
 import com.action.common.mybatisplus.extend.base.BaseMpService;
 import com.action.system.manager.struct.dto.SysUserDto;
 import com.action.system.manager.struct.entity.SysUser;

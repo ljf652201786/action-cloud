@@ -2,10 +2,10 @@ package com.action.call.clients;
 
 import com.action.call.config.FeignDecoderConfig;
 import com.action.call.factory.RemoteSystemClientsFallbackFactory;
-import com.action.call.vo.AuthUserInfoVo;
-import com.action.call.vo.LogLoginDto;
-import com.action.call.vo.LogRequestDto;
-import com.action.call.vo.LogSMSDto;
+import com.action.call.struct.vo.AuthUserInfoVo;
+import com.action.call.struct.dto.LogLoginDto;
+import com.action.call.struct.dto.LogRequestDto;
+import com.action.call.struct.dto.LogSMSDto;
 import com.action.common.core.common.Result;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.FeignClient;

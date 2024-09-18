@@ -1,6 +1,6 @@
 package com.action.system.manager.controller;
 
-import com.action.call.vo.LogSMSDto;
+import com.action.call.struct.dto.LogSMSDto;
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
 import com.action.common.mybatisplus.extend.base.BaseQuery;

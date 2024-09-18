@@ -73,6 +73,16 @@ public class ISysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> imp
         return securityMenuSet;
     }
 
+    @Override
+    public boolean disable(String menuId) {
+        return this.update(this.getLambdaUpdateWrapper().set(SysMenu::getStatus, StatusType.DISABLED.getStatus()).eq(SysMenu::getId, menuId));
+    }
+
+    @Override
+    public boolean enable(String menuId) {
+        return this.update(this.getLambdaUpdateWrapper().set(SysMenu::getStatus, StatusType.ENABLE.getStatus()).eq(SysMenu::getId, menuId));
+    }
+
     private List<SysMenu> buildMenu(List<SysMenu> sysMenuList) {
         List<SysMenu> parentMenuList = sysMenuList.stream().filter(menu -> menu.getParentId().equals(NodeTypeEnum.PARENT.getType()) && menu.getMenuType().equalsIgnoreCase(MenuType.LIST.getType())).collect(Collectors.toList());
         parentMenuList.stream().forEach(parentMenu -> {

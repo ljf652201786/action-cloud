@@ -2,7 +2,7 @@ package com.action.auth.service.impl;
 
 import com.action.auth.service.IAuthService;
 import com.action.call.clients.RemoteSystemClients;
-import com.action.call.vo.AuthUserInfoVo;
+import com.action.call.struct.vo.AuthUserInfoVo;
 import com.action.common.core.constants.ActionRedisConstants;
 import com.action.common.core.handle.RedisCacheHandle;
 import com.action.common.core.tool.KeyPairUtils;

@@ -2,7 +2,7 @@ package com.action.auth.service.impl;
 
 import com.action.auth.service.ISmsService;
 import com.action.call.clients.RemoteSystemClients;
-import com.action.call.vo.LogSMSDto;
+import com.action.call.struct.dto.LogSMSDto;
 import com.action.common.core.handle.RedisCacheHandle;
 import com.action.common.sms.properties.AliyunSmsProperties;
 import com.action.common.sms.service.impl.AliyunSmsService;

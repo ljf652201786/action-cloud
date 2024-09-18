@@ -15,9 +15,14 @@ import com.action.common.core.common.Result;
 import com.action.common.core.listener.IEventService;
 import com.action.common.entity.EventStruct;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
+import com.action.common.network.service.IWebClientApi;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,7 +45,10 @@ import java.util.List;
 public class TestController implements BaseController<ITestService, Test> {
     private final ITestService iTestService;
     private final IEventService iEventService;
-    private final TestApi testApi;
+    //    @Autowired
+    @Qualifier("iWebClientApi_52")
+    //@Qualifier不生效解决方式 1.使用@Autowired 注解方式替代构造方式注入 2.通过在src同级目录下创建lombok.config配置文件,写入 lombok.copyableAnnotations += org.springframework.beans.factory.annotation.Qualifier 配置
+    private final IWebClientApi iWebClientApi;
 
     /**
      * @param query 查询对象
@@ -219,8 +227,26 @@ public class TestController implements BaseController<ITestService, Test> {
         LoginDto loginDto = new LoginDto();
         loginDto.setUsername("zhangsan");
         loginDto.setPassword("123456");
-        Result result = testApi.login(loginDto);
-        System.out.println(result.toString());
+//        Result result = testApi.login(loginDto);
+//        System.out.println(result.toString());
+        System.out.println(loginDto.toString());
+    }
+
+    @RequestMapping(value = "testHttp_2", method = RequestMethod.GET)
+    public void testHttp_2() {
+        LoginDto loginDto = new LoginDto();
+        loginDto.setUsername("zhangsa4444n");
+        loginDto.setPassword("12345677777");
+//        Result result = testApi.login(loginDto);
+//        System.out.println(result.toString());
+        System.out.println(loginDto.toString());
+    }
+
+
+    @RequestMapping(value = "testHttp_test", method = RequestMethod.GET)
+    public void testHttp_test() {
+        Result result = ((TestApi) iWebClientApi).testHttp();
+        System.out.println(result);
     }
 
     @ApiVersion(1.1)
@@ -239,7 +265,7 @@ public class TestController implements BaseController<ITestService, Test> {
     }
 
     @GetMapping("sssaaaa")
-    public Result ff() {
+    public Result ff(@RequestParam("code") String code) {
         return Result.judge(true, "222", "3343");
     }
 }
