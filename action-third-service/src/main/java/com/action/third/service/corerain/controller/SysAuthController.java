@@ -62,8 +62,7 @@ public class SysAuthController {
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public Result login(@RequestBody LoginDto loginDto) {
-        UserVo userVo = sysAuthApi_52.login(loginDto);
-        return Result.success(userVo);
+        return Result.success(sysAuthApi_52.login(loginDto));
     }
 
     /**

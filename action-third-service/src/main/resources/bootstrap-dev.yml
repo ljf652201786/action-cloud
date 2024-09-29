@@ -1,9 +1,10 @@
 server:
   port: 7777
+  max-http-request-header-size: 65536
 spring:
   cloud:
     nacos:
-      server-addr: ${NACOS-HOST:127.0.0.1}:${NACOS-PORT:8848}
+      server-addr: ${NACOS-HOST:192.168.1.72}:${NACOS-PORT:8848}
       username: nacos
       password: nacos
       config:

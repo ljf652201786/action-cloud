@@ -1,6 +1,6 @@
 package com.action.third.service.manager.service.impl;
 
-import com.action.common.enums.StatusType;
+import com.action.common.core.enums.StatusType;
 import com.action.third.service.manager.mapper.ThirdPlatformInfoMapper;
 import com.action.third.service.manager.service.IThirdPlatformInfoService;
 import com.action.third.service.manager.struct.entity.ThirdPlatformInfo;

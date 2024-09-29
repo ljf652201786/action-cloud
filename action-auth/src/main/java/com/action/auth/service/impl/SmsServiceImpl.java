@@ -3,7 +3,7 @@ package com.action.auth.service.impl;
 import com.action.auth.service.ISmsService;
 import com.action.call.clients.RemoteSystemClients;
 import com.action.call.struct.dto.LogSMSDto;
-import com.action.common.core.handle.RedisCacheHandle;
+import com.action.common.core.service.RedisCacheServices;
 import com.action.common.sms.properties.AliyunSmsProperties;
 import com.action.common.sms.service.impl.AliyunSmsService;
 import com.alibaba.fastjson.JSONObject;
@@ -24,7 +24,7 @@ import static com.action.common.core.constants.ActionRedisConstants.REGISTER_SMS
 @RequiredArgsConstructor
 public class SmsServiceImpl implements ISmsService {
     private static final Long expireTime = 5 * 60L;
-    private final RedisCacheHandle redisCacheHandle;
+    private final RedisCacheServices redisCacheServices;
     private final AliyunSmsProperties aliyunSmsProperties;
     private final AliyunSmsService aliyunSmsService;
     private final RemoteSystemClients remoteSystemClients;
@@ -47,7 +47,7 @@ public class SmsServiceImpl implements ISmsService {
         boolean result = aliyunSmsService.sendSms(phone, templateCode, templateParams);
         if (result) {
             // 将验证码存入redis，有效期5分钟
-            redisCacheHandle.set(REGISTER_SMS_CODE_KEY + phone, code, expireTime);
+            redisCacheServices.set(REGISTER_SMS_CODE_KEY + phone, code, expireTime);
         }
         LogSMSDto logSMSDto = new LogSMSDto(phone, templateParams, result, new Date(), String.valueOf(expireTime));
         remoteSystemClients.save(logSMSDto);

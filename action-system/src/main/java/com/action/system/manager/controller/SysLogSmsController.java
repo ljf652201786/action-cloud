@@ -4,12 +4,16 @@ import com.action.call.struct.dto.LogSMSDto;
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
+import com.action.system.manager.struct.entity.SysLogRequest;
 import com.action.system.manager.struct.entity.SysLogSms;
 import com.action.system.manager.service.ISysLogSmsService;
 import com.action.system.manager.struct.converter.LogSmsConverter;
+import com.action.system.manager.struct.entity.SysUser;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -60,5 +64,20 @@ public class SysLogSmsController implements BaseController<ISysLogSmsService, Sy
     @RequestMapping(value = "deleteByIds", method = RequestMethod.DELETE)
     public Result deleteByIds(@RequestParam("ids") List<String> ids) {
         return this.deleteByIds(iSysLogSmsService, ids);
+    }
+
+    /**
+     * @param response  response对象
+     * @param sysLogSms 短信日志对象
+     * @Description: 导出短信日志excel文件
+     * @return: void
+     * @throws:
+     * @Author: ljf  <lin652210786@163.com>
+     * @Date: 2024/05/31
+     */
+    @RequestMapping(value = "exportExcel", method = RequestMethod.GET)
+    public void exportExcel(HttpServletResponse response, SysLogSms sysLogSms) throws IOException {
+        List<SysLogSms> list = iSysLogSmsService.list(this.getQueryWrapper(sysLogSms));
+        this.exportExcel(response, SysUser.class, "短信日志导出列表.xlsx", "日志sheet表", list);
     }
 }

@@ -1,6 +1,6 @@
 package com.action.gateway.config;
 
-import com.action.common.entity.ActionInterfaceEncryptStruct;
+import com.action.common.struct.ActionInterfaceEncryptStruct;
 import com.alibaba.nacos.common.utils.CollectionUtils;
 import lombok.Setter;
 import org.slf4j.Logger;

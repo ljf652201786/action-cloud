@@ -4,7 +4,7 @@ import com.action.auth.service.IAuthService;
 import com.action.call.clients.RemoteSystemClients;
 import com.action.call.struct.vo.AuthUserInfoVo;
 import com.action.common.core.constants.ActionRedisConstants;
-import com.action.common.core.handle.RedisCacheHandle;
+import com.action.common.core.service.RedisCacheServices;
 import com.action.common.core.tool.KeyPairUtils;
 import com.action.common.network.utils.WebClientUtils;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements IAuthService {
-    private final RedisCacheHandle redisCacheHandle;
+    private final RedisCacheServices redisCacheServices;
     private final RemoteSystemClients remoteSystemClients;
 
     @Override
@@ -36,7 +36,7 @@ public class AuthServiceImpl implements IAuthService {
             if (Objects.nonNull(userByAppId)) {
                 //生成随机code
                 String code = KeyPairUtils.getAppId();
-                redisCacheHandle.set(ActionRedisConstants.OPEN_CODE_KEY + appid, code);
+                redisCacheServices.set(ActionRedisConstants.OPEN_CODE_KEY + appid, code);
                 //重定向到url
                 HashMap<String, Object> paramsMap = new HashMap<>();
                 paramsMap.put("code", code);

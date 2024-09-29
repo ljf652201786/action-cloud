@@ -1,61 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.action.system.bsup.mapper.SysMenuLimitMapper">
+<mapper namespace="com.action.system.sconf.mapper.SysMenuLimitMapper">
 
-    <select id="getSysMenuByScope" resultType="com.action.system.manager.struct.entity.SysMenu">
-        select sm.id,
-        sm.ancestral,
-        sm.parent_id,
-        sm.menu_name,
-        sm.menu_type,
-        sm.menu_icon,
-        sm.menu_perm,
-        sm.route_name,
-        sm.route_url,
-        sm.component,
-        sm.is_frame,
-        sm.iframe_url,
-        sm.is_cache,
-        sm.sort,
-        sm.visible,
-        sm.status,
-        sm.enter_transition,
-        sm.leave_transition,
-        sm.frame_loading,
-        sm.hidden_tag,
-        sm.remark,
-        sm.create_by,
-        sm.create_time,
-        sm.update_by,
-        sm.update_time
+    <select id="getMenuLimitVoByScope" resultType="com.action.system.sconf.struct.vo.SysMenuLimitVo">
+        select sml.id,
+        sml.type,
+        sml.contact_id,
+        sml.menu_id,
+        sml.status,
+        sml.visible,
+        sml.hidden_tag
         from sys_menu_limit sml
-        left join sys_menu sm on sm.id = sml.menu_id
         <where>
-            1=1
+            ( 1=1
             <choose>
-                <when test="groupIdSet!=null and groupIdSet.size>0">
+                <when test="groupIdList!=null and groupIdList.size>0">
                     or (
                     sml.type = 1 and sml.contact_id in
-                    <foreach collection="groupIdSet" item="item" open="(" separator="," close=")">
+                    <foreach collection="groupIdList" item="item" open="(" separator="," close=")">
                         #{item}
                     </foreach>
                     )
                 </when>
-                <when test="postIdSet!=null and postIdSet.size>0">
+                <when test="postIdList!=null and postIdList.size>0">
                     or ( sml.type = 2 and sml.contact_id in
-                    <foreach collection="postIdSet" item="item" open="(" separator="," close=")">
+                    <foreach collection="postIdList" item="item" open="(" separator="," close=")">
                         #{item}
                     </foreach>
                     )
                 </when>
-                <when test="roleIdSet!=null and roleIdSet.size>0">
+                <when test="roleIdList!=null and roleIdList.size>0">
                     or ( sml.type = 3 and sml.contact_id in
-                    <foreach collection="roleIdSet" item="item" open="(" separator="," close=")">
+                    <foreach collection="roleIdList" item="item" open="(" separator="," close=")">
                         #{item}
                     </foreach>
                     )
                 </when>
             </choose>
+            ) and sml.status = "1"
         </where>
     </select>
 

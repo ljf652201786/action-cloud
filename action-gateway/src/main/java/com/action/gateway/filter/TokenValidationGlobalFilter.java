@@ -4,7 +4,7 @@ import com.action.common.common.RedisSetConstants;
 import com.action.common.core.common.ResultCode;
 import com.action.common.core.constants.ActionConstants;
 import com.action.common.core.constants.JwtClaimConstants;
-import com.action.common.core.handle.RedisCacheHandle;
+import com.action.common.core.service.RedisCacheServices;
 import com.action.gateway.util.WebFluxUtils;
 import com.nimbusds.jose.JWSObject;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ import java.text.ParseException;
 @Slf4j
 public class TokenValidationGlobalFilter implements GlobalFilter, Ordered {
 
-    private final RedisCacheHandle redisCacheHandle;
+    private final RedisCacheServices redisCacheServices;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -49,7 +49,7 @@ public class TokenValidationGlobalFilter implements GlobalFilter, Ordered {
             String token = authorization.substring(ActionConstants.BEARER_PREFIX.length());
             JWSObject jwsObject = JWSObject.parse(token);
             String jti = (String) jwsObject.getPayload().toJSONObject().get(JwtClaimConstants.JTI);
-            Boolean isBlackToken = redisCacheHandle.exists(RedisSetConstants.TOKEN_BLACKLIST_KEY + jti);
+            Boolean isBlackToken = redisCacheServices.exists(RedisSetConstants.TOKEN_BLACKLIST_KEY + jti);
             if (Boolean.TRUE.equals(isBlackToken)) {
                 return WebFluxUtils.writeErrorResponse(response, ResultCode.TOKEN_ACCESS_FORBIDDEN);
             }

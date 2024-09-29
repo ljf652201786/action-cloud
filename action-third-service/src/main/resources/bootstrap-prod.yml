@@ -1,17 +1,87 @@
 server:
   port: 3060
 spring:
-  cloud:
-    nacos:
-      server-addr: ${NACOS-HOST:127.0.0.1}:${NACOS-PORT:8848}
-      username: nacos
-      password: nacos
-      config:
-        file-extension: yaml
-        shared-configs[0]:
-          data-id: action-common.${spring.cloud.nacos.config.file-extension}
-          refresh: true
-        namespace: public
-      discovery:
-        namespace: ${spring.cloud.nacos.config.namespace}
-
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://yusui-converge-mysql:3306/action-thrid?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: yusui1015
+    druid:
+      initialSize: 5
+      minIdle: 10
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      maxEvictableIdleTimeMillis: 900000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      webStatFilter:
+        enabled: true
+      statViewServlet:
+        enabled: true
+        allow:
+        url-pattern: /druid/*
+        login-username:
+        login-password:
+      filter:
+        stat:
+          enabled: true
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+    xa:
+      properties:
+        useInformationSchema: true
+  data:
+    redis:
+      database: 5
+      host: yusui-converge-redis
+      port: 6379
+      password: yusui@REDIS
+      lettuce:
+        pool:
+          min-idle: 1
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  global-config:
+    id-type: 0
+    field-strategy: 2
+    db-column-underline: true
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    jdbc-type-for-null: 'null'
+  extend:
+    dytable-name:
+      enable: false
+    data-permission:
+      enable: false
+    multi-tenant:
+      enable: false
+net-manage:
+  remote_http:
+    remoteWebClients[0]:
+      serviceUrl: http://172.22.196.52:8081
+      tokenApiUrl: http://127.0.0.1:7777/corerain-sysauth/getToken
+    remoteWebClients[1]:
+      serviceUrl: http://172.22.196.52:8081
+      tokenApiUrl: http://127.0.0.1:7777/corerain-sysauth/getToken
+    remoteWebClients[2]:
+      serviceUrl: http://172.22.196.53:8081
+      tokenApiUrl: http://127.0.0.1:7777/corerain-sysauth/getToken
+    remoteWebClients[3]:
+      serviceUrl: http://172.22.196.54:8081
+      tokenApiUrl: http://127.0.0.1:7777/corerain-sysauth/getToken
+# 安全配置
+security-manage:
+  # 允许无需认证的路径列表
+  whitelist-paths:
+    - /**

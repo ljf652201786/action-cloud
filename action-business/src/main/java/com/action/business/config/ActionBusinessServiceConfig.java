@@ -2,16 +2,16 @@ package com.action.business.config;
 
 import com.action.business.listener.event.ActionBusinessEvent;
 import com.action.business.listener.event.ActionBusinessEventHandler;
-import com.action.business.network.ActionHttpNet;
 import com.action.business.network.ActionWebSockerNet;
 import com.action.business.network.ActionWebSocketServerInitializer;
+import com.action.common.core.entity.EventStruct;
 import com.action.common.core.listener.IEventService;
-import com.action.common.entity.EventStruct;
 import com.action.common.network.properties.NetWorkManagerProperties;
 import com.action.common.network.service.ActionNet;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,14 +22,14 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @RequiredArgsConstructor
-public class ActionBusinessServiceConfig {
+public class ActionBusinessServiceConfig implements ApplicationRunner {
     private final IEventService iEventService;
 
     @Value("${spring.application.name}")
     private String appName;
 
-    @PostConstruct
-    public void configService() {
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
         iEventService.registerEvent(ActionBusinessEvent.class, new ActionBusinessEvent(new EventStruct(), appName, new ActionBusinessEventHandler()));
     }
 
@@ -51,4 +51,5 @@ public class ActionBusinessServiceConfig {
         actionWebSockerNet.setChannelInitializer(new ActionWebSocketServerInitializer(webSocketNetProperties));
         return actionWebSockerNet.run();
     }
+
 }

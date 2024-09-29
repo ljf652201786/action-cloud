@@ -1,7 +1,7 @@
 package com.action.file.entity;
 
+import com.action.common.core.enums.DelType;
 import com.action.common.mybatisplus.extend.base.BaseEntity;
-import com.action.common.enums.DelType;
 import com.action.common.file.entity.FileStruct;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;

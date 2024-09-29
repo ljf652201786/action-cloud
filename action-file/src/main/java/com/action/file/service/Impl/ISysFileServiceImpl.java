@@ -1,7 +1,7 @@
 package com.action.file.service.Impl;
 
 import com.action.common.core.constants.StringPool;
-import com.action.common.enums.DelType;
+import com.action.common.core.enums.DelType;
 import com.action.common.file.entity.FileStruct;
 import com.action.common.file.properties.FileProperties;
 import com.action.common.file.utils.ActionFileUtils;
@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ISysFileServiceImpl extends ServiceImpl<SysFileMapper, SysFile> implements ISysFileService {
-    private final SysFileMapper sysFileMapper;
     private final FileProperties fileProperties;
     private final SecurityUtil securityUtil;
 

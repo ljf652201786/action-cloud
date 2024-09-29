@@ -1,5 +1,6 @@
 server:
   port: 6666
+  max-http-request-header-size: 65536
 spring:
   cloud:
     nacos:

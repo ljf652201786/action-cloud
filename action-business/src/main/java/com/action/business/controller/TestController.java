@@ -3,26 +3,24 @@ package com.action.business.controller;
 import com.action.business.api.LoginDto;
 import com.action.business.api.TestApi;
 import com.action.business.listener.event.ActionBusinessEvent;
+import com.action.common.struct.bo.LogEventBo;
 import com.action.business.struct.dto.TestDto;
 import com.action.business.struct.entity.Test;
 import com.action.business.listener.TestImportListener;
 import com.action.business.service.ITestService;
 import com.action.business.struct.vo.TestImportVo;
 import com.action.common.biz.annotation.ApiVersion;
-import com.action.common.biz.annotation.OpenApi;
 import com.action.common.biz.base.BaseController;
 import com.action.common.core.common.Result;
 import com.action.common.core.listener.IEventService;
-import com.action.common.entity.EventStruct;
 import com.action.common.mybatisplus.extend.base.BaseQuery;
 import com.action.common.network.service.IWebClientApi;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -185,33 +183,14 @@ public class TestController implements BaseController<ITestService, Test> {
      * @Date: 2024/05/31
      */
     @RequestMapping(value = "testPushEvent", method = RequestMethod.GET)
-    public void testPushEvent() {
-        EventStruct eventStruct = new EventStruct();
-        eventStruct.setMessage("事件内容");
-        eventStruct.setTime(new Date());
-        eventStruct.setServiceName("业务服务");
-        iEventService.publishEvent(eventStruct);
-        iEventService.publishEvent(ActionBusinessEvent.class, eventStruct);
-    }
-
-    /**
-     * @Description: 多租户测试
-     * @return: void
-     * @throws:
-     * @Author: ljf  <lin652210786@163.com>
-     * @Date: 2024/05/31
-     */
-    @RequestMapping(value = "multiTenant", method = RequestMethod.GET)
-    public void multiTenant() {
-        String id = "";
-        Test test = new Test();
-        test.setName("testsave");
-        iTestService.save(test);
-        id = test.getId();
-        Test tes = iTestService.getById(id);
-        test.setName("testupdate");
-        iTestService.updateById(test);
-        iTestService.removeById(id);
+    public Result testPushEvent(@RequestParam("id") String id) {
+        LogEventBo logEventBo = new LogEventBo();
+        logEventBo.setData("事件内容");
+        logEventBo.setTime(new Date());
+        logEventBo.setEventType("业务服务");
+//        iEventService.publishEvent(logEventBo);
+//        iEventService.publishEvent(ActionBusinessEvent.class, logEventBo);
+        return Result.success(logEventBo);
     }
 
 
@@ -232,17 +211,6 @@ public class TestController implements BaseController<ITestService, Test> {
         System.out.println(loginDto.toString());
     }
 
-    @RequestMapping(value = "testHttp_2", method = RequestMethod.GET)
-    public void testHttp_2() {
-        LoginDto loginDto = new LoginDto();
-        loginDto.setUsername("zhangsa4444n");
-        loginDto.setPassword("12345677777");
-//        Result result = testApi.login(loginDto);
-//        System.out.println(result.toString());
-        System.out.println(loginDto.toString());
-    }
-
-
     @RequestMapping(value = "testHttp_test", method = RequestMethod.GET)
     public void testHttp_test() {
         Result result = ((TestApi) iWebClientApi).testHttp();
@@ -250,22 +218,8 @@ public class TestController implements BaseController<ITestService, Test> {
     }
 
     @ApiVersion(1.1)
-//    @RequestMapping(value = "testBetween", method = RequestMethod.GET)
-    @GetMapping("testBetween")
+    @GetMapping("testApiVersion")
     public void testBetween() {
-        LocalDateTime startTime = LocalDateTime.parse("2022-01-01 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        LocalDateTime endTime = LocalDateTime.parse("2022-01-31 23:59:59", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        iTestService.list(new QueryWrapper<Test>().eq("id", "3").between("create_time", "2024-9-4", "2024-9-5").notLike("name", "zz"));
-    }
-
-    //    @RequestMapping(value = "testBetween", method = RequestMethod.GET)
-    @GetMapping("code")
-    public void testBetween1(@RequestParam("code") String code) {
-        System.out.println("接收" + code);
-    }
-
-    @GetMapping("sssaaaa")
-    public Result ff(@RequestParam("code") String code) {
-        return Result.judge(true, "222", "3343");
+        System.out.println("ok");
     }
 }

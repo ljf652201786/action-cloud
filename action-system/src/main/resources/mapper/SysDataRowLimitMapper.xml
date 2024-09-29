@@ -20,31 +20,32 @@
         from sys_data_row_limit sdrl
         left join sys_data sd on sd.id = sdrl.data_id
         <where>
-            1=1
+            ( 1=1
             <choose>
-                <when test="groupIdSet!=null and groupIdSet.size>0">
+                <when test="groupIdList!=null and groupIdList.size>0">
                     or (
                     sdrl.type = 1 and sdrl.contact_id in
-                    <foreach collection="groupIdSet" item="item" open="(" separator="," close=")">
+                    <foreach collection="groupIdList" item="item" open="(" separator="," close=")">
                         #{item}
                     </foreach>
                     )
                 </when>
-                <when test="postIdSet!=null and postIdSet.size>0">
+                <when test="postIdList!=null and postIdList.size>0">
                     or ( sdrl.type = 2 and sdrl.contact_id in
-                    <foreach collection="postIdSet" item="item" open="(" separator="," close=")">
+                    <foreach collection="postIdList" item="item" open="(" separator="," close=")">
                         #{item}
                     </foreach>
                     )
                 </when>
-                <when test="roleIdSet!=null and roleIdSet.size>0">
+                <when test="roleIdList!=null and roleIdList.size>0">
                     or ( sdrl.type = 3 and sdrl.contact_id in
-                    <foreach collection="roleIdSet" item="item" open="(" separator="," close=")">
+                    <foreach collection="roleIdList" item="item" open="(" separator="," close=")">
                         #{item}
                     </foreach>
                     )
                 </when>
             </choose>
+            ) and sdrl.status = "1"
         </where>
     </select>
 

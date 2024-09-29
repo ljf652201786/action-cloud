@@ -2,11 +2,13 @@ package com.action.system.holder;
 
 import com.action.common.core.base.BaseSecurityMenu;
 import com.action.common.security.holder.IAuthHolder;
+import com.action.system.bsup.service.ICacheService;
 import com.action.system.manager.service.ISysMenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @Description: 扩展认证
@@ -17,9 +19,16 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ExtendAuthHolder implements IAuthHolder {
     private final ISysMenuService iSysMenuService;
+    private final ICacheService iCacheService;
 
     @Override
-    public Set<? extends BaseSecurityMenu> getSysPermission() {
-        return iSysMenuService.getSysPermission();
+    public List<? extends BaseSecurityMenu> getSysPermission() {
+        List<? extends BaseSecurityMenu> sysPermission = iCacheService.getSysMenuCache();
+        if (CollectionUtils.isEmpty(sysPermission)) {
+            sysPermission = iSysMenuService.getSysPermission();
+            iCacheService.setSysMenuCache(sysPermission);
+            return sysPermission;
+        }
+        return sysPermission;
     }
 }

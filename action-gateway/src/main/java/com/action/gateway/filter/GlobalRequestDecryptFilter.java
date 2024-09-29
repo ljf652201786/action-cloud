@@ -2,7 +2,7 @@ package com.action.gateway.filter;
 
 import com.action.common.core.constants.StringPool;
 import com.action.common.encrypt.symmetric.AESEncrypt;
-import com.action.common.entity.ActionInterfaceEncryptStruct;
+import com.action.common.struct.ActionInterfaceEncryptStruct;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Joiner;
@@ -294,11 +294,12 @@ public class GlobalRequestDecryptFilter implements GlobalFilter, Ordered {
     private ServerHttpRequest paramRequestHandle(ServerWebExchange exchange, ServerHttpRequest newRequest) {
         try {
             ServerHttpRequest request = exchange.getRequest();
-            if (!request.getQueryParams().isEmpty()) {
+            if (Objects.nonNull(request.getQueryParams()) && !request.getQueryParams().isEmpty()) {
                 String paramData = request.getQueryParams().getFirst(PARAM_DATA_KEY);
                 if (StringUtils.isEmpty(paramData)) {
-                    throw new NullPointerException("The parameter cannot be empty");
+                    return newRequest;
                 }
+                paramData = paramData.replaceAll(StringPool.SPACE, StringPool.PLUS);
                 String decryptStr = aesDecrypt(paramData);
                 MultiValueMap<String, String> paramsMap = buildMultiValueMap(decryptStr);
                 URI uri = buildUri(request, paramsMap);

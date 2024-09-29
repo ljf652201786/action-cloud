@@ -1,5 +1,6 @@
 package com.action.system.manager.struct.entity;
 
+import com.action.common.mybatisplus.extend.annotation.Condition;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -16,32 +17,27 @@ import java.util.Date;
 public class SysLogRequest {
     @TableId(value = "id")
     private String id;
-    @TableField("model_name")
-    private String model_name;
-    @TableField("business_type")
-    private String business_type;
-    @TableField("operator_type")
-    private String operator_type;
+    @TableField("tenant_id")
+    private String tenantId;
     @TableField("operator_user")
-    private String operator_user;
+    private String operatorUser;
     @TableField("method_name")
-    private String method_name;
+    private String methodName;
     @TableField("request_method")
-    private String request_method;
+    private String requestMethod;
     @TableField("request_url")
-    private String request_url;
+    private String requestUrl;
     @TableField("request_ip")
-    private String request_ip;
-    @TableField("request_location")
-    private String request_location;
+    private String requestIp;
     @TableField("request_param")
-    private String request_param;
+    private String requestParam;
+    @TableField("operator_time")
+    private Integer operatorTime;
+    @Condition(order = Condition.OrderTypeEnums.DESC)
     @TableField("request_time")
-    private Date request_time;
+    private Date requestTime;
     @TableField("response_param")
-    private String response_param;
+    private String responseParam;
     @TableField("login_status")
-    private String login_status;
-    @TableField("exception_msg")
-    private String exception_msg;
+    private String loginStatus;
 }

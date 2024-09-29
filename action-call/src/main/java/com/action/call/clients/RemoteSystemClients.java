@@ -3,10 +3,10 @@ package com.action.call.clients;
 import com.action.call.config.FeignDecoderConfig;
 import com.action.call.factory.RemoteSystemClientsFallbackFactory;
 import com.action.call.struct.vo.AuthUserInfoVo;
-import com.action.call.struct.dto.LogLoginDto;
-import com.action.call.struct.dto.LogRequestDto;
 import com.action.call.struct.dto.LogSMSDto;
 import com.action.common.core.common.Result;
+import com.action.common.core.entity.LogLoginStruct;
+import com.action.common.core.entity.LogRequestStruct;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,16 +43,12 @@ public interface RemoteSystemClients {
     AuthUserInfoVo getUserByUserName(@RequestParam("username") String username);
 
     @LoadBalanced
-    @RequestMapping(value = "user/getUserNameByWeChatCode", method = RequestMethod.GET)
-    Result getUserNameByWeChatCode(@RequestParam("code") String code);
-
-    @LoadBalanced
     @RequestMapping(value = "logRequest/save", method = RequestMethod.POST)
-    Result save(@RequestBody LogRequestDto logRequestDto);
+    Result save(@RequestBody LogRequestStruct logRequestStruct);
 
     @LoadBalanced
     @RequestMapping(value = "logLogin/save", method = RequestMethod.POST)
-    Result save(@RequestBody LogLoginDto logLoginDto);
+    Result save(@RequestBody LogLoginStruct logLoginStruct);
 
     @LoadBalanced
     @RequestMapping(value = "logSMS/save", method = RequestMethod.POST)
