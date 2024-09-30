@@ -76,7 +76,7 @@ public class GlobalCacheRequestBodyFilter implements GlobalFilter, Ordered {
 
     public static boolean isOpenApi(ServerHttpRequest request) {
         String authorization = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.isBlank(authorization) || !StringUtils.startsWith(authorization, ActionConstants.BEARER_PREFIX)) {
+        if (StringUtils.isNoneBlank(authorization) && StringUtils.startsWith(authorization, ActionConstants.BEARER_PREFIX)) {
             String token = authorization.substring(ActionConstants.BEARER_PREFIX.length());
             if (StringUtils.isNotBlank(token)) {
                 JWSObject jwsObject = null;
@@ -89,7 +89,7 @@ public class GlobalCacheRequestBodyFilter implements GlobalFilter, Ordered {
                 }
             }
         }
-        return false;
+        return true;
     }
 
     @Override
