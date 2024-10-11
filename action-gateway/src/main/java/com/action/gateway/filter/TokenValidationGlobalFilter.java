@@ -37,28 +37,32 @@ public class TokenValidationGlobalFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
-        ServerHttpRequest request = exchange.getRequest();
+        ServerHttpRequest request = exchange.getRequest().mutate()
+                .header("x-forwarded-for", new String[]{exchange.getRequest().getRemoteAddress().getHostString()})
+                .build();
         ServerHttpResponse response = exchange.getResponse();
 
         String authorization = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.isBlank(authorization) || !StringUtils.startsWith(authorization, ActionConstants.BEARER_PREFIX)) {
-            return chain.filter(exchange);
-        }
-
-        try {
-            String token = authorization.substring(ActionConstants.BEARER_PREFIX.length());
-            JWSObject jwsObject = JWSObject.parse(token);
-            String jti = (String) jwsObject.getPayload().toJSONObject().get(JwtClaimConstants.JTI);
-            Boolean isBlackToken = redisCacheServices.exists(RedisSetConstants.TOKEN_BLACKLIST_KEY + jti);
-            if (Boolean.TRUE.equals(isBlackToken)) {
-                return WebFluxUtils.writeErrorResponse(response, ResultCode.TOKEN_ACCESS_FORBIDDEN);
+        if (StringUtils.isNoneBlank(authorization) && StringUtils.startsWith(authorization, ActionConstants.BEARER_PREFIX)) {
+            try {
+                String token = authorization.substring(ActionConstants.BEARER_PREFIX.length());
+                JWSObject jwsObject = JWSObject.parse(token);
+                String jti = (String) jwsObject.getPayload().toJSONObject().get(JwtClaimConstants.JTI);
+                Boolean isBlackToken = redisCacheServices.exists(RedisSetConstants.TOKEN_BLACKLIST_KEY + jti);
+                if (Boolean.TRUE.equals(isBlackToken)) {
+                    return WebFluxUtils.writeErrorResponse(response, ResultCode.TOKEN_ACCESS_FORBIDDEN);
+                }
+            } catch (ParseException e) {
+                log.error("Parsing token failed in TokenValidationGlobalFilter", e);
+                return WebFluxUtils.writeErrorResponse(response, ResultCode.TOKEN_INVALID);
             }
-        } catch (ParseException e) {
-            log.error("Parsing token failed in TokenValidationGlobalFilter", e);
-            return WebFluxUtils.writeErrorResponse(response, ResultCode.TOKEN_INVALID);
         }
-
-        return chain.filter(exchange);
+        return chain.filter(exchange.mutate().request(request).build())/*.then(Mono.fromRunnable(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("后置过滤器，待实现");
+            }
+        }))*/;
     }
 
     @Override
