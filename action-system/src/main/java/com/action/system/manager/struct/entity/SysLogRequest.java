@@ -1,6 +1,7 @@
 package com.action.system.manager.struct.entity;
 
 import com.action.common.mybatisplus.extend.annotation.Condition;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -15,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @TableName("sys_log_request")
 public class SysLogRequest {
-    @TableId(value = "id")
+    @TableId(value = "id", type = IdType.AUTO)
     private String id;
     @TableField("tenant_id")
     private String tenantId;

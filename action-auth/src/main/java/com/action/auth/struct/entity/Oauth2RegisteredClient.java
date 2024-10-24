@@ -1,5 +1,6 @@
 package com.action.auth.struct.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @TableName("oauth2_registered_client")
 public class Oauth2RegisteredClient {
-    @TableId(value = "id")
+    @TableId(value = "id", type = IdType.AUTO)
     private String id;
     @TableField("client_id")
     private String clientId;

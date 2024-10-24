@@ -14,7 +14,6 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -37,12 +36,9 @@ public class TokenValidationGlobalFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
-        ServerHttpRequest request = exchange.getRequest().mutate()
-                .header("x-forwarded-for", new String[]{exchange.getRequest().getRemoteAddress().getHostString()})
-                .build();
         ServerHttpResponse response = exchange.getResponse();
 
-        String authorization = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+        String authorization = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (StringUtils.isNoneBlank(authorization) && StringUtils.startsWith(authorization, ActionConstants.BEARER_PREFIX)) {
             try {
                 String token = authorization.substring(ActionConstants.BEARER_PREFIX.length());
@@ -57,7 +53,7 @@ public class TokenValidationGlobalFilter implements GlobalFilter, Ordered {
                 return WebFluxUtils.writeErrorResponse(response, ResultCode.TOKEN_INVALID);
             }
         }
-        return chain.filter(exchange.mutate().request(request).build())/*.then(Mono.fromRunnable(new Runnable() {
+        return chain.filter(exchange)/*.then(Mono.fromRunnable(new Runnable() {
             @Override
             public void run() {
                 System.out.println("后置过滤器，待实现");
