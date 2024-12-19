@@ -27,5 +27,11 @@
             <groupId>com.action</groupId>
             <artifactId>action-common</artifactId>
         </dependency>
+
+        <!-- 第三方依赖 -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+        </dependency>
     </dependencies>
 </project>

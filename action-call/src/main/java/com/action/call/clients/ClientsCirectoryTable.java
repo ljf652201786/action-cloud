@@ -6,8 +6,8 @@ package com.action.call.clients;
  * @Date: 2024/04/20
  */
 public class ClientsCirectoryTable {
-    /*认证服务*/
-    public static final String AUTH_SERVICE = "action-auth";
     /*系统服务*/
     public static final String SYSTEM_SERVICE = "action-system";
+    /*认证服务*/
+    public static final String CHANNEL_SERVICE = "action-channel";
 }
